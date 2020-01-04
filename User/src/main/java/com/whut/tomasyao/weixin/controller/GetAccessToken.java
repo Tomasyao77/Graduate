@@ -1,6 +1,6 @@
 package com.whut.tomasyao.weixin.controller;
 
-import edu.whut.pocket.weixin.service.TokenThread;
+import com.whut.tomasyao.weixin.service.TokenThread;
 
 /**
  * Author: zouy

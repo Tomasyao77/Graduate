@@ -1,8 +1,8 @@
 package com.whut.tomasyao.admin.service;
 
-import edu.whut.pocket.admin.model.AdminModule;
-import edu.whut.pocket.admin.model.Module;
-import edu.whut.pocket.admin.model.RoleModule;
+import com.whut.tomasyao.admin.model.AdminModule;
+import com.whut.tomasyao.admin.model.Module;
+import com.whut.tomasyao.admin.model.RoleModule;
 
 import java.util.List;
 

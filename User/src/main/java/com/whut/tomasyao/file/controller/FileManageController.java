@@ -5,12 +5,12 @@ package com.whut.tomasyao.file.controller;
  * Date: 2018-09-14 10:11
  */
 
-import edu.whut.pocket.auth.aspect.AuthAnnotation;
-import edu.whut.pocket.auth.model.UserType;
-import edu.whut.pocket.base.vo.Page;
-import edu.whut.pocket.file.service.IFileManageService;
-import edu.whut.pocket.file.vo.FileVo;
-import edu.whut.pocket.kafka.util.KafkaProducerUtil;
+import com.whut.tomasyao.auth.aspect.AuthAnnotation;
+import com.whut.tomasyao.auth.model.UserType;
+import com.whut.tomasyao.base.vo.Page;
+import com.whut.tomasyao.file.service.IFileManageService;
+import com.whut.tomasyao.file.vo.FileVo;
+import com.whut.tomasyao.kafka.util.KafkaProducerUtil;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
-import edu.whut.pocket.base.vo.ResponseMap;
+import com.whut.tomasyao.base.vo.ResponseMap;
 import springfox.documentation.annotations.ApiIgnore;
 
 @ApiIgnore

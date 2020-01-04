@@ -1,10 +1,10 @@
 package com.whut.tomasyao.auth.util;
 
-import edu.whut.pocket.auth.dao.IAdminRedisVoDao;
-import edu.whut.pocket.auth.dao.ISwaggerDao;
-import edu.whut.pocket.auth.dao.IUserRedisVoDao;
-import edu.whut.pocket.auth.vo.AdminRedisVo;
-import edu.whut.pocket.auth.vo.UserRedisVo;
+import com.whut.tomasyao.auth.dao.IAdminRedisVoDao;
+import com.whut.tomasyao.auth.dao.ISwaggerDao;
+import com.whut.tomasyao.auth.dao.IUserRedisVoDao;
+import com.whut.tomasyao.auth.vo.AdminRedisVo;
+import com.whut.tomasyao.auth.vo.UserRedisVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

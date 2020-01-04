@@ -6,9 +6,9 @@ package com.whut.tomasyao.file.dao.impl;
  */
 
 import org.springframework.stereotype.Component;
-import edu.whut.pocket.base.dao.impl.BaseDaoImpl;
-import edu.whut.pocket.base.model.File;
-import edu.whut.pocket.file.dao.IFileDao;
+import com.whut.tomasyao.base.dao.impl.BaseDaoImpl;
+import com.whut.tomasyao.base.model.File;
+import com.whut.tomasyao.file.dao.IFileDao;
 
 @Component
 public class FileDaoImpl extends BaseDaoImpl<File> implements IFileDao {

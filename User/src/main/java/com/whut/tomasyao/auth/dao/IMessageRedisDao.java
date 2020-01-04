@@ -1,6 +1,6 @@
 package com.whut.tomasyao.auth.dao;
 
-import edu.whut.pocket.base.dao.IRedisDao;
+import com.whut.tomasyao.base.dao.IRedisDao;
 
 /**
  * Author: zouy

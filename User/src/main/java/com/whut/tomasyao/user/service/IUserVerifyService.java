@@ -5,9 +5,9 @@ package com.whut.tomasyao.user.service;
  * Date: 2018-06-26 08:47
  */
 
-import edu.whut.pocket.base.vo.Page;
-import edu.whut.pocket.user.model.UserVerify;
-import edu.whut.pocket.user.vo.UserVerifyVo;
+import com.whut.tomasyao.base.vo.Page;
+import com.whut.tomasyao.user.model.UserVerify;
+import com.whut.tomasyao.user.vo.UserVerifyVo;
 
 public interface IUserVerifyService {
 

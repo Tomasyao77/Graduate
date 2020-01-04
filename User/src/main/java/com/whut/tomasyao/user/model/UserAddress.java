@@ -5,8 +5,8 @@ package com.whut.tomasyao.user.model;
  * Date: 2018-06-13 21:16
  */
 
-import edu.whut.pocket.base.model.Area;
-import edu.whut.pocket.base.model.User;
+import com.whut.tomasyao.base.model.Area;
+import com.whut.tomasyao.base.model.User;
 
 import javax.persistence.*;
 import java.util.Date;

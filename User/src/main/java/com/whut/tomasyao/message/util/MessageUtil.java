@@ -1,8 +1,8 @@
 package com.whut.tomasyao.message.util;
 
-import edu.whut.pocket.auth.dao.IMessageRedisDao;
-import edu.whut.pocket.base.util.EncryptUtil;
-import edu.whut.pocket.message.model.Message;
+import com.whut.tomasyao.auth.dao.IMessageRedisDao;
+import com.whut.tomasyao.base.util.EncryptUtil;
+import com.whut.tomasyao.message.model.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.security.NoSuchAlgorithmException;

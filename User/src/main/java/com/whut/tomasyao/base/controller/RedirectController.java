@@ -1,6 +1,6 @@
 package com.whut.tomasyao.base.controller;
 
-import edu.whut.pocket.redirect.HttpUtil;
+import com.whut.tomasyao.redirect.HttpUtil;
 import io.swagger.annotations.ApiOperation;
 import org.apache.http.NameValuePair;
 import org.apache.log4j.Logger;

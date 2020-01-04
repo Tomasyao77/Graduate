@@ -1,8 +1,8 @@
 package com.whut.tomasyao.auth.dao.impl;
 
-import edu.whut.pocket.auth.dao.IUserRedisVoDao;
-import edu.whut.pocket.auth.vo.UserRedisVo;
-import edu.whut.pocket.base.dao.impl.RedisDaoImpl;
+import com.whut.tomasyao.auth.dao.IUserRedisVoDao;
+import com.whut.tomasyao.auth.vo.UserRedisVo;
+import com.whut.tomasyao.base.dao.impl.RedisDaoImpl;
 import org.springframework.stereotype.Component;
 
 /**

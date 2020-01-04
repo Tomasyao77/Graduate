@@ -5,13 +5,12 @@ package com.whut.tomasyao.config.controller;
  * Date: 2018-02-12 13:59
  */
 
-import edu.whut.pocket.base.common.MavenModule;
-import edu.whut.pocket.base.vo.Page;
-import edu.whut.pocket.base.vo.ResponseMap;
-import edu.whut.pocket.config.model.Config;
-import edu.whut.pocket.config.service.IConfigService;
-import edu.whut.pocket.dubbo.config.service.IDubboConfigService;
-import edu.whut.pocket.log.aspect.LogAnnotation;
+import com.whut.tomasyao.base.common.MavenModule;
+import com.whut.tomasyao.base.vo.Page;
+import com.whut.tomasyao.base.vo.ResponseMap;
+import com.whut.tomasyao.config.model.Config;
+import com.whut.tomasyao.config.service.IConfigService;
+import com.whut.tomasyao.log.aspect.LogAnnotation;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -35,8 +34,6 @@ public class ConfigController {
 
     @Autowired
     private IConfigService configService;
-    @Autowired
-    private IDubboConfigService dubboConfigService;
 
     private static final Logger logger = Logger.getLogger(ConfigController.class);
 
@@ -94,7 +91,7 @@ public class ConfigController {
     @RequestMapping(value = "/getConfig", method = RequestMethod.POST)
     public Map getConfig(HttpServletRequest request, int userId, String nameEn) throws Exception {
         ResponseMap map = ResponseMap.getInstance();
-        Object config = dubboConfigService.getConfig(nameEn);
+        Object config = null; //dubboConfigService.getConfig(nameEn);
         if(config == null){
             return map.putFailure("获取失败", -1);
         }

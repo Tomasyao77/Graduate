@@ -1,7 +1,7 @@
 package com.whut.tomasyao.message.service;
 
-import edu.whut.pocket.base.vo.Page;
-import edu.whut.pocket.message.model.LogMessage;
+import com.whut.tomasyao.base.vo.Page;
+import com.whut.tomasyao.message.model.LogMessage;
 
 /**
  * Author: zouy

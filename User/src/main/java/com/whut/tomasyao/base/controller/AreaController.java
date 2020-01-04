@@ -1,7 +1,7 @@
 package com.whut.tomasyao.base.controller;
 
-import edu.whut.pocket.base.service.IAreaService;
-import edu.whut.pocket.base.vo.ResponseMap;
+import com.whut.tomasyao.base.service.IAreaService;
+import com.whut.tomasyao.base.vo.ResponseMap;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;

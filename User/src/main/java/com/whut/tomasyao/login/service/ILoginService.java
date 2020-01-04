@@ -1,8 +1,8 @@
 package com.whut.tomasyao.login.service;
 
-import edu.whut.pocket.auth.vo.AdminRedisVo;
-import edu.whut.pocket.auth.vo.UserRedisVo;
-import edu.whut.pocket.base.model.User;
+import com.whut.tomasyao.auth.vo.AdminRedisVo;
+import com.whut.tomasyao.auth.vo.UserRedisVo;
+import com.whut.tomasyao.base.model.User;
 
 /**
  * edu.whut.change.login.service

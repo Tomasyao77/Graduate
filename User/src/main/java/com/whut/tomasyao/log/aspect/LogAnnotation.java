@@ -1,6 +1,6 @@
 package com.whut.tomasyao.log.aspect;
 
-import edu.whut.pocket.base.common.MavenModule;
+import com.whut.tomasyao.base.common.MavenModule;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

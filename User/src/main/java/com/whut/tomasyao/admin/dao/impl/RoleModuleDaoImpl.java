@@ -6,9 +6,9 @@ package com.whut.tomasyao.admin.dao.impl;
  */
 
 import org.springframework.stereotype.Component;
-import edu.whut.pocket.base.dao.impl.BaseDaoImpl;
-import edu.whut.pocket.admin.model.RoleModule;
-import edu.whut.pocket.admin.dao.IRoleModuleDao;
+import com.whut.tomasyao.base.dao.impl.BaseDaoImpl;
+import com.whut.tomasyao.admin.model.RoleModule;
+import com.whut.tomasyao.admin.dao.IRoleModuleDao;
 
 @Component
 public class RoleModuleDaoImpl extends BaseDaoImpl<RoleModule> implements IRoleModuleDao {

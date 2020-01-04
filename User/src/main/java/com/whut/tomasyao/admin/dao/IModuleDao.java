@@ -5,8 +5,8 @@ package com.whut.tomasyao.admin.dao;
  * Date: 2018-03-28 19:34
  */
 
-import edu.whut.pocket.base.dao.IBaseDao;
-import edu.whut.pocket.admin.model.Module;
+import com.whut.tomasyao.base.dao.IBaseDao;
+import com.whut.tomasyao.admin.model.Module;
 
 import java.util.List;
 

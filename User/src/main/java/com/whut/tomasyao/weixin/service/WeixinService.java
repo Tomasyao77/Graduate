@@ -1,7 +1,7 @@
 package com.whut.tomasyao.weixin.service;
 
-import edu.whut.pocket.weixin.model.TextMessage;
-import edu.whut.pocket.weixin.util.MessageUtil;
+import com.whut.tomasyao.weixin.model.TextMessage;
+import com.whut.tomasyao.weixin.util.MessageUtil;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 

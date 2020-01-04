@@ -5,20 +5,20 @@ package com.whut.tomasyao.message.service.impl;
  * Date: 2018-09-15 15:36
  */
 
-import edu.whut.pocket.auth.dao.IMessageRedisDao;
-import edu.whut.pocket.base.mybatis.params.ParamsMap;
-import edu.whut.pocket.base.util.EncryptUtil;
-import edu.whut.pocket.base.vo.Page;
-import edu.whut.pocket.message.common.SmsPlatform;
-import edu.whut.pocket.message.common.SmsType;
-import edu.whut.pocket.message.mapper.LogMessageMapper;
-import edu.whut.pocket.message.util.MessageUtil;
+import com.whut.tomasyao.auth.dao.IMessageRedisDao;
+import com.whut.tomasyao.base.mybatis.params.ParamsMap;
+import com.whut.tomasyao.base.util.EncryptUtil;
+import com.whut.tomasyao.base.vo.Page;
+import com.whut.tomasyao.message.common.SmsPlatform;
+import com.whut.tomasyao.message.common.SmsType;
+import com.whut.tomasyao.message.mapper.LogMessageMapper;
+import com.whut.tomasyao.message.util.MessageUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-import edu.whut.pocket.message.model.LogMessage;
-import edu.whut.pocket.message.service.ILogMessageService;
+import com.whut.tomasyao.message.model.LogMessage;
+import com.whut.tomasyao.message.service.ILogMessageService;
 
 import java.util.Date;
 import java.util.List;

@@ -1,6 +1,6 @@
 package com.whut.tomasyao.file.model;
 
-import edu.whut.pocket.base.common.FileType;
+import com.whut.tomasyao.base.common.FileType;
 
 import java.util.Date;
 

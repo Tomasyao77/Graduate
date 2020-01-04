@@ -5,8 +5,8 @@ package com.whut.tomasyao.auth.dao;
  * Date: 2018-05-05 11:03
  */
 
-import edu.whut.pocket.base.dao.IBaseDao;
-import edu.whut.pocket.auth.model.Swagger;
+import com.whut.tomasyao.base.dao.IBaseDao;
+import com.whut.tomasyao.auth.model.Swagger;
 
 public interface ISwaggerDao extends IBaseDao<Swagger> {
 }

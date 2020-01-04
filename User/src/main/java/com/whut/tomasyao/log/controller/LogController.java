@@ -5,16 +5,16 @@ package com.whut.tomasyao.log.controller;
  * Date: 2018-07-28 15:20
  */
 
-import edu.whut.pocket.base.vo.Page;
-import edu.whut.pocket.log.service.ILogUserService;
-import edu.whut.pocket.log.vo.LogUserVo;
+import com.whut.tomasyao.base.vo.Page;
+import com.whut.tomasyao.log.service.ILogUserService;
+import com.whut.tomasyao.log.vo.LogUserVo;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
-import edu.whut.pocket.base.vo.ResponseMap;
+import com.whut.tomasyao.base.vo.ResponseMap;
 import springfox.documentation.annotations.ApiIgnore;
 
 @ApiIgnore

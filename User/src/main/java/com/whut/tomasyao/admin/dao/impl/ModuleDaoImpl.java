@@ -12,9 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate4.HibernateCallback;
 import org.springframework.orm.hibernate4.HibernateTemplate;
 import org.springframework.stereotype.Component;
-import edu.whut.pocket.base.dao.impl.BaseDaoImpl;
-import edu.whut.pocket.admin.model.Module;
-import edu.whut.pocket.admin.dao.IModuleDao;
+import com.whut.tomasyao.base.dao.impl.BaseDaoImpl;
+import com.whut.tomasyao.admin.model.Module;
+import com.whut.tomasyao.admin.dao.IModuleDao;
 
 import java.util.ArrayList;
 import java.util.List;

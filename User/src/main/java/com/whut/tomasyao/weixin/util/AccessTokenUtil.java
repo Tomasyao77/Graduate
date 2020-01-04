@@ -1,6 +1,6 @@
 package com.whut.tomasyao.weixin.util;
 
-import edu.whut.pocket.weixin.model.token.AccessToken;
+import com.whut.tomasyao.weixin.model.token.AccessToken;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;

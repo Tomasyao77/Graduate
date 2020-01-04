@@ -17,8 +17,8 @@
     <import resource="dubbo.xml"/>
     <!--spring包扫描-->
     <context:component-scan
-            base-package="edu.whut.pocket.*.service,edu.whut.pocket.*.dao,edu.whut.pocket.*.util,
-                        edu.whut.pocket.dubbo,edu.whut.pocket.*.aspect"/>
+            base-package="com.whut.tomasyao.*.service,com.whut.tomasyao.*.dao,com.whut.tomasyao.*.util,
+                        com.whut.tomasyao.dubbo,com.whut.tomasyao.*.aspect"/>
     <!--数据源-->
     <context:property-placeholder location="classpath:jdbc.properties" ignore-unresolvable="true"/>
     <context:property-placeholder location="classpath:redis.properties" ignore-unresolvable="true"/>
@@ -46,7 +46,7 @@
         <property name="password" value="${slave.jdbc.password}"/>
     </bean>
     <!--数据库主从,动态切换数据源-->
-    <bean id="dataSource" class="edu.whut.pocket.base.db.DynamicDataSource">
+    <bean id="dataSource" class="com.whut.tomasyao.base.db.DynamicDataSource">
         <property name="targetDataSources">
             <map key-type="java.lang.String">
                 <entry key="slave" value-ref="slaveDataSource"/>
@@ -54,7 +54,7 @@
         </property>
         <property name="defaultTargetDataSource" ref="masterDataSource"/>
     </bean>
-    <bean id="dataSourceAdvice" class="edu.whut.pocket.base.db.DataSourceAdvice"/>
+    <bean id="dataSourceAdvice" class="com.whut.tomasyao.base.db.DataSourceAdvice"/>
     <aop:config>
         <aop:advisor pointcut="execution(public * edu.whut..*service..*.*(..))" advice-ref="dataSourceAdvice"/>
     </aop:config>
@@ -66,7 +66,7 @@
         <property name="dataSource" ref="dataSource"/>
         <property name="packagesToScan">
             <list>
-                <value>edu.whut.pocket.*.model</value>
+                <value>com.whut.tomasyao.*.model</value>
             </list>
         </property>
         <property name="hibernateProperties">
@@ -104,7 +104,7 @@
         <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory" />
     </bean>
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="edu.whut.pocket.**.mapper"/>
+        <property name="basePackage" value="com.whut.tomasyao.**.mapper"/>
         <property name="sqlSessionTemplateBeanName" value="sqlSessionTemplate"/>
     </bean>
     <!--事务管理-->
@@ -122,7 +122,7 @@
         </tx:attributes>
     </tx:advice>
     <aop:config>
-        <aop:pointcut expression="execution(* edu.whut.pocket..*.service..*(..))" id="businessService"/>
+        <aop:pointcut expression="execution(* com.whut.tomasyao..*.service..*(..))" id="businessService"/>
         <aop:advisor advice-ref="transactionAdvice" pointcut-ref="businessService"/>
     </aop:config>
     <!--redis 连接池 <- 工厂 <- 模板-->
@@ -151,10 +151,10 @@
     </bean>
     <!--kafka-->
     <!--kafakaProducer仅在本地测试时使用-->
-    <!--<bean id="kafakaProducer" class="edu.whut.pocket.kafka.MyProducer" init-method="initProducer"/>-->
-    <!--<bean id="kafakaConsumer" class="edu.whut.pocket.kafka.MyConsumer" init-method="initConsumer"/>-->
+    <!--<bean id="kafakaProducer" class="com.whut.tomasyao.kafka.MyProducer" init-method="initProducer"/>-->
+    <!--<bean id="kafakaConsumer" class="com.whut.tomasyao.kafka.MyConsumer" init-method="initConsumer"/>-->
     <!--短信-->
-    <!--<bean id="yiTDSmsHandler" class="edu.whut.pocket.message.util.YiTDSmsUtil" init-method="initSmsUtil"/>-->
+    <!--<bean id="yiTDSmsHandler" class="com.whut.tomasyao.message.util.YiTDSmsUtil" init-method="initSmsUtil"/>-->
     <!--weixin-->
-    <!--<bean id="weixin" class="edu.whut.pocket.weixin.controller.GetAccessToken" init-method="init"/>-->
+    <!--<bean id="weixin" class="com.whut.tomasyao.weixin.controller.GetAccessToken" init-method="init"/>-->
 </beans>

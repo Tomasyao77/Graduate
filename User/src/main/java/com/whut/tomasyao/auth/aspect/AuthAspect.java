@@ -1,10 +1,10 @@
 package com.whut.tomasyao.auth.aspect;
 
-import edu.whut.pocket.auth.dao.IAdminRedisVoDao;
-import edu.whut.pocket.auth.dao.IUserRedisVoDao;
-import edu.whut.pocket.auth.model.UserType;
-import edu.whut.pocket.auth.util.CookiesUtil;
-import edu.whut.pocket.auth.vo.AdminRedisVo;
+import com.whut.tomasyao.auth.dao.IAdminRedisVoDao;
+import com.whut.tomasyao.auth.dao.IUserRedisVoDao;
+import com.whut.tomasyao.auth.model.UserType;
+import com.whut.tomasyao.auth.util.CookiesUtil;
+import com.whut.tomasyao.auth.vo.AdminRedisVo;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -25,7 +25,7 @@ public class AuthAspect {
     
     private static Logger logger = Logger.getLogger(AuthAspect.class.getName());
 
-    @Around(value = "edu.whut.pocket.auth.aspect.AuthPointCut.authAccess()&&@annotation(authAnnotation)",
+    @Around(value = "com.whut.tomasyao.auth.aspect.AuthPointCut.authAccess()&&@annotation(authAnnotation)",
             argNames = "pjp,authAnnotation")
     public Object checkPermission(ProceedingJoinPoint pjp, AuthAnnotation authAnnotation) throws Throwable {
         UserType userType = authAnnotation.value();

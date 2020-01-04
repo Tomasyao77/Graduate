@@ -5,7 +5,7 @@ package com.whut.tomasyao.config.model;
  * Date: 2018-04-10 16:33
  */
 
-import edu.whut.pocket.base.common.ConfigType;
+import com.whut.tomasyao.base.common.ConfigType;
 
 import javax.persistence.*;
 import java.util.Date;

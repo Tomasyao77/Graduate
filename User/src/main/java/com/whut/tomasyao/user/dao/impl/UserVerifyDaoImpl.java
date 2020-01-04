@@ -6,9 +6,9 @@ package com.whut.tomasyao.user.dao.impl;
  */
 
 import org.springframework.stereotype.Component;
-import edu.whut.pocket.base.dao.impl.BaseDaoImpl;
-import edu.whut.pocket.user.model.UserVerify;
-import edu.whut.pocket.user.dao.IUserVerifyDao;
+import com.whut.tomasyao.base.dao.impl.BaseDaoImpl;
+import com.whut.tomasyao.user.model.UserVerify;
+import com.whut.tomasyao.user.dao.IUserVerifyDao;
 
 @Component
 public class UserVerifyDaoImpl extends BaseDaoImpl<UserVerify> implements IUserVerifyDao {

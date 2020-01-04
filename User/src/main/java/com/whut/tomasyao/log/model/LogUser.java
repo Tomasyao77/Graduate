@@ -1,6 +1,6 @@
 package com.whut.tomasyao.log.model;
 
-import edu.whut.pocket.base.common.MavenModule;
+import com.whut.tomasyao.base.common.MavenModule;
 
 import java.util.Date;
 

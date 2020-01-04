@@ -1,9 +1,9 @@
 package com.whut.tomasyao.auth.filter;
 
-import edu.whut.pocket.auth.util.CookiesUtil;
-import edu.whut.pocket.auth.util.LoginUtil;
-import edu.whut.pocket.auth.vo.AdminRedisVo;
-import edu.whut.pocket.auth.vo.UserRedisVo;
+import com.whut.tomasyao.auth.util.CookiesUtil;
+import com.whut.tomasyao.auth.util.LoginUtil;
+import com.whut.tomasyao.auth.vo.AdminRedisVo;
+import com.whut.tomasyao.auth.vo.UserRedisVo;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * edu.whut.pocket.admin.filter
+ * com.whut.tomasyao.admin.filter
  * Created by YTY on 2016/6/14.
  */
 public class LoginCheckFilter implements Filter {

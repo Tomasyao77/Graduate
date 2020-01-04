@@ -6,9 +6,9 @@ package com.whut.tomasyao.config.dao.impl;
  */
 
 import org.springframework.stereotype.Component;
-import edu.whut.pocket.base.dao.impl.BaseDaoImpl;
-import edu.whut.pocket.config.model.Config;
-import edu.whut.pocket.config.dao.IConfigDao;
+import com.whut.tomasyao.base.dao.impl.BaseDaoImpl;
+import com.whut.tomasyao.config.model.Config;
+import com.whut.tomasyao.config.dao.IConfigDao;
 
 @Component
 public class ConfigDaoImpl extends BaseDaoImpl<Config> implements IConfigDao {

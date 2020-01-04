@@ -1,7 +1,7 @@
 package com.whut.tomasyao.auth.dao;
 
-import edu.whut.pocket.auth.vo.UserRedisVo;
-import edu.whut.pocket.base.dao.IRedisDao;
+import com.whut.tomasyao.auth.vo.UserRedisVo;
+import com.whut.tomasyao.base.dao.IRedisDao;
 
 /**
  * Created by YTY on 2016/6/9.

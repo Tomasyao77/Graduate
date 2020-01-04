@@ -1,18 +1,18 @@
 package com.whut.tomasyao.weixin.controller;
 
 import com.alibaba.dubbo.common.utils.StringUtils;
-import edu.whut.pocket.base.util.EncryptUtil;
-import edu.whut.pocket.base.vo.ResponseMap;
-import edu.whut.pocket.dubbo.file.service.IDubboFileService;
-import edu.whut.pocket.dubbo.store.service.IDubboStoreService;
-import edu.whut.pocket.file.util.FileUtil;
-import edu.whut.pocket.weixin.service.TokenThread;
-import edu.whut.pocket.weixin.service.WeixinService;
-import edu.whut.pocket.weixin.smallCode.CommonUtil;
-import edu.whut.pocket.weixin.smallCode.SmallCodeConstant;
-import edu.whut.pocket.weixin.util.AES;
-import edu.whut.pocket.weixin.util.MenuUtil;
-import edu.whut.pocket.weixin.util.SignUtil;
+import com.whut.tomasyao.base.util.EncryptUtil;
+import com.whut.tomasyao.base.vo.ResponseMap;
+import com.whut.tomasyao.dubbo.file.service.IDubboFileService;
+import com.whut.tomasyao.dubbo.store.service.IDubboStoreService;
+import com.whut.tomasyao.file.util.FileUtil;
+import com.whut.tomasyao.weixin.service.TokenThread;
+import com.whut.tomasyao.weixin.service.WeixinService;
+import com.whut.tomasyao.weixin.smallCode.CommonUtil;
+import com.whut.tomasyao.weixin.smallCode.SmallCodeConstant;
+import com.whut.tomasyao.weixin.util.AES;
+import com.whut.tomasyao.weixin.util.MenuUtil;
+import com.whut.tomasyao.weixin.util.SignUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -276,7 +276,7 @@ public class WeixinController {
             //上传到fdfs
             File file = new File(outFile+fileName+".png");
             String picture = FileUtil.upload(String.valueOf(userId), file);
-            edu.whut.pocket.base.model.File sqlFile = dubboFileService.addOneFile(picture);
+            com.whut.tomasyao.base.model.File sqlFile = dubboFileService.addOneFile(picture);
             dubboStoreService.createSmallCode(storeId, sqlFile.getId());
             map.put("qrcode", picture);
             clearFiles(outFile+fileName+".png");

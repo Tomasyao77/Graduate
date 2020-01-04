@@ -1,7 +1,7 @@
 package com.whut.tomasyao.log.service;
 
-import edu.whut.pocket.base.vo.Page;
-import edu.whut.pocket.log.vo.LogUserVo;
+import com.whut.tomasyao.base.vo.Page;
+import com.whut.tomasyao.log.vo.LogUserVo;
 
 /**
  * Author: zouy

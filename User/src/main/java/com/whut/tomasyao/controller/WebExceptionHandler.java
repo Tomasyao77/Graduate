@@ -1,6 +1,6 @@
 package com.whut.tomasyao.controller;
 
-import edu.whut.pocket.base.vo.ResponseMap;
+import com.whut.tomasyao.base.vo.ResponseMap;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;

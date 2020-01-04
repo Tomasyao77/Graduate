@@ -5,8 +5,8 @@ package com.whut.tomasyao.user.service;
  * Date: 2018-06-13 21:22
  */
 
-import edu.whut.pocket.user.model.UserAddress;
-import edu.whut.pocket.base.vo.Page;
+import com.whut.tomasyao.user.model.UserAddress;
+import com.whut.tomasyao.base.vo.Page;
 
 public interface IUserAddressService {
 

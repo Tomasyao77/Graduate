@@ -1,6 +1,6 @@
 package com.whut.tomasyao.message.mapper;
 
-import edu.whut.pocket.message.model.LogMessage;
+import com.whut.tomasyao.message.model.LogMessage;
 
 import java.util.HashMap;
 import java.util.List;

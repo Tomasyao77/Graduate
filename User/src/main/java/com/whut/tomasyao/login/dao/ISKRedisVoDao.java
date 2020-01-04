@@ -1,6 +1,6 @@
 package com.whut.tomasyao.login.dao;
 
-import edu.whut.pocket.base.dao.IRedisDao;
+import com.whut.tomasyao.base.dao.IRedisDao;
 
 /**
  * Created by YTY on 2016/6/9.

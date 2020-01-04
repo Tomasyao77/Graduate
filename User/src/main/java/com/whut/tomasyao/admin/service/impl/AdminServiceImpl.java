@@ -5,20 +5,19 @@ package com.whut.tomasyao.admin.service.impl;
  * Date: 2018-03-28 20:14
  */
 
-import edu.whut.pocket.admin.dao.*;
-import edu.whut.pocket.admin.mapper.AdminMapper;
-import edu.whut.pocket.admin.model.*;
-import edu.whut.pocket.admin.vo.ModuleVo;
-import edu.whut.pocket.admin.vo.ModulesVo;
-import edu.whut.pocket.base.common.AdminType;
-import edu.whut.pocket.base.util.EncryptUtil;
-import edu.whut.pocket.base.util.HqlUtil;
-import edu.whut.pocket.base.vo.Page;
-import edu.whut.pocket.base.vo.Parameter;
-import edu.whut.pocket.institution.dao.IAdminInstitutionDao;
+import com.whut.tomasyao.admin.dao.*;
+import com.whut.tomasyao.admin.mapper.AdminMapper;
+import com.whut.tomasyao.admin.model.*;
+import com.whut.tomasyao.admin.vo.ModuleVo;
+import com.whut.tomasyao.admin.vo.ModulesVo;
+import com.whut.tomasyao.base.common.AdminType;
+import com.whut.tomasyao.base.util.EncryptUtil;
+import com.whut.tomasyao.base.util.HqlUtil;
+import com.whut.tomasyao.base.vo.Page;
+import com.whut.tomasyao.base.vo.Parameter;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-import edu.whut.pocket.admin.service.IAdminService;
+import com.whut.tomasyao.admin.service.IAdminService;
 
 import java.util.*;
 
@@ -35,8 +34,6 @@ public class AdminServiceImpl implements IAdminService {
     private IRoleModuleDao roleModuleDao;
     @Autowired
     private IAdminModuleDao adminModuleDao;
-    @Autowired
-    private IAdminInstitutionDao adminInstitutionDao;
     @Autowired
     private AdminMapper adminMapper;
 
@@ -412,8 +409,6 @@ public class AdminServiceImpl implements IAdminService {
             return false;
         }
         admin.setDeleted(true);
-        //删除与管理员关联的admin_institution信息
-        adminInstitutionDao.deleteWithHql(" delete from AdminInstitution ai where ai.adminId='"+id+"' ");
         return true;
     }
 

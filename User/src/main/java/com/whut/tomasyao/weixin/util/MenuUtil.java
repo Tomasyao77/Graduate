@@ -1,9 +1,9 @@
 package com.whut.tomasyao.weixin.util;
 
-import edu.whut.pocket.weixin.model.button.Button;
-import edu.whut.pocket.weixin.model.button.ClickButton;
-import edu.whut.pocket.weixin.model.button.Menu;
-import edu.whut.pocket.weixin.model.button.ViewButton;
+import com.whut.tomasyao.weixin.model.button.Button;
+import com.whut.tomasyao.weixin.model.button.ClickButton;
+import com.whut.tomasyao.weixin.model.button.Menu;
+import com.whut.tomasyao.weixin.model.button.ViewButton;
 import org.apache.log4j.Logger;
 
 /**

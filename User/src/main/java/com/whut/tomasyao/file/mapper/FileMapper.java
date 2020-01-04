@@ -1,6 +1,6 @@
 package com.whut.tomasyao.file.mapper;
 
-import edu.whut.pocket.file.vo.FileVo;
+import com.whut.tomasyao.file.vo.FileVo;
 
 import java.util.HashMap;
 import java.util.List;

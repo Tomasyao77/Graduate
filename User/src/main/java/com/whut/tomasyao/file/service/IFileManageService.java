@@ -5,8 +5,8 @@ package com.whut.tomasyao.file.service;
  * Date: 2018-09-14 10:12
  */
 
-import edu.whut.pocket.base.vo.Page;
-import edu.whut.pocket.file.vo.FileVo;
+import com.whut.tomasyao.base.vo.Page;
+import com.whut.tomasyao.file.vo.FileVo;
 
 public interface IFileManageService {
 

@@ -1,7 +1,7 @@
 package com.whut.tomasyao.log.vo;
 
-import edu.whut.pocket.base.common.MavenModule;
-import edu.whut.pocket.user.vo.UserVo;
+import com.whut.tomasyao.base.common.MavenModule;
+import com.whut.tomasyao.user.vo.UserVo;
 
 import java.util.Date;
 

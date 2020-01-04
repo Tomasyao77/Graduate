@@ -1,7 +1,7 @@
 package com.whut.tomasyao.admin.mapper;
 
-import edu.whut.pocket.admin.vo.AdminVo;
-import edu.whut.pocket.admin.vo.ModuleVo;
+import com.whut.tomasyao.admin.vo.AdminVo;
+import com.whut.tomasyao.admin.vo.ModuleVo;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;

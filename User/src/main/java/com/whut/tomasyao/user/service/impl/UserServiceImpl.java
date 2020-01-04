@@ -5,20 +5,20 @@ package com.whut.tomasyao.user.service.impl;
  * Date: 2018-02-11 20:47
  */
 
-import edu.whut.pocket.base.model.File;
-import edu.whut.pocket.base.util.EncryptUtil;
-import edu.whut.pocket.base.util.HqlUtil;
-import edu.whut.pocket.base.util.StringUtil;
-import edu.whut.pocket.base.vo.Page;
-import edu.whut.pocket.base.vo.Parameter;
-import edu.whut.pocket.dubbo.user.service.IDubboUserService;
-import edu.whut.pocket.user.mapper.UserMapper;
-import edu.whut.pocket.user.vo.UserVo;
+import com.whut.tomasyao.base.model.File;
+import com.whut.tomasyao.base.util.EncryptUtil;
+import com.whut.tomasyao.base.util.HqlUtil;
+import com.whut.tomasyao.base.util.StringUtil;
+import com.whut.tomasyao.base.vo.Page;
+import com.whut.tomasyao.base.vo.Parameter;
+import com.whut.tomasyao.dubbo.user.service.IDubboUserService;
+import com.whut.tomasyao.user.mapper.UserMapper;
+import com.whut.tomasyao.user.vo.UserVo;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-import edu.whut.pocket.base.model.User;
-import edu.whut.pocket.user.service.IUserService;
-import edu.whut.pocket.user.dao.IUserDao;
+import com.whut.tomasyao.base.model.User;
+import com.whut.tomasyao.user.service.IUserService;
+import com.whut.tomasyao.user.dao.IUserDao;
 
 import java.util.Date;
 import java.util.HashMap;

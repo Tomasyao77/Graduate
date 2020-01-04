@@ -1,10 +1,10 @@
 package com.whut.tomasyao.kafka;
 
-import edu.whut.pocket.file.util.FileUtil;
-import edu.whut.pocket.kafka.util.KafkaConsumerUtil;
-import edu.whut.pocket.log.service.ILogUserService;
-import edu.whut.pocket.message.mapper.LogMessageMapper;
-import edu.whut.pocket.message.service.ILogMessageService;
+import com.whut.tomasyao.file.util.FileUtil;
+import com.whut.tomasyao.kafka.util.KafkaConsumerUtil;
+import com.whut.tomasyao.log.service.ILogUserService;
+import com.whut.tomasyao.message.mapper.LogMessageMapper;
+import com.whut.tomasyao.message.service.ILogMessageService;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;

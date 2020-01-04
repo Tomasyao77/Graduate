@@ -5,22 +5,18 @@ package com.whut.tomasyao.user.controller;
  * Date: 2018-02-12 13:59
  */
 
-import edu.whut.pocket.base.common.MavenModule;
-import edu.whut.pocket.base.model.File;
-import edu.whut.pocket.dubbo.config.service.IDubboConfigService;
-import edu.whut.pocket.dubbo.store.service.IDubboStoreService;
-import edu.whut.pocket.dubbo.user.service.IDubboUserService;
-import edu.whut.pocket.log.aspect.LogAnnotation;
-import edu.whut.pocket.message.service.ILogMessageService;
-import edu.whut.pocket.user.model.UserAddress;
-import edu.whut.pocket.base.vo.Page;
-import edu.whut.pocket.dubbo.file.service.IDubboFileService;
-import edu.whut.pocket.file.service.IFileService;
-import edu.whut.pocket.user.model.UserVerify;
-import edu.whut.pocket.user.service.IUserAddressService;
-import edu.whut.pocket.user.service.IUserVerifyService;
-import edu.whut.pocket.user.vo.UserVerifyVo;
-import edu.whut.pocket.user.vo.UserVo;
+import com.whut.tomasyao.base.common.MavenModule;
+import com.whut.tomasyao.base.model.File;
+import com.whut.tomasyao.log.aspect.LogAnnotation;
+import com.whut.tomasyao.message.service.ILogMessageService;
+import com.whut.tomasyao.user.model.UserAddress;
+import com.whut.tomasyao.base.vo.Page;
+import com.whut.tomasyao.file.service.IFileService;
+import com.whut.tomasyao.user.model.UserVerify;
+import com.whut.tomasyao.user.service.IUserAddressService;
+import com.whut.tomasyao.user.service.IUserVerifyService;
+import com.whut.tomasyao.user.vo.UserVerifyVo;
+import com.whut.tomasyao.user.vo.UserVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -35,9 +31,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import edu.whut.pocket.base.vo.ResponseMap;
-import edu.whut.pocket.base.model.User;
-import edu.whut.pocket.user.service.IUserService;
+import com.whut.tomasyao.base.vo.ResponseMap;
+import com.whut.tomasyao.base.model.User;
+import com.whut.tomasyao.user.service.IUserService;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -54,15 +50,7 @@ public class UserController {
     @Autowired
     private IFileService fileService;
     @Autowired
-    private IDubboFileService dubboFileService;
-    @Autowired
     private ILogMessageService logMessageService;
-    @Autowired
-    private IDubboConfigService dubboConfigService;
-    @Autowired
-    private IDubboUserService dubboUserService;
-    @Autowired
-    private IDubboStoreService dubboStoreService;
 
     private static final Logger logger = Logger.getLogger(UserController.class);
 

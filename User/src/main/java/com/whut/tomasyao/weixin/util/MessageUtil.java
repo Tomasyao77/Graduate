@@ -1,7 +1,7 @@
 package com.whut.tomasyao.weixin.util;
 
 import com.thoughtworks.xstream.XStream;
-import edu.whut.pocket.weixin.model.TextMessage;
+import com.whut.tomasyao.weixin.model.TextMessage;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;

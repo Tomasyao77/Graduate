@@ -1,8 +1,8 @@
 package com.whut.tomasyao.user.mapper;
 
-import edu.whut.pocket.base.model.User;
-import edu.whut.pocket.user.vo.UserVerifyVo;
-import edu.whut.pocket.user.vo.UserVo;
+import com.whut.tomasyao.base.model.User;
+import com.whut.tomasyao.user.vo.UserVerifyVo;
+import com.whut.tomasyao.user.vo.UserVo;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;

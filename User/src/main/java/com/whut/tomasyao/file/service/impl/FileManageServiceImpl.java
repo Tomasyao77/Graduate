@@ -5,13 +5,13 @@ package com.whut.tomasyao.file.service.impl;
  * Date: 2018-09-14 10:18
  */
 
-import edu.whut.pocket.base.mybatis.params.ParamsMap;
-import edu.whut.pocket.base.vo.Page;
-import edu.whut.pocket.file.mapper.FileMapper;
-import edu.whut.pocket.file.vo.FileVo;
+import com.whut.tomasyao.base.mybatis.params.ParamsMap;
+import com.whut.tomasyao.base.vo.Page;
+import com.whut.tomasyao.file.mapper.FileMapper;
+import com.whut.tomasyao.file.vo.FileVo;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-import edu.whut.pocket.file.service.IFileManageService;
+import com.whut.tomasyao.file.service.IFileManageService;
 
 import java.util.List;
 

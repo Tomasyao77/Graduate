@@ -5,16 +5,16 @@ package com.whut.tomasyao.log.service.impl;
  * Date: 2018-07-27 15:07
  */
 
-import edu.whut.pocket.base.common.MavenModule;
-import edu.whut.pocket.base.mybatis.params.ParamsMap;
-import edu.whut.pocket.base.vo.Page;
-import edu.whut.pocket.log.mapper.LogUserMapper;
-import edu.whut.pocket.log.vo.LogUserVo;
+import com.whut.tomasyao.base.common.MavenModule;
+import com.whut.tomasyao.base.mybatis.params.ParamsMap;
+import com.whut.tomasyao.base.vo.Page;
+import com.whut.tomasyao.log.mapper.LogUserMapper;
+import com.whut.tomasyao.log.vo.LogUserVo;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-import edu.whut.pocket.log.model.LogUser;
-import edu.whut.pocket.log.service.ILogUserService;
+import com.whut.tomasyao.log.model.LogUser;
+import com.whut.tomasyao.log.service.ILogUserService;
 
 import java.util.Date;
 import java.util.List;

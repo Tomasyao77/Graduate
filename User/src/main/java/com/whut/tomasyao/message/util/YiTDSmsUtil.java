@@ -1,7 +1,7 @@
 package com.whut.tomasyao.message.util;
 
-import edu.whut.pocket.kafka.util.KafkaProducerUtil;
-import edu.whut.pocket.message.model.Message;
+import com.whut.tomasyao.kafka.util.KafkaProducerUtil;
+import com.whut.tomasyao.message.model.Message;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.PostMethod;

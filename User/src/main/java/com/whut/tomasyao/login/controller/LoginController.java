@@ -5,17 +5,17 @@ package com.whut.tomasyao.login.controller;
  * Date: 2018-02-12 13:59
  */
 
-import edu.whut.pocket.auth.util.LoginUtil;
-import edu.whut.pocket.auth.vo.AdminRedisVo;
-import edu.whut.pocket.auth.vo.UserRedisVo;
-import edu.whut.pocket.base.common.Constant;
-import edu.whut.pocket.base.common.MavenModule;
-import edu.whut.pocket.base.vo.ResponseMap;
-import edu.whut.pocket.kafka.util.KafkaProducerUtil;
-import edu.whut.pocket.log.aspect.LogAnnotation;
-import edu.whut.pocket.login.dao.ISKRedisVoDao;
-import edu.whut.pocket.login.service.ILoginService;
-import edu.whut.pocket.message.service.ILogMessageService;
+import com.whut.tomasyao.auth.util.LoginUtil;
+import com.whut.tomasyao.auth.vo.AdminRedisVo;
+import com.whut.tomasyao.auth.vo.UserRedisVo;
+import com.whut.tomasyao.base.common.Constant;
+import com.whut.tomasyao.base.common.MavenModule;
+import com.whut.tomasyao.base.vo.ResponseMap;
+import com.whut.tomasyao.kafka.util.KafkaProducerUtil;
+import com.whut.tomasyao.log.aspect.LogAnnotation;
+import com.whut.tomasyao.login.dao.ISKRedisVoDao;
+import com.whut.tomasyao.login.service.ILoginService;
+import com.whut.tomasyao.message.service.ILogMessageService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;

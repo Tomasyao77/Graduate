@@ -6,9 +6,9 @@ package com.whut.tomasyao.auth.dao.impl;
  */
 
 import org.springframework.stereotype.Component;
-import edu.whut.pocket.base.dao.impl.BaseDaoImpl;
-import edu.whut.pocket.auth.model.Swagger;
-import edu.whut.pocket.auth.dao.ISwaggerDao;
+import com.whut.tomasyao.base.dao.impl.BaseDaoImpl;
+import com.whut.tomasyao.auth.model.Swagger;
+import com.whut.tomasyao.auth.dao.ISwaggerDao;
 
 @Component
 public class SwaggerDaoImpl extends BaseDaoImpl<Swagger> implements ISwaggerDao {

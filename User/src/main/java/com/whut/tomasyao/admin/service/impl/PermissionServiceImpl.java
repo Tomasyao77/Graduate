@@ -5,14 +5,14 @@ package com.whut.tomasyao.admin.service.impl;
  * Date: 2018-04-08 15:17
  */
 
-import edu.whut.pocket.admin.dao.*;
-import edu.whut.pocket.admin.model.*;
-import edu.whut.pocket.admin.service.IAdminService;
-import edu.whut.pocket.base.util.HqlUtil;
-import edu.whut.pocket.base.vo.Parameter;
+import com.whut.tomasyao.admin.dao.*;
+import com.whut.tomasyao.admin.model.*;
+import com.whut.tomasyao.admin.service.IAdminService;
+import com.whut.tomasyao.base.util.HqlUtil;
+import com.whut.tomasyao.base.vo.Parameter;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-import edu.whut.pocket.admin.service.IPermissionService;
+import com.whut.tomasyao.admin.service.IPermissionService;
 
 import java.util.*;
 

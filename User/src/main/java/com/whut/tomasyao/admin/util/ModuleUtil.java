@@ -1,7 +1,7 @@
 package com.whut.tomasyao.admin.util;
 
-import edu.whut.pocket.admin.model.Module;
-import edu.whut.pocket.admin.vo.ModulesVo;
+import com.whut.tomasyao.admin.model.Module;
+import com.whut.tomasyao.admin.vo.ModulesVo;
 
 import java.util.*;
 

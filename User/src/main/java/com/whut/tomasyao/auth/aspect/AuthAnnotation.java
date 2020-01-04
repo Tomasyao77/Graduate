@@ -1,6 +1,6 @@
 package com.whut.tomasyao.auth.aspect;
 
-import edu.whut.pocket.auth.model.UserType;
+import com.whut.tomasyao.auth.model.UserType;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

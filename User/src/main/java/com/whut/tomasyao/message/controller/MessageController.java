@@ -5,14 +5,14 @@ package com.whut.tomasyao.message.controller;
  * Date: 2018-09-15 17:06
  */
 
-import edu.whut.pocket.auth.dao.IMessageRedisDao;
-import edu.whut.pocket.base.common.MavenModule;
-import edu.whut.pocket.base.util.StringUtil;
-import edu.whut.pocket.base.vo.Page;
-import edu.whut.pocket.log.aspect.LogAnnotation;
-import edu.whut.pocket.message.model.LogMessage;
-import edu.whut.pocket.message.service.ILogMessageService;
-import edu.whut.pocket.message.util.MessageUtil;
+import com.whut.tomasyao.auth.dao.IMessageRedisDao;
+import com.whut.tomasyao.base.common.MavenModule;
+import com.whut.tomasyao.base.util.StringUtil;
+import com.whut.tomasyao.base.vo.Page;
+import com.whut.tomasyao.log.aspect.LogAnnotation;
+import com.whut.tomasyao.message.model.LogMessage;
+import com.whut.tomasyao.message.service.ILogMessageService;
+import com.whut.tomasyao.message.util.MessageUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -24,8 +24,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
-import edu.whut.pocket.base.vo.ResponseMap;
-import edu.whut.pocket.message.model.Message;
+import com.whut.tomasyao.base.vo.ResponseMap;
+import com.whut.tomasyao.message.model.Message;
 import springfox.documentation.annotations.ApiIgnore;
 
 @Api(tags = {"短信"}, description = "验证码|普通短信", produces = MediaType.APPLICATION_JSON_VALUE)

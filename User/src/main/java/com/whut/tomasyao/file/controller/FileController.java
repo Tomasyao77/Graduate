@@ -5,8 +5,8 @@ package com.whut.tomasyao.file.controller;
  * Date: 2018-06-09 08:48
  */
 
-import edu.whut.pocket.file.util.FileUtil;
-import edu.whut.pocket.redirect.HttpUtil;
+import com.whut.tomasyao.file.util.FileUtil;
+import com.whut.tomasyao.redirect.HttpUtil;
 import io.swagger.annotations.ApiOperation;
 import net.coobird.thumbnailator.Thumbnails;
 import org.apache.http.NameValuePair;
@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import edu.whut.pocket.file.service.IFileService;
+import com.whut.tomasyao.file.service.IFileService;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import springfox.documentation.annotations.ApiIgnore;

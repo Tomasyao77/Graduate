@@ -1,7 +1,7 @@
 package com.whut.tomasyao.log.mapper;
 
-import edu.whut.pocket.log.model.LogUser;
-import edu.whut.pocket.log.vo.LogUserVo;
+import com.whut.tomasyao.log.model.LogUser;
+import com.whut.tomasyao.log.vo.LogUserVo;
 
 import java.util.HashMap;
 import java.util.List;

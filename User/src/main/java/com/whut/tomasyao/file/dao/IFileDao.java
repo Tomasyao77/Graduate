@@ -5,8 +5,8 @@ package com.whut.tomasyao.file.dao;
  * Date: 2018-03-24 11:09
  */
 
-import edu.whut.pocket.base.dao.IBaseDao;
-import edu.whut.pocket.base.model.File;
+import com.whut.tomasyao.base.dao.IBaseDao;
+import com.whut.tomasyao.base.model.File;
 
 public interface IFileDao extends IBaseDao<File> {
 }

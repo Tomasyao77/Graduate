@@ -5,12 +5,12 @@ package com.whut.tomasyao.admin.service;
  * Date: 2018-03-28 20:14
  */
 
-import edu.whut.pocket.admin.model.Admin;
-import edu.whut.pocket.admin.model.Module;
-import edu.whut.pocket.admin.model.Role;
-import edu.whut.pocket.admin.vo.ModuleVo;
-import edu.whut.pocket.admin.vo.ModulesVo;
-import edu.whut.pocket.base.vo.Page;
+import com.whut.tomasyao.admin.model.Admin;
+import com.whut.tomasyao.admin.model.Module;
+import com.whut.tomasyao.admin.model.Role;
+import com.whut.tomasyao.admin.vo.ModuleVo;
+import com.whut.tomasyao.admin.vo.ModulesVo;
+import com.whut.tomasyao.base.vo.Page;
 
 import java.util.Date;
 import java.util.List;

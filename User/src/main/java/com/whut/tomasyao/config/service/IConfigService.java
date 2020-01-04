@@ -5,8 +5,8 @@ package com.whut.tomasyao.config.service;
  * Date: 2018-04-10 16:57
  */
 
-import edu.whut.pocket.base.vo.Page;
-import edu.whut.pocket.config.model.Config;
+import com.whut.tomasyao.base.vo.Page;
+import com.whut.tomasyao.config.model.Config;
 
 import java.util.List;
 

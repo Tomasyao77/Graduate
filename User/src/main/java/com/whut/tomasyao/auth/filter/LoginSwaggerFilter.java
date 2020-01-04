@@ -1,8 +1,8 @@
 package com.whut.tomasyao.auth.filter;
 
-import edu.whut.pocket.auth.dao.ISwaggerDao;
-import edu.whut.pocket.auth.model.Swagger;
-import edu.whut.pocket.auth.util.LoginUtil;
+import com.whut.tomasyao.auth.dao.ISwaggerDao;
+import com.whut.tomasyao.auth.model.Swagger;
+import com.whut.tomasyao.auth.util.LoginUtil;
 import org.apache.log4j.Logger;
 
 import javax.servlet.*;
@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * edu.whut.pocket.admin.filter
+ * com.whut.tomasyao.admin.filter
  * Created by zouy on 2018/5/6.
  */
 public class LoginSwaggerFilter implements Filter {

@@ -1,9 +1,9 @@
 package com.whut.tomasyao.log.aspect;
 
-import edu.whut.pocket.auth.util.LoginUtil;
-import edu.whut.pocket.base.common.MavenModule;
-import edu.whut.pocket.base.util.StringUtil;
-import edu.whut.pocket.kafka.util.KafkaProducerUtil;
+import com.whut.tomasyao.auth.util.LoginUtil;
+import com.whut.tomasyao.base.common.MavenModule;
+import com.whut.tomasyao.base.util.StringUtil;
+import com.whut.tomasyao.kafka.util.KafkaProducerUtil;
 import org.apache.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -27,12 +27,12 @@ import java.util.Map;
 public class LogAspect {
     private static final Logger logger = Logger.getLogger(LogAspect.class);
 
-    @Pointcut("@annotation(edu.whut.pocket.log.aspect.LogAnnotation)")
+    @Pointcut("@annotation(com.whut.tomasyao.log.aspect.LogAnnotation)")
     private void authAccess() {
     }
 
     //这里写的为环绕触发,可自行根据业务场景选择@Before @After
-    //触发条件为：(edu.whut.pocket.*.controller包下面所有类且)含有注解@LogAnnotation
+    //触发条件为：(com.whut.tomasyao.*.controller包下面所有类且)含有注解@LogAnnotation
     @Around(value = "authAccess() && @annotation(logAnnotation)", argNames = "pjp, logAnnotation")
     public Object doAroundMethod(ProceedingJoinPoint pjp, LogAnnotation logAnnotation) throws Throwable {
         JSONObject jsonObject = new JSONObject();

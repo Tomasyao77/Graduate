@@ -5,10 +5,10 @@ package com.whut.tomasyao.user.service;
  * Date: 2018-02-11 20:46
  */
 
-import edu.whut.pocket.base.model.File;
-import edu.whut.pocket.base.model.User;
-import edu.whut.pocket.base.vo.Page;
-import edu.whut.pocket.user.vo.UserVo;
+import com.whut.tomasyao.base.model.File;
+import com.whut.tomasyao.base.model.User;
+import com.whut.tomasyao.base.vo.Page;
+import com.whut.tomasyao.user.vo.UserVo;
 
 import java.util.List;
 

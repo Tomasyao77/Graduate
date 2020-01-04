@@ -5,7 +5,7 @@ package com.whut.tomasyao.config.vo;
  * Date: 2018-04-11 11:06
  */
 
-import edu.whut.pocket.base.common.ConfigType;
+import com.whut.tomasyao.base.common.ConfigType;
 
 import java.util.Date;
 

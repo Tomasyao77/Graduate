@@ -5,7 +5,7 @@ package com.whut.tomasyao.admin.model;
  * Date: 2018-03-28 19:42
  */
 
-import edu.whut.pocket.base.common.AdminType;
+import com.whut.tomasyao.base.common.AdminType;
 
 import javax.persistence.*;
 import java.util.Date;

@@ -1,8 +1,8 @@
 package com.whut.tomasyao.weixin.service;
 
-import edu.whut.pocket.weixin.model.token.AccessToken;
-import edu.whut.pocket.weixin.smallCode.SmallCodeConstant;
-import edu.whut.pocket.weixin.util.AccessTokenUtil;
+import com.whut.tomasyao.weixin.model.token.AccessToken;
+import com.whut.tomasyao.weixin.smallCode.SmallCodeConstant;
+import com.whut.tomasyao.weixin.util.AccessTokenUtil;
 import org.apache.log4j.Logger;
 
 /**

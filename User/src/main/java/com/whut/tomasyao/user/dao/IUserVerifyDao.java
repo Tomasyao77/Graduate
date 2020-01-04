@@ -5,8 +5,8 @@ package com.whut.tomasyao.user.dao;
  * Date: 2018-06-26 08:46
  */
 
-import edu.whut.pocket.base.dao.IBaseDao;
-import edu.whut.pocket.user.model.UserVerify;
+import com.whut.tomasyao.base.dao.IBaseDao;
+import com.whut.tomasyao.user.model.UserVerify;
 
 public interface IUserVerifyDao extends IBaseDao<UserVerify> {
 }

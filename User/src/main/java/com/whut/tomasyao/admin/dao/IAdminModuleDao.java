@@ -5,8 +5,8 @@ package com.whut.tomasyao.admin.dao;
  * Date: 2018-03-28 20:12
  */
 
-import edu.whut.pocket.base.dao.IBaseDao;
-import edu.whut.pocket.admin.model.AdminModule;
+import com.whut.tomasyao.base.dao.IBaseDao;
+import com.whut.tomasyao.admin.model.AdminModule;
 
 public interface IAdminModuleDao extends IBaseDao<AdminModule> {
 }

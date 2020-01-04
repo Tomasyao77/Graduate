@@ -5,8 +5,8 @@ package com.whut.tomasyao.config.dao;
  * Date: 2018-04-10 16:53
  */
 
-import edu.whut.pocket.base.dao.IBaseDao;
-import edu.whut.pocket.config.model.Config;
+import com.whut.tomasyao.base.dao.IBaseDao;
+import com.whut.tomasyao.config.model.Config;
 
 public interface IConfigDao extends IBaseDao<Config> {
 }

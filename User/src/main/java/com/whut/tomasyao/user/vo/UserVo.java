@@ -1,6 +1,6 @@
 package com.whut.tomasyao.user.vo;
 
-import edu.whut.pocket.file.vo.FileVo;
+import com.whut.tomasyao.file.vo.FileVo;
 
 import java.util.Date;
 

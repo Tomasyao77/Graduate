@@ -1,7 +1,7 @@
 package com.whut.tomasyao.login.dao.impl;
 
-import edu.whut.pocket.base.dao.impl.RedisDaoImpl;
-import edu.whut.pocket.login.dao.ISKRedisVoDao;
+import com.whut.tomasyao.base.dao.impl.RedisDaoImpl;
+import com.whut.tomasyao.login.dao.ISKRedisVoDao;
 import org.springframework.stereotype.Component;
 
 /**

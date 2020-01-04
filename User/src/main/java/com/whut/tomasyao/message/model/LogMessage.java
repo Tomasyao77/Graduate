@@ -1,7 +1,7 @@
 package com.whut.tomasyao.message.model;
 
-import edu.whut.pocket.message.common.SmsPlatform;
-import edu.whut.pocket.message.common.SmsType;
+import com.whut.tomasyao.message.common.SmsPlatform;
+import com.whut.tomasyao.message.common.SmsType;
 
 import java.util.Date;
 

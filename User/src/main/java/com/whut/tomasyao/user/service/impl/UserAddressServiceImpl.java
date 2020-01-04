@@ -5,17 +5,17 @@ package com.whut.tomasyao.user.service.impl;
  * Date: 2018-06-13 21:23
  */
 
-import edu.whut.pocket.base.model.User;
-import edu.whut.pocket.base.service.IAreaService;
-import edu.whut.pocket.base.util.HqlUtil;
-import edu.whut.pocket.base.vo.Page;
-import edu.whut.pocket.base.vo.Parameter;
-import edu.whut.pocket.user.dao.IUserDao;
+import com.whut.tomasyao.base.model.User;
+import com.whut.tomasyao.base.service.IAreaService;
+import com.whut.tomasyao.base.util.HqlUtil;
+import com.whut.tomasyao.base.vo.Page;
+import com.whut.tomasyao.base.vo.Parameter;
+import com.whut.tomasyao.user.dao.IUserDao;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-import edu.whut.pocket.user.model.UserAddress;
-import edu.whut.pocket.user.service.IUserAddressService;
-import edu.whut.pocket.user.dao.IUserAddressDao;
+import com.whut.tomasyao.user.model.UserAddress;
+import com.whut.tomasyao.user.service.IUserAddressService;
+import com.whut.tomasyao.user.dao.IUserAddressDao;
 
 import java.util.Arrays;
 import java.util.Date;

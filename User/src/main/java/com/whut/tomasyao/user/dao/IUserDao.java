@@ -5,8 +5,8 @@ package com.whut.tomasyao.user.dao;
  * Date: 2018-02-11 20:39
  */
 
-import edu.whut.pocket.base.dao.IBaseDao;
-import edu.whut.pocket.base.model.User;
+import com.whut.tomasyao.base.dao.IBaseDao;
+import com.whut.tomasyao.base.model.User;
 
 public interface IUserDao extends IBaseDao<User> {
 }

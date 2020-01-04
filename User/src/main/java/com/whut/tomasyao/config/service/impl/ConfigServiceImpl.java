@@ -5,15 +5,15 @@ package com.whut.tomasyao.config.service.impl;
  * Date: 2018-04-10 16:57
  */
 
-import edu.whut.pocket.base.common.ConfigType;
-import edu.whut.pocket.base.util.HqlUtil;
-import edu.whut.pocket.base.vo.Page;
-import edu.whut.pocket.base.vo.Parameter;
+import com.whut.tomasyao.base.common.ConfigType;
+import com.whut.tomasyao.base.util.HqlUtil;
+import com.whut.tomasyao.base.vo.Page;
+import com.whut.tomasyao.base.vo.Parameter;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-import edu.whut.pocket.config.model.Config;
-import edu.whut.pocket.config.service.IConfigService;
-import edu.whut.pocket.config.dao.IConfigDao;
+import com.whut.tomasyao.config.model.Config;
+import com.whut.tomasyao.config.service.IConfigService;
+import com.whut.tomasyao.config.dao.IConfigDao;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -89,7 +89,7 @@ public class ConfigServiceImpl implements IConfigService {
     @Override
     public Page<Config> getConfigPageList(int current, int size, String search, int parentId,
                                           String orderBy, Boolean asc) throws Exception {
-        String hql = " select new edu.whut.pocket.config.vo.ConfigHibernateVo(" +
+        String hql = " select new com.whut.tomasyao.config.vo.ConfigHibernateVo(" +
                 "c.id,c.name,c.nameEn,c.valueType,c.createTime,c.value,ci.id,ci.name,ci.nameEn)" +
                 " from Config c inner join c.parent ci ";//自连接查询parent属性
         if(parentId == 0){

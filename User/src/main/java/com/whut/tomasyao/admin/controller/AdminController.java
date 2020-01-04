@@ -5,19 +5,19 @@ package com.whut.tomasyao.admin.controller;
  * Date: 2018-02-12 13:59
  */
 
-import edu.whut.pocket.admin.mapper.AdminMapper;
-import edu.whut.pocket.admin.model.Admin;
-import edu.whut.pocket.admin.model.Module;
-import edu.whut.pocket.admin.model.Role;
-import edu.whut.pocket.admin.service.IAdminService;
-import edu.whut.pocket.admin.util.ModuleUtil;
-import edu.whut.pocket.admin.vo.AdminVo;
-import edu.whut.pocket.admin.vo.ModuleVo;
-import edu.whut.pocket.admin.vo.ModulesVo;
-import edu.whut.pocket.base.common.MavenModule;
-import edu.whut.pocket.base.vo.Page;
-import edu.whut.pocket.base.vo.ResponseMap;
-import edu.whut.pocket.log.aspect.LogAnnotation;
+import com.whut.tomasyao.admin.mapper.AdminMapper;
+import com.whut.tomasyao.admin.model.Admin;
+import com.whut.tomasyao.admin.model.Module;
+import com.whut.tomasyao.admin.model.Role;
+import com.whut.tomasyao.admin.service.IAdminService;
+import com.whut.tomasyao.admin.util.ModuleUtil;
+import com.whut.tomasyao.admin.vo.AdminVo;
+import com.whut.tomasyao.admin.vo.ModuleVo;
+import com.whut.tomasyao.admin.vo.ModulesVo;
+import com.whut.tomasyao.base.common.MavenModule;
+import com.whut.tomasyao.base.vo.Page;
+import com.whut.tomasyao.base.vo.ResponseMap;
+import com.whut.tomasyao.log.aspect.LogAnnotation;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.log4j.Logger;
