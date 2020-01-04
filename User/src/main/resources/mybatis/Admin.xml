@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.whut.pocket.admin.mapper.AdminMapper">
+    <!--暂时不使用缓存-->
+    <!--<cache eviction="LRU" flushInterval="60000" size="1024" readOnly="true"/>-->
+
+    <resultMap id="getModuleRM" type="edu.whut.pocket.admin.vo.ModuleVo">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="url" column="url"/>
+        <result property="icon" column="icon"/>
+        <result property="index" column="index1"/>
+        <result property="type" column="type"/>
+        <result property="level" column="level"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <association property="nodes" column="{parent_id=id,type=type}" select="getModuleList"/>
+    </resultMap>
+
+    <!--好像没有用了-->
+	<select id="getAdminMB" parameterType="int" resultType="edu.whut.pocket.admin.vo.AdminVo">
+		select
+		a.id as adminId, a.name as adminName, a.create_time as adminCreateTime,
+		i.id as institutionId, i.name as institutionName,
+		f.url as picture, f1.url as pictureThumb,
+		ar.merger_name as areaMergerName
+		from admin a
+		 left join admin_institution ai on ai.admin_id = a.id
+		 left join institution i on ai.institution_id = i.id
+		 left join file f on f.id=i.picture
+		 left join file f1 on f1.id=i.picture_thumb
+		 left join area ar on ar.code=i.area
+		 where a.id = #{id}
+	</select>
+
+    <select id="getModuleList" parameterType="hashmap"
+            resultMap="getModuleRM">
+        select *,if(m.parent_id=0,0,1) as level from module m
+        <where>
+            <if test="1 == 1">m.is_deleted=0</if>
+            <if test="parent_id != null and parent_id >= 0">and m.parent_id=#{parent_id}</if>
+            <if test="type != null and type >= 0">and m.type=#{type}</if>
+        </where>
+        order by m.index1 asc
+    </select>
+</mapper>

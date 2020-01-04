@@ -1,0 +1,589 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<div ng-controller="credit">
+    <div class="panel panel-default m-t-lg">
+        <div class="panel-heading">
+            <h4>赊购列表</h4>
+            <div class="clearfix">
+                <label>
+                    <button class="btn btn-success" ng-click="page.refreshTo(1)">
+                        <span class="icon-refresh m-r"></span>刷新
+                    </button>
+                </label>
+                <form class="form-inline pull-right" ng-submit="page.refreshTo(1)">
+                    <label>审核状态&nbsp;
+                        <select class="form-control" ng-model="searchType"
+                                ng-options="x.id as x.name for x in verifyType"
+                                ng-change="selectChange()"></select>
+                    </label>
+                    <input class="form-control m-l" type="text"
+                           placeholder="名称/描述" ng-model="search">
+                    <button class="btn btn-primary" type="submit">
+                        <span class="icon-search m-r"></span> 搜索
+                    </button>
+                </form>
+            </div>
+        </div>
+        <%@ include file="/jsp/common/table.jspf" %>
+    </div>
+    <%--编辑价格--%>
+    <div entity-modal="modal-creditYou" title="价格" e="entityCredit">
+        <entity-modal-body>
+            <div entity-view-tag="entityCredit.entity.name" type="text" title="名称"></div>
+            <div entity-view-tag="entityCredit.entity.description" type="textarea" title="描述"></div>
+            <div entity-view-tag="entityCredit.entity.num" type="text" title="数量"></div>
+            <div entity-edit-text="originalPrice" type="number" title="原价" entity="entityCredit.entity" e="entityCredit"
+                 vld="entityCredit.validate"></div>
+            <div entity-edit-text="currentPrice" type="number" title="现价" entity="entityCredit.entity" e="entityCredit"
+                 vld="entityCredit.validate"></div>
+            <div entity-edit-text="activityPrice" type="number" title="活动价" entity="entityCredit.entity" e="entityCredit"
+                 ></div>
+        </entity-modal-body>
+    </div>
+    <%--赊购须知--%>
+    <div entity-modal="modal-creditNeedKnow" title="赊购须知" e="entityCreditNeedknow">
+        <entity-modal-body>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div ng-model="entityCreditNeedknow.entity.creditNeedKnow" editor-simple
+                         content="entityCreditNeedknow.entity.creditNeedKnow"
+                         style="height: 500px; width: 100%">
+                    </div>
+                </div>
+            </div>
+        </entity-modal-body>
+    </div>
+    <%--查看详情--%>
+    <div entity-modal-view="modal-view" title="查看 产品详情" e="entityView">
+        <entity-modal-view-body>
+            <div class="row">
+                <div class="col-xs-6">
+                    <p style="font-size: 150%;font-weight: bold;" class="text-muted">基本信息</p>
+                    <div style="max-height: 700px;overflow-y: auto;overflow-x: hidden;">
+                        <div id="myCarousel"
+                             ng-show="entityView.entity.files != null && entityView.entity.files.length > 0"
+                             class="carousel slide"
+                             style="width: 375px;">
+                            <!-- 轮播（Carousel）指标 -->
+                            <ol class="carousel-indicators">
+                                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                                <li data-target="#myCarousel" data-slide-to="1"></li>
+                                <li data-target="#myCarousel" data-slide-to="2"></li>
+                            </ol>
+                            <!-- 轮播（Carousel）项目 -->
+                            <div class="carousel-inner">
+                                <div ng-repeat="item in entityView.entity.files" class="item"
+                                     ng-class="{'active':$index===0}"
+                                     style="width: 375px;height: 383px;">
+                                    <img ng-src="{{item.picture.url}}" class="img-responsive" style="width: 375px;"
+                                         alt="">
+                                </div>
+                            </div>
+                            <!-- 轮播（Carousel）导航 -->
+                            <a class="carousel-control left" href="#myCarousel" data-slide="prev">
+                                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                            </a>
+                            <a class="carousel-control right" href="#myCarousel" data-slide="next">
+                                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                            </a>
+                        </div>
+                        <div class="row" style="padding: 10px 20px;">
+                            <div entity-view-img="entityView.entity.listfiles[0].picture.url" title="列表图" type="img"
+                                 icon="icon-picture"
+                                 rewidth="3-0-8"></div>
+                            <div entity-view-text="entityView.entity.name" title="产品名称" icon="icon-credit-card"
+                                 rewidth="3-0-8"></div>
+                            <div entity-view-textarea="entityView.entity.description" title="产品描述"
+                                 icon="icon-book"></div>
+                            <div entity-view-text="entityView.entity.type | productType : productTypePage" title="产品类型"
+                                 icon="icon-tag"
+                                 rewidth="3-0-8"></div>
+                            <div entity-view-text="entityView.entity.institution.name" title="所属机构" icon="icon-hospital"
+                                 rewidth="3-0-8"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6">
+                    <p style="font-size: 150%;font-weight: bold;" class="text-muted">产品详情</p>
+                    <div style="max-height: 700px;overflow-y: auto;">
+                        <div ng-repeat="item in entityView.entity.infofiles" class="item"
+                             style="border: 1px solid #ccfcff;">
+                            <%--<img ng-src="{{item.picture.url}}" class="img-responsive" alt="">--%>
+                            <img ng-src="{{item.picture.url}}" style="margin:0 auto; display:block;"
+                                 width=100%; height=100%;/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </entity-modal-view-body>
+    </div>
+    <%--设置 提现折算比例&运费--%>
+    <div entity-modal="modal-config" title="设置" e="entityConfig">
+        <entity-modal-body>
+            <div entity-view-tag="entityConfig.entity.name" type="text" title="名称"></div>
+            <div entity-edit-text="withdrawRatio" type="number" title="提现折算比例" min="0" max="100"
+                 entity="entityConfig.entity" e="entityConfig" vld="entityConfig.validate"></div>
+            <div entity-edit-text="transPrice" type="number" title="运费" min="0" max="50"
+                 entity="entityConfig.entity" e="entityConfig" vld="entityConfig.validate"></div>
+        </entity-modal-body>
+    </div>
+</div>
+<script>
+    m.filter('productType', function () {
+        return function (number, obj) {
+            var text = "";
+            for (var item in obj) {
+                if (number === obj[item]["id"]) {
+                    text = obj[item]["type"];
+                }
+            }
+            return text;
+        }
+    }).controller("credit", function ($scope, page, ajax, $location, entity, $filter, alertService) {
+        //审核状态
+        $scope.verifyType = [{id: 1, name: "审核通过"}, {id: 0, name: "待审核"}, {id: 2, name: "审核未通过"}];
+        $scope.searchType = 1;
+        $scope.selectChange = function () {
+            $scope.page.refresh();
+        };
+        //获取产品类型
+        $scope.getProductTypePage = function () {
+            ajax.ajax("/user/redirect/trade/product/getProductTypePage", "POST",
+                {
+                    userId: 1,
+                    current: 1,
+                    size: 100,
+                    orderBy: "create_time",
+                    asc: false
+                }).success(function (data) {
+                if (data.success) {
+                    $scope.productTypePage = data.page.list;
+                }
+            });
+        };
+        /**
+         * 获取所属机构信息
+         */
+        $scope.getInstitution = function (callback) {
+            ajax.ajax("/user/institution/getInstitutionByAdmin", "POST", {
+                userId: 1,
+                adminId: userId
+            }).success(function (data) {
+                console.log(data);
+                if (data.success) {
+                    $scope.institution = data.value;
+                    callback && callback();
+                }
+            });
+        };
+        $scope.load = function (current, size, orderBy, asc) {
+            ajax.ajax("/user/redirect/trade/productsells/getProductCreditPage", "POST",
+                {
+                    userId: 1,
+                    current: current,
+                    size: size,
+                    search: $scope.search,
+                    orderBy: orderBy,
+                    asc: asc,
+                    institutionId: $scope.institution.id,
+                    verify: $scope.searchType
+                }).success(function (data) {
+                console.log(data);
+                if (data.success) {
+                    $scope.page.refreshPage(data);
+                }
+            });
+        };
+        $scope.page = page.page($scope.load, "p.create_time", false);
+        $scope.ths = [
+            {
+                name: "封面",
+                img: function (row) {
+                    row = row.product;
+                    if (row.files.length <= 0) {//如果没有图片显示默认图片
+                        return $scope.default_picture_thumb;
+                    }
+                    return row.files[0].pictureThumb.url;
+                },
+                width: "5%"
+            },
+            {
+                name: "产品名称",
+                value: function (row) {
+                    return row.product.name;
+                },
+                width: "10%"
+            }, /*{
+             name: "描述",
+             value: function (row) {
+             return row.product.description;
+             },
+             width: "15%"
+             }, */{
+                name: "数量(份)",
+                value: function (row) {
+                    return row.num;
+                },
+                width: "10%"
+            }, {
+                name: "剩余(份)",
+                value: function (row) {
+                    return row.numRest;
+                },
+                width: "10%"
+            }, {
+                name: "原价(元)",
+                value: function (row) {
+                    return row.originalPrice;
+                },
+                width: "10%"
+            }, {
+                name: "现价(元)",
+                value: function (row) {
+                    return row.currentPrice;
+                },
+                width: "10%"
+            }, {
+                name: "活动价(元)",
+                value: function (row) {
+                    return row.activityPrice;
+                },
+                width: "10%"
+            }, {
+                name: "状态",
+                style: function (row) {
+                    return {
+                        "color": row.status === true ? "#36bf36" : "#a1a1a1"
+                    };
+                },
+                clas: function (row) {
+                    return {
+                        "hide": $scope.searchType !== 1
+                    }
+                },
+                value: function (row) {
+                    return row.status === true ? "上架中" : "已下架";
+                },
+                width: "10%"
+            }, {
+                name: "创建时间",
+                value: function (row) {
+                    return $filter("fmtDateYMdHMcn")(row.createTime);
+                },
+                orderBy: "p.create_time",
+                width: "15%"
+            }
+        ];
+        $scope.operations = [
+            {
+                name: function () {
+                    return "编辑价格";
+                },
+                clas: function (row) {
+                    return {
+                        "btn btn-xs btn-primary": true,
+                        "hide": row.verify === "待审核"
+                    };
+                },
+                click: function (row) {
+                    $scope.entityCredit._openModal("edit", row);
+                }
+            }, {
+                name: function () {
+                    return "上架";
+                },
+                clas: function (row) {
+                    return {
+                        "btn btn-xs btn-success": true,
+                        "hide": row.status === true || $scope.searchType !== 1
+                    };
+                },
+                click: function (row) {
+                    swal({
+                        closeOnClickOutside: false,//禁止点击背景关闭alert
+                        title: "提示!",
+                        text: "确认要上架吗?",
+                        icon: "warning",
+                        buttons: {
+                            cancel: "关闭",
+                            catch: {
+                                text: "确定",
+                                value: "catch"
+                            }
+                        }
+                    }).then(function (value) {
+                        switch (value) {
+                            case "catch":
+                                ajax.ajax("/user/redirect/trade/productsells/updateProductCreditStatus", "POST", {
+                                    userId: userId,
+                                    productId: row.product.id,
+                                    status: 1
+                                }).success(function (data) {
+                                    if (data.success) {
+                                        $scope.page.refresh();
+                                        alertService.show("操作成功!", "success", "80%");
+                                    } else {
+                                        swal("提示!", "操作失败!", "error");
+                                    }
+                                }).error(function (data) {
+                                    console.log(data);
+                                });
+                                break;
+                        }
+                    });
+                }
+            }, {
+                name: function () {
+                    return "下架";
+                },
+                clas: function (row) {
+                    return {
+                        "btn btn-xs btn-danger": true,
+                        "hide": row.status === false || $scope.searchType !== 1
+                    };
+                },
+                click: function (row) {
+                    swal({
+                        closeOnClickOutside: false,//禁止点击背景关闭alert
+                        title: "提示!",
+                        text: "确认要下架吗?",
+                        icon: "warning",
+                        buttons: {
+                            cancel: "关闭",
+                            catch: {
+                                text: "确定",
+                                value: "catch"
+                            }
+                        }
+                    }).then(function (value) {
+                        switch (value) {
+                            case "catch":
+                                ajax.ajax("/user/redirect/trade/productsells/updateProductCreditStatus", "POST", {
+                                    userId: userId,
+                                    productId: row.product.id,
+                                    status: 0
+                                }).success(function (data) {
+                                    if (data.success) {
+                                        $scope.page.refresh();
+                                        alertService.show("操作成功!", "success", "80%");
+                                    } else {
+                                        swal("提示!", "操作失败!", "error");
+                                    }
+                                }).error(function (data) {
+                                    console.log(data);
+                                });
+                                break;
+                        }
+                    });
+                }
+            }, {
+                name: function () {
+                    return "查看";
+                },
+                clas: function () {
+                    return {
+                        "btn btn-xs btn-default": true
+                    };
+                },
+                click: function (row) {
+                    $scope.entityView._openModal("view", row);
+                }
+            }, {
+                name: function () {
+                    return "查看与编辑返点";
+                },
+                clas: function (row) {
+                    return {
+                        "btn btn-xs btn-success": true,
+                    };
+                },
+                click: function (row) {
+                    window.open("/jsp/product/productCredit/creditGift.jsp?productId=" + row.product.id);
+                }
+            }, {
+                name: function () {
+                    return "活动";
+                },
+                clas: function (row) {
+                    return {
+                        "btn btn-xs btn-success": true,
+                    };
+                },
+                click: function (row) {
+                    window.open("/jsp/product/productCredit/activity.jsp?productId="+row.product.id);
+                }
+            }, {
+                name: function () {
+                    return "须知";
+                },
+                clas: function () {
+                    return {
+                        "btn btn-xs btn-info": true
+                    };
+                },
+                click: function (row) {
+                    $scope.entityCreditNeedknow._openModal("creditNeedKnow", row);
+                }
+            }, {
+                name: function () {
+                    return "设置";
+                },
+                clas: function () {
+                    return {
+                        "btn btn-xs btn-warning": true,
+                        "hide": $scope.searchType !== 1
+                    };
+                },
+                click: function (row) {
+                    $scope.entityConfig._openModal("config", row);
+                }
+            }
+        ];
+        /**
+         * entity
+         */
+        $scope.entityCredit = entity.getEntity(
+            {originalPrice: "", currentPrice: "", activityPrice: ""},
+            {originalPrice: {}, currentPrice: {}},
+            function (action, row) {//beforeOpen
+                if ($scope.entityCredit.action === "edit") {
+                    $scope.entityCredit.entity = angular.copy(row.product);
+                    $scope.entityCredit.entity.num = row.num;
+                    $scope.entityCredit.entity.originalPrice_old = angular.copy(row.originalPrice);
+                    $scope.entityCredit.entity.currentPrice_old = angular.copy(row.currentPrice);
+                    $scope.entityCredit.entity.activityPrice_old = angular.copy(row.activityPrice);
+                    $scope.entityCredit.entity.originalPrice = row.originalPrice;
+                    $scope.entityCredit.entity.currentPrice = row.currentPrice;
+                    $scope.entityCredit.entity.activityPrice = row.activityPrice;
+                }
+            }, function () {//submit
+                if ($scope.entityCredit.action === "edit") {
+                    //如果修改了原价或活动价
+                    console.log($scope.entityCredit.entity.originalPrice);
+                    console.log($scope.entityCredit.entity.activityPrice);
+                    if ($scope.entityCredit.entity.originalPrice !== $scope.entityCredit.entity.originalPrice_old ||
+                        $scope.entityCredit.entity.activityPrice !== $scope.entityCredit.entity.activityPrice_old) {
+                        ajax.ajax("/user/redirect/trade/productsells/updateProductCreditPrice", "POST", {
+                            userId: userId,
+                            productId: $scope.entityCredit.entity.id,
+                            originalPrice: $scope.entityCredit.entity.originalPrice,
+                            activityPrice: $scope.entityCredit.entity.activityPrice
+                        }).success(function (data) {
+                            if (data.success) {
+                                $scope.page.refresh();
+                                alertService.show("操作成功!", "success", "80%");
+                            } else {
+                                swal("提示!", "操作失败!", "error");
+                            }
+                        }).error(function (data) {
+                            console.log(data);
+                        });
+                    }
+                    //如果修改了现价
+                    if ($scope.entityCredit.entity.currentPrice !== $scope.entityCredit.entity.currentPrice_old) {
+                        ajax.ajax("/user/redirect/trade/productverify/addProductPriceVerify", "POST", {
+                            userId: userId,
+                            product: $scope.entityCredit.entity.id,
+                            type: 1,//赊购
+                            price: $scope.entityCredit.entity.currentPrice
+                        }).success(function (data) {
+                            console.log(data);
+                            if (data.success) {
+                                $scope.page.refresh();
+                                alertService.show("操作成功!", "success", "80%");
+                            } else {
+                                swal("提示!", "操作失败!", "error");
+                            }
+                            $scope.entityCredit._success();//隐藏模态框
+                        }).error(function (data) {
+                            console.log(data);
+                            $scope.entityCredit._error();//隐藏模态框
+                        });
+                    }
+                    $scope.entityCredit._success();//隐藏模态框
+                }
+            }, "modal-creditYou");
+
+        //查看详情
+        $scope.entityView = entity.getEntity(
+            {},
+            {},
+            function (action, row) {//beforeOpen
+                if ($scope.entityView.action === "view") {
+                    $scope.entityView.entity = row.product;
+                }
+            }, function () {//submit
+            }, "modal-view");
+
+        //赊购须知
+        $scope.entityCreditNeedknow = entity.getEntity(
+            {creditNeedKnow: ""},
+            {},
+            function (action, row) {//beforeOpen
+                $scope.entityCreditNeedknow.entity.creditNeedKnow = "";
+                if ($scope.entityCreditNeedknow.action === "creditNeedKnow") {
+                    $scope.entityCreditNeedknow.entity = angular.copy(row.product);
+                    $scope.entityCreditNeedknow.entity.creditNeedKnow = angular.copy(row.creditNeedKnow);
+                }
+            },
+            function () {//submit
+                ajax.ajax("/user/redirect/trade/productsells/updateCreditNeedKnow", "POST", {
+                    userId: userId,
+                    productId: $scope.entityCreditNeedknow.entity.id,
+                    content: $scope.entityCreditNeedknow.entity.creditNeedKnow
+                }).success(function (data) {
+                    console.log(data);
+                    if (data.success) {
+                        $scope.page.refresh();
+                        alertService.show("操作成功!", "success", "80%");
+                    } else {
+                        swal("提示!", "操作失败!", "error");
+                    }
+                    $scope.entityCreditNeedknow._success();//隐藏模态框
+                }).error(function (data) {
+                    console.log(data);
+                    $scope.entityCreditNeedknow._error();//隐藏模态框
+                });
+            }, "modal-creditNeedKnow");
+
+        //设置 提现折算比例&运费
+        $scope.entityConfig = entity.getEntity(
+            {withdrawRatio: "", transPrice: ""},
+            {withdrawRatio: {}, transPrice: {}},
+            function (action, row) {//beforeOpen
+                if ($scope.entityConfig.action === "config") {
+                    $scope.entityConfig.entity = angular.copy(row.product);
+                    $scope.entityConfig.entity.withdrawRatio = angular.copy(row.withdraw_ratio);
+                    $scope.entityConfig.entity.transPrice = angular.copy(row.trans_price);
+                }
+            }, function () {//submit
+                ajax.ajax("/user/redirect/trade/productsells/updateProductCreditConfig", "POST", {
+                    userId: userId,
+                    productId: $scope.entityConfig.entity.id,
+                    withdraw_ratio: $scope.entityConfig.entity.withdrawRatio,
+                    trans_price: $scope.entityConfig.entity.transPrice
+                }).success(function (data) {
+                    console.log(data);
+                    if (data.success) {
+                        $scope.page.refresh();
+                        alertService.show("操作成功!", "success", "80%");
+                    } else {
+                        swal("提示!", "操作失败!", "error");
+                    }
+                    $scope.entityConfig._success();//隐藏模态框
+                }).error(function (data) {
+                    console.log(data);
+                    $scope.entityConfig._error();//隐藏模态框
+                });
+            }, "modal-config");
+
+
+        $scope.$on("onNav", function (e, data) {
+            if (data.controller === "credit") {
+                $scope.getProductTypePage();
+                $scope.getInstitution(function () {
+                    $scope.page.refreshTo(1);
+                });
+            }
+        });
+    })
+</script>

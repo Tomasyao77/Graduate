@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<!--
+Author: zouy
+Unit: D9lab
+Date: 2017-12-07 20:36 
+-->
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>title</title>
+    <!--基础css & js-->
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/jsp/common/css/validate.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.bootcss.com/angular.js/1.5.0/angular.min.js"></script>
+    <script src="/jsp/common/js/ng-file-upload-all.min.js"></script>
+    <script src="/jsp/common/template/baseModule.js"></script>
+    <!--日期处理-->
+    <link href="/jsp/common/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <script src="/jsp/common/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="/jsp/common/js/bootstrap-datetimepicker.zh-CN.js"></script>
+    <script src="/jsp/common/js/moment.min.js"></script>
+</head>
+<body ng-app="m" ng-controller="c" style="padding-top: 50px;">
+
+<div entity-modal="modal" title="用户" e="entity">
+    <entity-modal-body>
+        <div entity-edit-text="password" type="password" title="密码" entity="entity.entity"></div>
+        <div entity-edit-text="name" type="text" title="姓名" entity="entity.entity" e="entity"
+             vld="entity.validate"></div>
+        <div entity-edit-text="tel" type="tel" title="电话" entity="entity.entity" e="entity" vld="entity.validate"></div>
+        <div entity-edit-text="email" type="email" title="邮箱" entity="entity.entity" e="entity"
+             vld="entity.validate"></div>
+        <div entity-edit-textarea="description" title="个人介绍" entity="entity.entity" e="entity"
+             vld="entity.validate"></div>
+        <div entity-edit-img="img" myid="modal-img-id" title="图片" entity="entity.entity" e="entity"></div>
+    </entity-modal-body>
+</div>
+
+<div entity-modal-view="modal1" title="查看 用户" e="entity1">
+    <entity-modal-view-body>
+        <div entity-view-tag="entity1.password" type="password" title="密码"></div>
+        <div entity-view-tag="entity1.name" type="text" title="姓名"></div>
+        <div entity-view-tag="entity1.tel" type="text" title="电话"></div>
+        <div entity-view-tag="entity1.email" type="text" title="邮箱"></div>
+        <div entity-view-tag="entity1.description" type="textarea" title="个人介绍"></div>
+        <div entity-view-tag="entity1.img" type="img" title="图片"></div>
+    </entity-modal-view-body>
+</div>
+
+<div class="form-horizontal">
+    <div entity-right-button="open add" clas="success" click="entity._openModal('add')"></div>
+    <div entity-right-button="open edit" clas="info" click="entity._openModal('edit', model)"></div>
+    <div entity-right-button="open view" clas="primary" click="entity1.openView()"></div>
+    <div entity-edit-file="file" myid="modal-img-file" title="文件" entity="entity.entity" e="entity"
+        size="20MB" pattern=".xls,.xlsx" accept=""></div>
+    <button class="btn btn-success center-block" type="button" ng-click="submit()">submit</button>
+</div>
+
+<div style="width: 350px;margin-top: 20px;" class="center-block">
+    <input type="text" value="" id="datetimepicker" class="form-control" data-date-format="yyyy-mm-dd">
+</div>
+<script>
+    angular.module("m", ["baseModule"])
+        .controller("c", function ($scope, entity, ajax, Upload) {
+            $scope.model = {
+                password: "1",
+                name: "2",
+                tel: "2",
+                email: "2",
+                description: "2",
+                img: "http://ouq6u283u.bkt.clouddn.com/17-10-24-18:47springfirst.jpg"
+            };
+            $scope.entity = entity.getEntity(
+                {
+                    password: "",
+                    name: "",
+                    tel: "",
+                    email: "",
+                    description: "",
+                    img: ""
+                }, {
+                    //password: {},
+                    /*name: {},
+                    tel: {},
+                    email: {},
+                    description: {}*/
+                }, function (action, row) {//beforeOpen
+                    var src = action === "add" ? "" : (action === "edit" ? row.img : "");
+                    $("#modal-img-id").attr("src", src);
+                    $scope.entity.entity = row;
+                    $scope.entity.imgChange = false;
+                }, function () {//submit
+                    console.log($scope.entity.imgChange);
+                    Upload.upload({
+                        url: '/file/upload',
+                        data: {file: $scope.entity.entity.img,
+                        userId: 1,name: "zouy"}
+                    }).then(function (resp) {
+                        console.log(resp);
+                        //$scope.fileReturn = resp.data.value.url;
+                        //console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+                    }, function (resp) {
+                        console.log(resp);
+                        //console.log('Error status: ' + resp.status);
+                    }, function (evt) {
+                        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                        console.log(evt);
+                        //console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+                    });
+                }, "modal");
+            $scope.entity1 = {
+                password: "1",
+                name: "2",
+                tel: "3",
+                email: "4",
+                description: "5",
+                img: "http://ouq6u283u.bkt.clouddn.com/17-10-24-18:47springfirst.jpg",
+                openView: function () {
+                    $scope.entity1.action = "view";
+                    $("#modal1").modal("toggle");
+                }
+            };
+
+            // upload later on form submit or something similar
+            $scope.submit = function() {
+                if ($scope.entity.entity.file) {
+                    $scope.upload($scope.entity.entity.file);
+                }
+            };
+
+            // upload on file select or drop
+            $scope.upload = function (file) {
+                Upload.upload({
+                    url: '/file/upload',
+                    data: {file: file}
+                }).then(function (resp) {
+                    console.log(resp);
+                    //console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+                }, function (resp) {
+                    console.log(resp);
+                    //console.log('Error status: ' + resp.status);
+                }, function (evt) {
+                    var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                    //console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+                });
+            };
+
+            /**日期处理初始化*/
+            (function () {
+                $('#datetimepicker').datetimepicker({
+                    format: 'yyyy-mm-dd',//yyyy-mm-dd hh:ii:ss
+                    autoclose: true,
+                    language: 'zh-CN',
+                    minView: 2 //0-hour 1-day 2-month 3-year 4 decade
+                }).on('changeDate', function (e) {
+                    /**用法
+                     * $('#datetimepicker').val(moment($scope.entity.authDeadLine).format("YYYY-MM-DD"));//赋值
+                     * var today = moment().format("YYYY-MM-DD");//自定义变量千万不能有moment否则会覆盖//今天的日期
+                     * moment($('#datetimepicker').val()).format("YYYY-MM-DD HH:mm:ss");//结果为string类型
+                     */
+                });
+            })();
+        });
+</script>
+</body>
+</html>

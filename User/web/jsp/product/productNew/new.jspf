@@ -1,0 +1,548 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<div ng-controller="new">
+    <div class="panel panel-default m-t-lg">
+        <div class="panel-heading">
+            <h4>优品列表</h4>
+            <div class="clearfix">
+                <label>
+                    <button class="btn btn-success" ng-click="page.refreshTo(1)">
+                        <span class="icon-refresh m-r"></span>刷新
+                    </button>
+                </label>
+                <form class="form-inline pull-right" ng-submit="page.refreshTo(1)">
+                    <label>审核状态&nbsp;
+                        <select class="form-control" ng-model="searchType"
+                                ng-options="x.id as x.name for x in verifyType"
+                                ng-change="selectChange()"></select>
+                    </label>
+                    <input class="form-control m-l" type="text"
+                           placeholder="名称/描述" ng-model="search">
+                    <button class="btn btn-primary" type="submit">
+                        <span class="icon-search m-r"></span> 搜索
+                    </button>
+                </form>
+            </div>
+        </div>
+        <%@ include file="/jsp/common/table.jspf" %>
+    </div>
+    <%--编辑优品--%>
+    <div entity-modal="modal-new" title="价格" e="entityNew">
+        <entity-modal-body>
+            <div entity-view-tag="entityNew.entity.name" type="text" title="名称"></div>
+            <div entity-view-tag="entityNew.entity.description" type="textarea" title="描述"></div>
+            <div entity-view-tag="entityNew.entity.num" type="text" title="数量"></div>
+            <div entity-edit-text="originalPrice" type="number" title="原价" entity="entityNew.entity" e="entityNew"
+                 vld="entityNew.validate"></div>
+            <div entity-edit-text="currentPrice" type="number" title="现价" entity="entityNew.entity" e="entityNew"
+                 vld="entityNew.validate"></div>
+        </entity-modal-body>
+    </div>
+    <%--设置 最大体验数&运费--%>
+    <div entity-modal="modal-maxExpNum" title="设置" e="entityMaxExpNum">
+        <entity-modal-body>
+            <div entity-view-tag="entityMaxExpNum.entity.name" type="text" title="名称"></div>
+            <div entity-edit-text="maxExpNum" type="number" title="最大体验数" min="0" max="100"
+                 entity="entityMaxExpNum.entity" e="entityMaxExpNum" vld="entityMaxExpNum.validate"></div>
+            <div entity-edit-text="transPrice" type="number" title="运费" min="0" max="50"
+                 entity="entityMaxExpNum.entity" e="entityMaxExpNum" vld="entityMaxExpNum.validate"></div>
+        </entity-modal-body>
+    </div>
+    <%--体验须知--%>
+    <div entity-modal="modal-expNeedknow" title="体验须知" e="entityExpNeedknow">
+        <entity-modal-body>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div ng-model="entityExpNeedknow.entity.expNeedknow" editor-simple
+                         content="entityExpNeedknow.entity.expNeedknow"
+                         style="height: 500px; width: 100%">
+                    </div>
+                </div>
+            </div>
+        </entity-modal-body>
+    </div>
+    <%--查看详情--%>
+    <div entity-modal-view="modal-view" title="查看 产品详情" e="entityView">
+        <entity-modal-view-body>
+            <div class="row">
+                <div class="col-xs-6">
+                    <p style="font-size: 150%;font-weight: bold;" class="text-muted">基本信息</p>
+                    <div style="max-height: 700px;overflow-y: auto;overflow-x: hidden;">
+                        <div id="myCarousel" ng-show="entityView.entity.files != null && entityView.entity.files.length > 0" class="carousel slide"
+                             style="width: 375px;">
+                            <!-- 轮播（Carousel）指标 -->
+                            <ol class="carousel-indicators">
+                                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                                <li data-target="#myCarousel" data-slide-to="1"></li>
+                                <li data-target="#myCarousel" data-slide-to="2"></li>
+                            </ol>
+                            <!-- 轮播（Carousel）项目 -->
+                            <div class="carousel-inner">
+                                <div ng-repeat="item in entityView.entity.files" class="item" ng-class="{'active':$index===0}"
+                                     style="width: 375px;height: 383px;">
+                                    <img ng-src="{{item.picture.url}}" class="img-responsive" style="width: 375px;" alt="">
+                                </div>
+                            </div>
+                            <!-- 轮播（Carousel）导航 -->
+                            <a class="carousel-control left" href="#myCarousel" data-slide="prev">
+                                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                            </a>
+                            <a class="carousel-control right" href="#myCarousel" data-slide="next">
+                                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                            </a>
+                        </div>
+                        <div class="row" style="padding: 10px 20px;">
+                            <div entity-view-img="entityView.entity.listfiles[0].picture.url" title="列表图" type="img" icon="icon-picture"
+                                 rewidth="3-0-8"></div>
+                            <div entity-view-text="entityView.entity.name" title="产品名称" icon="icon-credit-card" rewidth="3-0-8"></div>
+                            <div entity-view-textarea="entityView.entity.description" title="产品描述" icon="icon-book"></div>
+                            <div entity-view-text="entityView.entity.type | productType : productTypePage" title="产品类型" icon="icon-tag"
+                                 rewidth="3-0-8"></div>
+                            <div entity-view-text="entityView.entity.institution.name" title="所属机构" icon="icon-hospital"
+                                 rewidth="3-0-8"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6">
+                    <p style="font-size: 150%;font-weight: bold;" class="text-muted">产品详情</p>
+                    <div style="max-height: 700px;overflow-y: auto;">
+                        <div ng-repeat="item in entityView.entity.infofiles" class="item"
+                             style="border: 1px solid #ccfcff;">
+                            <%--<img ng-src="{{item.picture.url}}" class="img-responsive" alt="">--%>
+                            <img ng-src="{{item.picture.url}}" style="margin:0 auto; display:block;"
+                                 width=100%; height=100%;/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </entity-modal-view-body>
+    </div>
+</div>
+<script>
+    m.filter('productType', function () {
+        return function (number, obj) {
+            var text = "";
+            for (var item in obj) {
+                if (number === obj[item]["id"]) {
+                    text = obj[item]["type"];
+                }
+            }
+            return text;
+        }
+    }).controller("new", function ($scope, page, ajax, $location, entity, $filter, alertService) {
+        //审核状态
+        $scope.verifyType = [{id: 1, name: "审核通过"}, {id: 0, name: "待审核"}, {id: 2, name: "审核未通过"}];
+        $scope.searchType = 1;
+        $scope.selectChange = function () {
+            $scope.page.refresh();
+        };
+        //获取产品类型
+        $scope.getProductTypePage = function () {
+            ajax.ajax("/user/redirect/trade/product/getProductTypePage", "POST",
+                {
+                    userId: 1,
+                    current: 1,
+                    size: 100,
+                    orderBy: "create_time",
+                    asc: false
+                }).success(function (data) {
+                if (data.success) {
+                    $scope.productTypePage = data.page.list;
+                }
+            });
+        };
+        /**
+         * 获取所属机构信息
+         */
+        $scope.getInstitution = function (callback) {
+            ajax.ajax("/user/institution/getInstitutionByAdmin", "POST", {
+                userId: 1,
+                adminId: userId
+            }).success(function (data) {
+                console.log(data);
+                if (data.success) {
+                    $scope.institution = data.value;
+                    callback && callback();
+                }
+            });
+        };
+        $scope.load = function (current, size, orderBy, asc) {
+            ajax.ajax("/user/redirect/trade/productsells/getProductNewPage", "POST",
+                {
+                    userId: userId,
+                    current: current,
+                    size: size,
+                    search: $scope.search,
+                    orderBy: orderBy,
+                    asc: asc,
+                    institutionId: $scope.institution.id,
+                    verify: $scope.searchType
+                }).success(function (data) {
+                console.log(data);
+                if (data.success) {
+                    $scope.page.refreshPage(data);
+                }
+            });
+        };
+        $scope.page = page.page($scope.load, "p.create_time", false);
+        $scope.ths = [
+            {
+                name: "封面",
+                img: function (row) {
+                    row = row.product;
+                    if(row.files.length <= 0){//如果没有图片显示默认图片
+                        return $scope.default_picture_thumb;
+                    }
+                    return row.files[0].pictureThumb.url;
+                },
+                width: "5%"
+            },
+            {
+                name: "产品名称",
+                value: function (row) {
+                    return row.product.name;
+                },
+                width: "10%"
+            }, /*{
+                name: "描述",
+                value: function (row) {
+                    return row.product.description;
+                },
+                width: "15%"
+            }, */{
+                name: "数量(份)",
+                value: function (row) {
+                    return row.num;
+                },
+                width: "10%"
+            }, {
+                name: "剩余(份)",
+                value: function (row) {
+                    return row.numRest;
+                },
+                width: "10%"
+            }, {
+                name: "原价(元)",
+                value: function (row) {
+                    return row.originalPrice;
+                },
+                width: "10%"
+            }, {
+                name: "现价(元)",
+                value: function (row) {
+                    return row.currentPrice;
+                },
+                width: "10%"
+            }, {
+                name: "最大体验数",
+                value: function (row) {
+                    return row.maxExpNum;
+                },
+                width: "10%"
+            }, {
+                name: "状态",
+                style: function (row) {
+                    return {
+                        "color": row.status === true ? "#36bf36" : "#a1a1a1"
+                    };
+                },
+                clas: function (row) {
+                    return {
+                        "hide": $scope.searchType !== 1
+                    }
+                },
+                value: function (row) {
+                    return row.status === true ? "上架中" : "已下架";
+                },
+                width: "10%"
+            }, {
+                name: "创建时间",
+                value: function (row) {
+                    return $filter("fmtDateYMdHMcn")(row.createTime);
+                },
+                orderBy: "p.create_time",
+                width: "15%"
+            }
+        ];
+        $scope.operations = [
+            {
+                name: function () {
+                    return "编辑价格";
+                },
+                clas: function () {
+                    return {
+                        "btn btn-xs btn-primary": true,
+                        "hide": $scope.searchType !== 1
+                    };
+                },
+                click: function (row) {
+                    $scope.entityNew._openModal("edit", row);
+                }
+            }, {
+                name: function () {
+                    return "上架";
+                },
+                clas: function (row) {
+                    return {
+                        "btn btn-xs btn-success": true,
+                        "hide": row.status === true || $scope.searchType !== 1
+                    };
+                },
+                click: function (row) {
+                    swal({
+                        closeOnClickOutside: false,//禁止点击背景关闭alert
+                        title: "提示!",
+                        text: "确认要上架吗?",
+                        icon: "warning",
+                        buttons: {
+                            cancel: "关闭",
+                            catch: {
+                                text: "确定",
+                                value: "catch"
+                            }
+                        }
+                    }).then(function (value) {
+                        switch (value) {
+                            case "catch":
+                                ajax.ajax("/user/redirect/trade/productsells/updateProductNewStatus", "POST", {
+                                    userId: userId,
+                                    productId: row.product.id,
+                                    status: 1
+                                }).success(function (data) {
+                                    if (data.success) {
+                                        $scope.page.refresh();
+                                        alertService.show("操作成功!", "success", "80%");
+                                    } else {
+                                        swal("提示!", "操作失败!", "error");
+                                    }
+                                }).error(function (data) {
+                                    console.log(data);
+                                });
+                                break;
+                        }
+                    });
+                }
+            }, {
+                name: function () {
+                    return "下架";
+                },
+                clas: function (row) {
+                    return {
+                        "btn btn-xs btn-danger": true,
+                        "hide": row.status === false || $scope.searchType !== 1
+                    };
+                },
+                click: function (row) {
+                    swal({
+                        closeOnClickOutside: false,//禁止点击背景关闭alert
+                        title: "提示!",
+                        text: "确认要下架吗?",
+                        icon: "warning",
+                        buttons: {
+                            cancel: "关闭",
+                            catch: {
+                                text: "确定",
+                                value: "catch"
+                            }
+                        }
+                    }).then(function (value) {
+                        switch (value) {
+                            case "catch":
+                                ajax.ajax("/user/redirect/trade/productsells/updateProductNewStatus", "POST", {
+                                    userId: userId,
+                                    productId: row.product.id,
+                                    status: 0
+                                }).success(function (data) {
+                                    if (data.success) {
+                                        $scope.page.refresh();
+                                        alertService.show("操作成功!", "success", "80%");
+                                    } else {
+                                        swal("提示!", "操作失败!", "error");
+                                    }
+                                }).error(function (data) {
+                                    console.log(data);
+                                });
+                                break;
+                        }
+                    });
+                }
+            }, {
+                name: function () {
+                    return "设置";
+                },
+                clas: function () {
+                    return {
+                        "btn btn-xs btn-warning": true,
+                        "hide": $scope.searchType !== 1
+                    };
+                },
+                click: function (row) {
+                    $scope.entityMaxExpNum._openModal("maxExpNum", row);
+                }
+            }, {
+                name: function () {
+                    return "查看";
+                },
+                clas: function () {
+                    return {
+                        "btn btn-xs btn-default": true
+                    };
+                },
+                click: function (row) {
+                    $scope.entityView._openModal("view", row);
+                }
+            }, {
+                name: function () {
+                    return "须知";
+                },
+                clas: function () {
+                    return {
+                        "btn btn-xs btn-info": true,
+                        "hide": $scope.searchType !== 1
+                    };
+                },
+                click: function (row) {
+                    $scope.entityExpNeedknow._openModal("expNeedknow", row);
+                }
+            }
+        ];
+        /**
+         * entity
+         */
+        $scope.entityNew = entity.getEntity(
+            {originalPrice: "", currentPrice: ""},
+            {originalPrice: {}, currentPrice: {}},
+            function (action, row) {//beforeOpen
+                if ($scope.entityNew.action === "edit") {
+                    $scope.entityNew.entity = angular.copy(row.product);
+                    $scope.entityNew.entity.num = row.num;
+                    $scope.entityNew.entity.originalPrice_old = angular.copy(row.originalPrice);
+                    $scope.entityNew.entity.currentPrice_old = angular.copy(row.currentPrice);
+                    $scope.entityNew.entity.originalPrice = row.originalPrice;
+                    $scope.entityNew.entity.currentPrice = row.currentPrice;
+                }
+            }, function () {//submit
+                if ($scope.entityNew.action === "edit") {
+                    //如果修改了原价
+                    if($scope.entityNew.entity.originalPrice !== $scope.entityNew.entity.originalPrice_old){
+                        ajax.ajax("/user/redirect/trade/productsells/updateProductNewPrice", "POST", {
+                            userId: userId,
+                            productId: $scope.entityNew.entity.id,
+                            originalPrice: $scope.entityNew.entity.originalPrice
+                        }).success(function (data) {
+                            if (data.success) {
+                                $scope.page.refresh();
+                                alertService.show("操作成功!", "success", "80%");
+                            } else {
+                                swal("提示!", "操作失败!", "error");
+                            }
+                        }).error(function (data) {
+                            console.log(data);
+                        });
+                    }
+                    //如果修改了现价
+                    if($scope.entityNew.entity.currentPrice !== $scope.entityNew.entity.currentPrice_old){
+                        ajax.ajax("/user/redirect/trade/productverify/addProductPriceVerify", "POST", {
+                            userId: userId,
+                            product: $scope.entityNew.entity.id,
+                            type: 0,//优品
+                            price: $scope.entityNew.entity.currentPrice
+                        }).success(function (data) {
+                            console.log(data);
+                            if (data.success) {
+                                $scope.page.refresh();
+                                alertService.show("操作成功!", "success", "80%");
+                            } else {
+                                swal("提示!", "操作失败!", "error");
+                            }
+                            $scope.entityNew._success();//隐藏模态框
+                        }).error(function (data) {
+                            console.log(data);
+                            $scope.entityNew._error();//隐藏模态框
+                        });
+                    }
+                    $scope.entityNew._success();//隐藏模态框
+                }
+            }, "modal-new");
+
+        //查看详情
+        $scope.entityView = entity.getEntity(
+            {},
+            {},
+            function (action, row) {//beforeOpen
+                if ($scope.entityView.action === "view") {
+                    $scope.entityView.entity = angular.copy(row.product);
+                }
+            }, function () {//submit
+            }, "modal-view");
+
+        //设置 最大体验数&运费
+        $scope.entityMaxExpNum = entity.getEntity(
+            {maxExpNum: "", transPrice: ""},
+            {maxExpNum: {}, transPrice: {}},
+            function (action, row) {//beforeOpen
+                if ($scope.entityMaxExpNum.action === "maxExpNum") {
+                    $scope.entityMaxExpNum.entity = angular.copy(row.product);
+                    $scope.entityMaxExpNum.entity.maxExpNum = angular.copy(row.maxExpNum);
+                    $scope.entityMaxExpNum.entity.transPrice = angular.copy(row.trans_price);
+                }
+            }, function () {//submit
+                ajax.ajax("/user/redirect/trade/productsells/updateProductNewMaxExpNum", "POST", {
+                    userId: userId,
+                    productId: $scope.entityMaxExpNum.entity.id,
+                    max_exp_num: $scope.entityMaxExpNum.entity.maxExpNum,
+                    trans_price: $scope.entityMaxExpNum.entity.transPrice
+                }).success(function (data) {
+                    console.log(data);
+                    if (data.success) {
+                        $scope.page.refresh();
+                        alertService.show("操作成功!", "success", "80%");
+                    } else {
+                        swal("提示!", "操作失败!", "error");
+                    }
+                    $scope.entityMaxExpNum._success();//隐藏模态框
+                }).error(function (data) {
+                    console.log(data);
+                    $scope.entityMaxExpNum._error();//隐藏模态框
+                });
+            }, "modal-maxExpNum");
+
+        //体验须知
+        $scope.entityExpNeedknow = entity.getEntity(
+            {expNeedknow: ""},
+            {},
+            function (action, row) {//beforeOpen
+                $scope.entityExpNeedknow.entity.expNeedknow = "";
+                if ($scope.entityExpNeedknow.action === "expNeedknow") {
+                    $scope.entityExpNeedknow.entity = angular.copy(row.product);
+                    $scope.entityExpNeedknow.entity.expNeedknow = angular.copy(row.expNeedKnow);
+                }
+            }, function () {//submit
+                ajax.ajax("/user/redirect/trade/productsells/updateExpNeedKnow", "POST", {
+                    userId: userId,
+                    productId: $scope.entityExpNeedknow.entity.id,
+                    content: $scope.entityExpNeedknow.entity.expNeedknow
+                }).success(function (data) {
+                    console.log(data);
+                    if (data.success) {
+                        $scope.page.refresh();
+                        alertService.show("操作成功!", "success", "80%");
+                    } else {
+                        swal("提示!", "操作失败!", "error");
+                    }
+                    $scope.entityExpNeedknow._success();//隐藏模态框
+                }).error(function (data) {
+                    console.log(data);
+                    $scope.entityExpNeedknow._error();//隐藏模态框
+                });
+            }, "modal-expNeedknow");
+
+        $scope.$on("onNav", function (e, data) {
+            if (data.controller === "new") {
+                $scope.getProductTypePage();
+                $scope.getInstitution(function () {
+                    $scope.page.refreshTo(1);
+                });
+            }
+        });
+    })
+</script>

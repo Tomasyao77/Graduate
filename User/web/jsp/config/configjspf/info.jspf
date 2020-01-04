@@ -1,0 +1,288 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<div ng-controller="info">
+    <div class="panel panel-default m-t-lg">
+        <div class="panel-heading">
+            <h4>详情列表</h4>
+            <div class="clearfix">
+                <label>
+                    <button class="btn btn-success" ng-click="entity._openModal('add')">
+                        <span class="icon-plus m-r"></span>新增&nbsp;详情
+                    </button>
+                </label>
+                <form class="form-inline pull-right" ng-submit="page.refreshTo(1)">
+                    <label>设置类别&nbsp;
+                        <select class="form-control" ng-model="searchType"
+                                ng-options="x.id as x.name for x in configTypeList"
+                                ng-change="page.refreshTo(1)">
+                        </select>
+                    </label>
+                    <input class="form-control m-l" type="text" placeholder="名称" ng-model="search">
+                    <button class="btn btn-primary" type="submit">
+                        <span class="icon-search m-r"></span> 搜索
+                    </button>
+                </form>
+            </div>
+        </div>
+        <%@ include file="/jsp/common/table.jspf" %>
+    </div>
+    <%--模态框--%>
+    <div entity-modal="modal-info" title="详情" e="entity">
+        <entity-modal-body>
+            <div entity-edit-text="name" type="text" title="名称" entity="entity.entity" e="entity"
+                 vld="entity.validate" rewidth="2-0-8"></div>
+            <div entity-edit-text="nameEn" type="text" title="英文名" entity="entity.entity" e="entity"
+                 vld="entity.validate" rewidth="2-0-8"></div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">类别</label>
+                <div class="col-sm-8">
+                    <select class="form-control" ng-model="entity.entity.selectType"
+                            ng-options="x.id as x.name for x in selectTypeList"
+                            ng-change="selectChange()">
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">值类型</label>
+                <div class="col-sm-8">
+                    <select class="form-control" ng-model="entity.entity.valueType"
+                            ng-options="x for x in valueTypeList"
+                            ng-change="selectChange()">
+                    </select>
+                </div>
+            </div>
+            <div ng-show="valueTypeShow.ifNormal()"
+                 entity-edit-text="value" type="text" title="值" entity="entity.entity" e="entity"
+                 vld="entity.validate" rewidth="2-0-8"></div>
+            <div ng-show="valueTypeShow.ifString()"
+                 entity-edit-textarea="value" type="text" title="值" entity="entity.entity" e="entity"
+                 vld="entity.validate" rewidth="2-0-8"></div>
+            <div ng-show="valueTypeShow.ifRichText()" class="row">
+                <label class="col-sm-2 control-label">富文本</label>
+                <div class="col-xs-8">
+                    <div ng-model="entity.entity.value" editor-simple
+                         content="entity.entity.value"
+                         style="height: 350px; width: 100%">
+                    </div>
+                </div>
+                <p ng-show="entity.entity.value === null || entity.entity.value === ''"
+                   class="col-sm-2 text-danger" style="padding-top: 6px;margin-bottom: 0;">
+                    <span>内容不能为空</span>
+                </p>
+            </div>
+        </entity-modal-body>
+    </div>
+</div>
+<script>
+    m.controller("info", function ($scope, page, ajax, $location, entity, $filter) {
+        $scope.name = typeof $location.search().name == "undefined" ? "" : $location.search().name;
+
+        //（顺序要与服务器的枚举类一致）布尔型, 整型, 浮点型, 字符串型, 富文本
+        $scope.valueTypeList = ["布尔型", "整型", "浮点型", "字符串型", "富文本"];
+
+        $scope.selectChange = function () {
+            if ($scope.entity.action === "add") {
+                $scope.entity.entity.value = "";
+            }
+        };
+
+        $scope.valueTypeShow = {
+            ifRichText: function () {
+                return "富文本" === $scope.entity.entity.valueType;
+            },
+            ifString: function () {
+                return "字符串型" === $scope.entity.entity.valueType;
+            },
+            ifNormal: function () {
+                var index = $scope.valueTypeList.indexOf($scope.entity.entity.valueType);
+                return index === 0 || index === 1 || index === 2;
+            }
+        };
+
+        $scope.getConfigTypeList = function (callback) {
+            ajax.ajax("/user/config/getConfigTypeList", "POST",
+                {
+                    userId: 1
+                }).success(function (data) {
+                    console.log(data);
+                    if (data.success) {
+                        $scope.configTypeList = data.list;
+                        //新增/编辑模态框
+                        $scope.selectTypeList = angular.copy(data.list);
+                        //搜索栏
+                        $scope.configTypeList.unshift({id:0, name: "全部"});
+                        $scope.searchType = $scope.configTypeList[0].id;
+                        callback();
+                    }
+            });
+        };
+
+        $scope.load = function (current, size, orderBy, asc) {
+            ajax.ajax("/user/config/getConfigPageList", "POST",
+                {
+                    userId: 1,
+                    current: current,
+                    size: size,
+                    search: $scope.search,
+                    parentId: $scope.searchType === 0 ? -1 : $scope.searchType,
+                    orderBy: orderBy,
+                    asc: asc
+                }).success(function (data) {
+                console.log(data);
+                if (data.success) {
+                    $scope.page.refreshPage(data);
+                }
+            });
+        };
+        $scope.page = page.page($scope.load, "createTime", false);
+        $scope.ths = [
+            {width: "1%"},
+            {
+                name: "名称",
+                value: function (row) {
+                    return row.name;
+                },
+                width: "10%"
+            }, {
+                name: "英文名",
+                value: function (row) {
+                    return row.nameEn;
+                },
+                width: "10%"
+            }, {
+                name: "所属类别",
+                value: function (row) {
+                    return row.parentName;
+                },
+                width: "10%"
+            }, {
+                name: "值类型",
+                value: function (row) {
+                    return row.valueType;
+                },
+                width: "10%"
+            }, {
+                name: "值",
+                value: function (row) {
+                    return row.value;
+                },
+                width: "10%"
+            },{
+                name: "创建时间",
+                value: function (row) {
+                    return $filter("fmtDateYMdHMcn")(row.createTime);
+                },
+                orderBy: "createTime",
+                width: "15%"
+            }
+        ];
+        $scope.operations = [
+            {
+                name: function () {
+                    return "编辑";
+                },
+                clas: function () {
+                    return {
+                        "btn btn-xs btn-primary": true
+                    };
+                },
+                click: function (row) {
+                    $scope.entity._openModal("edit", row);
+                }
+            }/*,{
+                name: function () {
+                    return "删除";
+                },
+                clas: function () {
+                    return {
+                        "btn btn-xs btn-danger": true
+                    };
+                },
+                click: function (row) {
+                    if (confirm("确认删除吗？")) {
+                        /!*ajax.ajax("/server/admin/role/deleteRole", "POST", {
+                         userId: userId,
+                         id: row.id
+                         }).success(function (data) {
+                         if (data.success) {
+                         $scope.page.refresh();
+                         } else {
+                         alert(data.message);
+                         }
+                         });*!/
+                    }
+                }
+            }*/
+        ];
+        /**
+         * entity
+         */
+        $scope.entity = entity.getEntity(
+            //name, nameEn, parentId, valueType, value
+            {name: "", nameEn: "", value: ""},
+            {name: {}, nameEn: {}, value: {}
+            }, function (action, row) {//beforeOpen
+                if ($scope.entity.action === "add") {
+                    $scope.entity.entity.selectType = $scope.selectTypeList[0].id;
+                    $scope.entity.entity.valueType = $scope.valueTypeList[0];
+                } else if ($scope.entity.action === "edit") {
+                    $scope.entity.entity = angular.copy(row);
+                    $scope.entity.entity.selectType = $scope.entity.entity.parentId;
+                }
+            }, function () {//submit
+                if ($scope.entity.action === "add") {
+                    ajax.ajax("/user/config/addOneConfig", "POST", {
+                        userId: 1,
+                        name: $scope.entity.entity.name,
+                        nameEn: $scope.entity.entity.nameEn,
+                        parentId: $scope.entity.entity.selectType,
+                        valueType: $scope.entity.entity.valueType,
+                        value: $scope.entity.entity.value
+                    }).success(function (data) {
+                        console.log(data);
+                        if (data.success){
+                            $scope.page.refresh();
+                        } else {
+                            alert("新增失败!名称已存在");
+                        }
+                    }).error(function (data) {
+                        console.log(data);
+                    });
+                } else if ($scope.entity.action === "edit") {
+                    ajax.ajax("/user/config/updateOneConfig", "POST", {
+                        userId: 1,
+                        id: $scope.entity.entity.id,
+                        name: $scope.entity.entity.name,
+                        nameEn: $scope.entity.entity.nameEn,
+                        parentId: $scope.entity.entity.selectType,
+                        valueType: $scope.entity.entity.valueType,
+                        value: $scope.entity.entity.value
+                    }).success(function (data) {
+                        console.log(data);
+                        if (data.success){
+                            $scope.page.refresh();
+                        } else {
+                            alert("新增失败!名称已存在");
+                        }
+                    }).error(function (data) {
+                        console.log(data);
+                    });
+                }
+                $scope.entity._success();//隐藏模态框
+            }, "modal-info");
+
+        $scope.$watch('$viewContentLoaded', function () {
+            /*$scope.getConfigTypeList(function () {
+                $scope.page.refreshTo(1);
+            });*/
+        });
+
+        $scope.$on("onNav", function (e, data) {
+            console.log(data);
+            if(data.controller === "info"){
+                $scope.getConfigTypeList(function () {
+                    $scope.page.refreshTo(1);
+                });
+            }
+        });
+    })
+</script>

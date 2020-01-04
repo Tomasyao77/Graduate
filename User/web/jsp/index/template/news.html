@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>变购天地</title>
+    <!--基础css-->
+    <link href="/jsp/common/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/jsp/common/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/jsp/common/css/bootstrap-extend.css" rel="stylesheet">
+    <!--基础js-->
+    <script src="/jsp/common/js/jquery.min.js"></script>
+    <script src="/jsp/common/js/bootstrap.min.js"></script>
+    <script src="/jsp/common/js/angular.min.js"></script>
+    <script src="/jsp/common/js/ng-file-upload-all.min.js"></script>
+    <!--自定义angular module-->
+    <script src="/jsp/common/template/baseModule.js"></script>
+
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <style>
+        body{
+            padding: 20px 10px;
+        }
+        /*toast in web*/
+        .toast-container {
+            position: fixed;
+            z-index: 9999;
+            top: 50%;
+            width: 100%;
+            -webkit-transition: opacity .8s;
+            transition: opacity .8s;
+            opacity: 0
+        }
+        .toast-container.toast-active {
+            opacity: 1
+        }
+        .toast-message-container {
+            font-size: 14px;
+            width: 170px;
+            margin: 5px auto;
+            padding: 5px;
+            text-align: center;
+            color: #f5f5f5;
+            border-radius: 7px;
+            background-color: #676767;
+        }
+        /*返回顶部*/
+        .back_to_top{
+            position: fixed;
+            bottom:30px;
+            right: 30px;
+            border:1px solid #888;
+        }
+    </style>
+</head>
+<script>
+    angular.module("m", ["baseModule"])
+        .controller("c", function ($scope, ajax) {
+            //获取url ?后面的参数
+            $scope.GetQueryString = function(name){
+                var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+                var r = window.location.search.substr(1).match(reg);
+                if(r!=null){return  decodeURI(r[2]);} return null;
+            };
+            var userId=$scope.GetQueryString("userId");
+            var newsId=$scope.GetQueryString("newsId");
+
+            $scope.collectImgArr = ["/jsp/common/asset/un_collect.png",
+            "/jsp/common/asset/collected.png"];
+            $scope.collectImg = $scope.collectImgArr[0];
+            //获取新闻
+            $scope.getOneNews = function(callback){
+                ajax.ajax("/news/getOneNews", "POST", {
+                    userId: userId,
+                    newsId: newsId
+                }).success(function (data) {
+                    console.log(data);
+                    if (data.success){
+                        $scope.news = data.value;
+                        if($scope.news.newsCollect !== null){
+                            $scope.collectImg = $scope.collectImgArr[1];
+                        }
+                        callback && callback();
+                    }
+                }).error(function (data) {
+                    console.log(data);
+                });
+            };
+            //收藏
+            $scope.collectNews = function(){
+                ajax.ajax("/news/collectNews", "POST", {
+                    userId: userId,
+                    newsId: newsId
+                }).success(function (data) {
+                    console.log(data);
+                    if (data.success){
+                        $scope.getOneNews();
+                        $scope.collectImg = $scope.collectImgArr[1];
+                        $scope.toast("收藏成功");
+                    }
+                }).error(function (data) {
+                    console.log(data);
+                });
+            };
+            //取消收藏
+            $scope.cancelNews = function(){
+                ajax.ajax("/news/cancelNews", "POST", {
+                    userId: userId,
+                    newsId: newsId
+                }).success(function (data) {
+                    console.log(data);
+                    if (data.success){
+                        $scope.getOneNews();
+                        $scope.collectImg = $scope.collectImgArr[0];
+                        $scope.toast("取消收藏成功");
+                    }
+                }).error(function (data) {
+                    console.log(data);
+                });
+            };
+            //点击图标
+            $scope.clickImg = function(){
+                if($scope.news.newsCollect !== null){
+                    $scope.cancelNews();
+                } else{
+                    $scope.collectNews();
+                }
+            };
+            //页面toast
+            $scope.toast = function(msg) {
+                var active = "toast-active";
+                var div = document.createElement("div");
+                div.classList.add("toast-container");
+                div.innerHTML = '<div class="toast-message-container">' + msg + "</div>";
+                div.addEventListener("webkitTransitionEnd", function() {
+                    div.classList.contains(active) || div.parentNode.removeChild(div);
+                });
+                document.body.appendChild(div);
+                div.classList.add(active);
+                setTimeout(function() {
+                    div.classList.remove(active)
+                }, 1500);
+            };
+            //返回顶部
+            $scope.backFunc = function () {
+                var backButton=$('.back_to_top');
+                backButton.fadeOut();
+                $scope.backToTop = function() {
+                    console.log($(window).scrollTop());
+                    window.scrollTop = 0;
+                    $('html,body').animate({
+                        scrollTop: 0
+                    }, 800);
+                };
+                $(window).on('scroll', function () {
+                    if ($(window).scrollTop() > 100)
+                        backButton.fadeIn();
+                    else
+                        backButton.fadeOut();
+                });
+            };
+
+            $scope.width = {
+                body:  window.screen.availHeight,
+                newsContent:  window.screen.availHeight - 100
+            };
+
+            $scope.$watch('$viewContentLoaded', function() {
+                $scope.getOneNews(function () {
+                    $scope.backFunc();
+                });
+            });
+            console.log($scope.width.body);
+            console.log($("#newsContent").height());
+        });
+</script>
+<body ng-app="m" ng-controller="c">
+    <!-- 收藏和浏览量 -->
+    <div class="clearfix" style="height: 50px;">
+        <div style="float: left;" class="clearfix">
+            <img ng-click="clickImg()" ng-src="{{collectImg}}" style="width: 16px;height: 16px;margin-top: -3px;">&nbsp;收藏
+            <span style="margin-left: 5px;" ng-bind=news.view></span>&nbsp;次浏览
+        </div>
+    </div>
+
+    <div id="newsContent" ng-style="{'height':width.newsContent}"
+         style="margin-top: 20px;-webkit-overflow-scrolling : touch;">
+        <div ng-bind-html="news.content | trustContent"></div>
+    </div>
+
+    <img src="/jsp/common/asset/top.png" ng-click="backToTop()" class="back_to_top"
+         style="width: 32px;height: 32px;border-style:none;" alt=""/>
+</body>
+</html>
+

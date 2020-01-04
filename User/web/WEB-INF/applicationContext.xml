@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!--导入dubbo配置-->
+    <import resource="dubbo.xml"/>
+    <!--spring包扫描-->
+    <context:component-scan
+            base-package="edu.whut.pocket.*.service,edu.whut.pocket.*.dao,edu.whut.pocket.*.util,
+                        edu.whut.pocket.dubbo,edu.whut.pocket.*.aspect"/>
+    <!--数据源-->
+    <context:property-placeholder location="classpath:jdbc.properties" ignore-unresolvable="true"/>
+    <context:property-placeholder location="classpath:redis.properties" ignore-unresolvable="true"/>
+    <bean id="parentDataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close"><!--连接池-->
+        <property name="initialSize" value="${pool.initialPoolSize}"/>
+        <property name="maxActive" value="${pool.maxPoolSize}"/>
+        <property name="maxIdle" value="${pool.maxIdle}"/>
+        <property name="minIdle" value="${pool.minIdle}"/>
+        <property name="suspectTimeout" value="${pool.suspectTimeout}"/>
+        <property name="timeBetweenEvictionRunsMillis" value="${pool.timeBetweenEvictionRunsMillis}"/>
+        <property name="minEvictableIdleTimeMillis" value="${pool.minEvictableIdleTimeMillis}"/>
+        <property name="testOnBorrow" value="${pool.testOnBorrow}"/>
+        <property name="validationQuery" value="${pool.validationQuery}"/>
+    </bean>
+    <bean id="masterDataSource" parent="parentDataSource">
+        <property name="driverClassName" value="${master.jdbc.driverClass}"/>
+        <property name="url" value="${master.jdbc.url}"/>
+        <property name="username" value="${master.jdbc.user}"/>
+        <property name="password" value="${master.jdbc.password}"/>
+    </bean>
+    <bean id="slaveDataSource" parent="parentDataSource">
+        <property name="driverClassName" value="${slave.jdbc.driverClass}"/>
+        <property name="url" value="${slave.jdbc.url}"/>
+        <property name="username" value="${slave.jdbc.user}"/>
+        <property name="password" value="${slave.jdbc.password}"/>
+    </bean>
+    <!--数据库主从,动态切换数据源-->
+    <bean id="dataSource" class="edu.whut.pocket.base.db.DynamicDataSource">
+        <property name="targetDataSources">
+            <map key-type="java.lang.String">
+                <entry key="slave" value-ref="slaveDataSource"/>
+            </map>
+        </property>
+        <property name="defaultTargetDataSource" ref="masterDataSource"/>
+    </bean>
+    <bean id="dataSourceAdvice" class="edu.whut.pocket.base.db.DataSourceAdvice"/>
+    <aop:config>
+        <aop:advisor pointcut="execution(public * edu.whut..*service..*.*(..))" advice-ref="dataSourceAdvice"/>
+    </aop:config>
+    <!--hibernate:
+        dataSource <- sessionFactory <- hibernateTemplate
+        (dataSource & sessionFactory) <- transactionManager <- transactionAdvice
+    -->
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan">
+            <list>
+                <value>edu.whut.pocket.*.model</value>
+            </list>
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+                <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+                <prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
+                <prop key="hibernate.jdbc.fetch_size">${hibernate.jdbc.fetch_size}</prop>
+                <prop key="hibernate.jdbc.batch_size">${hibernate.jdbc.batch_size}</prop>
+            </props>
+        </property>
+    </bean>
+    <bean id="hibernateTemplate" class="org.springframework.orm.hibernate4.HibernateTemplate">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <!--mybatis:
+        sqlSessionFactory
+        sqlSessionTemplate
+        MapperScannerConfigurer //mapper包扫描
+    -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <!--<property name="configLocation" value="classpath:mybatis-config.xml" />-->
+        <!--<property name="typeAliasesPackage" value="com.cnblogs.yjmyzz.entity" />-->
+        <property name="mapperLocations" value="classpath:mybatis/**/*.xml" />
+        <property name="plugins">
+            <list> <!--mybatis分页插件-->
+                <bean class="com.github.miemiedev.mybatis.paginator.OffsetLimitInterceptor">
+                    <property name="dialectClass" value="com.github.miemiedev.mybatis.paginator.dialect.MySQLDialect" />
+                </bean>
+            </list>
+        </property>
+    </bean>
+    <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory" />
+    </bean>
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="edu.whut.pocket.**.mapper"/>
+        <property name="sqlSessionTemplateBeanName" value="sqlSessionTemplate"/>
+    </bean>
+    <!--事务管理-->
+    <!--<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>-->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <tx:advice id="transactionAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="get*" read-only="true"/>
+            <tx:method name="*" propagation="REQUIRED"/>
+        </tx:attributes>
+    </tx:advice>
+    <aop:config>
+        <aop:pointcut expression="execution(* edu.whut.pocket..*.service..*(..))" id="businessService"/>
+        <aop:advisor advice-ref="transactionAdvice" pointcut-ref="businessService"/>
+    </aop:config>
+    <!--redis 连接池 <- 工厂 <- 模板-->
+    <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxIdle" value="${redis.maxIdle}"/>
+        <property name="maxTotal" value="${redis.maxTotal}"/>
+        <property name="maxWaitMillis" value="${redis.maxWait}"/>
+        <property name="testOnBorrow" value="${redis.testOnBorrow}"/>
+        <property name="testOnReturn" value="${redis.testOnReturn}"/>
+        <property name="blockWhenExhausted" value="${redis.blockWhenExhausted}"/>
+    </bean>
+    <bean id="connectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+        <property name="hostName" value="${redis.host}"/>
+        <property name="port" value="${redis.port}"/>
+        <property name="password" value="${redis.pass}"/>
+        <property name="poolConfig" ref="poolConfig"/>
+    </bean>
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+        <property name="connectionFactory" ref="connectionFactory"/>
+        <property name="keySerializer">
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
+        </property>
+        <property name="valueSerializer">
+            <bean class="org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer"/>
+        </property>
+    </bean>
+    <!--kafka-->
+    <!--kafakaProducer仅在本地测试时使用-->
+    <!--<bean id="kafakaProducer" class="edu.whut.pocket.kafka.MyProducer" init-method="initProducer"/>-->
+    <!--<bean id="kafakaConsumer" class="edu.whut.pocket.kafka.MyConsumer" init-method="initConsumer"/>-->
+    <!--短信-->
+    <!--<bean id="yiTDSmsHandler" class="edu.whut.pocket.message.util.YiTDSmsUtil" init-method="initSmsUtil"/>-->
+    <!--weixin-->
+    <!--<bean id="weixin" class="edu.whut.pocket.weixin.controller.GetAccessToken" init-method="init"/>-->
+</beans>

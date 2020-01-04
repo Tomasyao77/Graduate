@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<HTML>
+<HEAD>
+    <TITLE> ZTREE DEMO </TITLE>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <!--<link rel="stylesheet" href="demoStyle/demo.css" type="text/css">-->
+    <link rel="stylesheet" href="css/zTreeStyle.css" type="text/css">
+    <script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.ztree.all.min.js"></script>
+    <SCRIPT LANGUAGE="JavaScript">
+        var zTreeObj;
+        // zTree 的参数配置，深入使用请参考 API 文档（setting 配置详解）
+        var setting = {
+            //点击
+            callback: {
+                onClick: function (event, treeId, treeNode) {
+                    console.log(treeNode);
+                },
+                beforeDrag: function (treeId, treeNodes) {
+                    return !treeNodes[0].isParent;
+                },
+                beforeRemove: function (treeId, treeNode) {
+                    //return confirm("确认要删除吗?");
+                }
+            },
+            //选择
+            check: {
+                enable: true,
+                chkStyle: "checkbox",
+                chkboxType: { "Y": "ps", "N": "ps" }
+            },
+            //拖拽
+            edit: {
+                enable: true,
+                drag: {
+                    isCopy: false,
+                    isMove: true,
+                    prev: true,
+                    next: true,
+                    inner: false
+                },
+                showRemoveBtn: function (treeId, treeNode) {
+                    if(treeNode.level!==0){
+                        return true;
+                    }
+                    if(treeNode.level===0 && !treeNode.children){
+                        return true;
+                    }
+                    if(treeNode.level===0 && treeNode.children && treeNode.children.length===0){
+                        return true;
+                    }
+                    return false;
+                }
+            },
+            view: {
+                addHoverDom: addHoverDom,
+                removeHoverDom: removeHoverDom,
+                selectedMulti: false
+            }
+        };
+        function addHoverDom (treeId, treeNode) {
+            if(!treeNode.isLastNode && treeNode.level===0){
+                return false;
+            }
+            var sObj = $("#" + treeNode.tId + "_span");
+            if (treeNode.editNameFlag || $("#addBtn_"+treeNode.tId).length>0) return;
+            var addStr = "<span class='button add' id='addBtn_" + treeNode.tId
+                + "' title='add node' onfocus='this.blur();'></span>";
+            sObj.after(addStr);
+            var btn = $("#addBtn_"+treeNode.tId);
+            if (btn) btn.bind("click", function(){
+                if(!treeNode.isLastNode && treeNode.level===0){
+                    return false;
+                }
+                var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+                //添加节点
+                var node = {parentTId:treeNode.parentTId, name:"未命名_新模块"};
+                if(treeNode.level === 0){
+                    node.iconOpen = "css/img/diy/p_open.png";
+                    node.iconClose = "css/img/diy/p_close.png";
+                    node.children = [];
+                }else {
+                    node.icon = "css/img/diy/module.png";
+                }
+                zTree.addNodes(zTree.getNodeByTId(""+treeNode.parentTId), node);
+                return false;
+            });
+        }
+        function removeHoverDom(treeId, treeNode) {
+            $("#addBtn_"+treeNode.tId).unbind().remove();
+        }
+        // zTree 的数据属性，深入使用请参考 API 文档（zTreeNode 节点数据详解）
+        var zNodes = [
+            {name:"模块管理", open:false, iconOpen:"css/img/diy/p_open.png", iconClose:"css/img/diy/p_close.png",
+                children:[{name:"test1_1", icon:"css/img/diy/module.png"}, {name:"test1_2", icon:"css/img/diy/module.png"}]},
+            {name:"test2", open:true, iconOpen:"css/img/diy/p_open.png", iconClose:"css/img/diy/p_close.png",
+                children:[{name:"test2_1", icon:"css/img/diy/module.png"}, {name:"test2_2", icon:"css/img/diy/module.png"}]}
+        ];
+        $(document).ready(function(){
+            zTreeObj = $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+        });
+    </SCRIPT>
+</HEAD>
+<BODY>
+<div style="margin: 50px 350px;">
+    <ul id="treeDemo" class="ztree"></ul>
+</div>
+</BODY>
+</HTML>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<!--
+Author: zouy
+Unit: D9lab
+Date: 2018-03-24 15:50 
+-->
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>title</title>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.bootcss.com/angular.js/1.5.0/angular.min.js"></script>
+    <script src="/jsp/common/js/ng-file-upload-all.min.js"></script>
+    <script src="/jsp/common/template/baseModule.js"></script>
+</head>
+<body ng-app="fileUpload" ng-controller="MyCtrl">
+<div class="container" style="margin-top: 50px;width: 80%;">
+    <div class="btn btn-primary center-block" ngf-select ng-model="file"
+         ngf-pattern="'.xls,.xlsx'" ngf-accept="'application/x-excel'"
+         ngf-max-size="20MB" style="width: 100px;">选择文件</div>
+    <hr/>
+    <button class="btn btn-success center-block" type="button" ng-click="submit()">submit</button>
+
+</div>
+
+<script>
+    //inject directives and services.
+    var app = angular.module('fileUpload', ['ngFileUpload', 'baseModule']);
+
+    app.controller('MyCtrl', ['$scope', 'Upload', function ($scope, Upload) {
+        // upload later on form submit or something similar
+        $scope.submit = function() {
+            if ($scope.file) {
+                $scope.upload($scope.file);
+            }
+        };
+
+        // upload on file select or drop
+        $scope.upload = function (file) {
+            Upload.upload({
+                url: '/file/upload',
+                data: {file: file}
+            }).then(function (resp) {
+                console.log(resp);
+                //console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+            }, function (resp) {
+                console.log(resp);
+                //console.log('Error status: ' + resp.status);
+            }, function (evt) {
+                var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                //console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+            });
+        };
+    }]);
+</script>
+</body>
+</html>

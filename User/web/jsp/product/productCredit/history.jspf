@@ -1,0 +1,218 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<div ng-controller="history">
+    <div class="panel panel-default m-t-lg">
+        <div class="panel-heading">
+            <h4>历史记录</h4>
+            <div class="clearfix">
+                <label>
+                    <button class="btn btn-success" ng-click="page.refreshTo(1)">
+                        <span class="icon-refresh m-r"></span>刷新
+                    </button>
+                </label>
+                <form class="form-inline pull-right" ng-submit="page.refreshTo(1)">
+                    <label>审核状态&nbsp;
+                        <select class="form-control" ng-model="searchType"
+                                ng-options="x.id as x.name for x in verifyType"
+                                ng-change="selectChange()"></select>
+                    </label>
+                    <input class="form-control m-l" type="text"
+                           placeholder="名称/描述" ng-model="search">
+                    <button class="btn btn-primary" type="submit">
+                        <span class="icon-search m-r"></span> 搜索
+                    </button>
+                </form>
+            </div>
+        </div>
+        <%@ include file="/jsp/common/table.jspf" %>
+    </div>
+    <%--编辑新品--%>
+    <div entity-modal="modal-new-history" title="新品" e="entityNew">
+        <entity-modal-body>
+            <div entity-view-tag="entityNew.entity.product.name" type="text" title="名称"></div>
+            <div entity-view-tag="entityNew.entity.product.description" type="textarea" title="描述"></div>
+            <div entity-edit-text="num" type="number" title="数量" entity="entityNew.entity" e="entityNew"
+                 vld="entityNew.validate" min="0" max="100000" step="1"></div>
+            <%--<div entity-edit-text="originalPrice" type="text" title="原价" entity="entityNew.entity" e="entityNew"
+                 vld="entityNew.validate" ng-show="!ifNewedVerifyFlag"></div>
+            <div entity-edit-text="currentPrice" type="text" title="现价" entity="entityNew.entity" e="entityNew"
+                 vld="entityNew.validate" ng-show="!ifNewedVerifyFlag"></div>--%>
+        </entity-modal-body>
+    </div>
+</div>
+<script>
+    m.controller("history", function ($scope, page, ajax, $location, entity, $filter, alertService) {
+        //审核状态
+        $scope.verifyType = [{id: 1, name: "审核通过"}, {id: 0, name: "待审核"}, {id: 2, name: "审核未通过"}];
+        $scope.searchType = 1;
+        $scope.selectChange = function () {
+            $scope.page.refresh();
+        };
+        /**
+         * 获取所属机构信息
+         */
+        $scope.getInstitution = function (callback) {
+            ajax.ajax("/user/institution/getInstitutionByAdmin", "POST", {
+                userId: 1,
+                adminId: userId
+            }).success(function (data) {
+                console.log(data);
+                if (data.success) {
+                    $scope.institution = data.value;
+                    callback && callback();
+                }
+            });
+        };
+        $scope.load = function (current, size, orderBy, asc) {
+            ajax.ajax("/user/redirect/trade/productsells/getProductCreditItemPage", "POST",
+                {
+                    userId: 1,
+                    current: current,
+                    size: size,
+                    search: $scope.search,
+                    orderBy: orderBy,
+                    asc: asc,
+                    institutionId: $scope.institution.id,
+                    verify: $scope.searchType
+                }).success(function (data) {
+                console.log(data);
+                if (data.success) {
+                    $scope.page.refreshPage(data);
+                }
+            });
+        };
+        $scope.page = page.page($scope.load, "p.create_time", false);
+        $scope.ths = [
+            {
+                name: "封面",
+                img: function (row) {
+                    row = row.product;
+                    if(row.files.length <= 0){//如果没有图片显示默认图片
+                        row.files.push({
+                            picture: {url: $scope.default_picture},
+                            pictureThumb: {url: $scope.default_picture_thumb}
+                        });
+                    }
+                    return row.files[0].pictureThumb.url;
+                },
+                width: "5%"
+            },
+            {
+                name: "产品名称",
+                value: function (row) {
+                    return row.product.name;
+                },
+                width: "10%"
+            }, {
+                name: "描述",
+                value: function (row) {
+                    return row.product.description;
+                },
+                width: "15%"
+            }, {
+                name: "数量(份)",
+                value: function (row) {
+                    return row.num;
+                },
+                width: "10%"
+            }, {
+                name: "原价(元)",
+                value: function (row) {
+                    return row.originalPrice;
+                },
+                width: "10%"
+            }, {
+                name: "现价(元)",
+                value: function (row) {
+                    return row.currentPrice;
+                },
+                width: "10%"
+            }, {
+                name: "创建时间",
+                value: function (row) {
+                    return $filter("fmtDateYMdHMcn")(row.createTime);
+                },
+                orderBy: "p.create_time",
+                width: "15%"
+            }
+        ];
+        $scope.operations = [
+            {
+                name: function () {
+                    return "重新编辑";
+                },
+                clas: function (row) {
+                    return {
+                        "btn btn-xs btn-primary": true,
+                        "hide": $scope.searchType !== 2
+                    };
+                },
+                click: function (row) {
+                    $scope.entityNew._openModal("edit", row);
+                }
+            }
+        ];
+        /**
+         * entity
+         */
+        $scope.entityNew = entity.getEntity(
+            {num: "", originalPrice: "", currentPrice: ""},
+            {num: {}/*, originalPrice: {}*/},
+            function (action, row) {//beforeOpen
+                if($scope.entityNew.action === "edit"){
+                    $scope.entityNew.entity = angular.copy(row);
+                    $scope.ifCredited(row.product.id);
+                    $scope.entityNew.entity.num = row.num;
+                    $scope.entityNew.entity.originalPrice = row.originalPrice;
+                    $scope.entityNew.entity.currentPrice = row.currentPrice;
+                }
+            }, function () {//submit
+                if($scope.entityNew.action === "edit"){//审核未通过重新编辑数量
+                    ajax.ajax("/user/redirect/trade/productsells/updateProductCreditItem", "POST", {
+                        userId: 1,
+                        id: $scope.entityNew.entity.id,
+                        num: $scope.entityNew.entity.num/*,
+                        originalPrice: $scope.entityNew.entity.originalPrice,
+                        currentPrice: $scope.entityNew.entity.currentPrice*/
+                    }).success(function (data) {
+                        console.log(data);
+                        if (data.success) {
+                            $scope.page.refresh();
+                            alertService.show("操作成功!", "success", "80%");
+                        } else {
+                            swal("提示!", "操作失败!", "error");
+                        }
+                        $scope.entityNew._success();//隐藏模态框
+                    }).error(function (data) {
+                        console.log(data);
+                        $scope.entityNew._error();//隐藏模态框
+                    });
+                }
+            }, "modal-new-history");
+
+        //此产品是否上架为赊购过
+        $scope.ifCredited = function (productId) {
+            ajax.ajax("/user/redirect/trade/productsells/getProductCredit", "POST", {
+                userId: userId,
+                productId: productId
+            }).success(function (data) {
+                console.log(data);
+                if (data.success) {
+                    $scope.ifCreditedFlag = true;
+                    $scope.productCredit = data.value;
+                }else {
+                    $scope.ifCreditedFlag = false;
+                }
+            }).error(function (data) {
+                console.log(data);
+            });
+        };
+
+        $scope.$on("onNav", function (e, data) {
+            if (data.controller === "history") {
+                $scope.getInstitution(function () {
+                    $scope.page.refreshTo(1);
+                });
+            }
+        });
+    })
+</script>

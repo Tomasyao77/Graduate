@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>医美专栏</title>
+    <!--基础css-->
+    <link href="/jsp/common/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/jsp/common/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/jsp/common/css/bootstrap-extend.css" rel="stylesheet">
+    <link href="/jsp/common/css/validate.css" rel="stylesheet">
+    <!--基础js-->
+    <script src="/jsp/common/js/jquery.min.js"></script>
+    <script src="/jsp/common/js/bootstrap.min.js"></script>
+    <script src="/jsp/common/js/angular.min.js"></script>
+    <script src="/jsp/common/js/ng-file-upload-all.min.js"></script>
+    <!--自定义angular module-->
+    <script src="/jsp/common/template/baseModule.js"></script>
+    <style>
+        body{
+            padding: 20px 10px;
+        }
+    </style>
+</head>
+<script>
+    angular.module("nm", ["baseModule"])
+        .controller("nc", function ($scope) {
+        });
+    angular.module("m", ["nm"])
+        .controller("c", function ($scope, ajax) {
+            $scope.GetQueryString = function(name){
+                var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+                var r = window.location.search.substr(1).match(reg);
+                if(r!=null){return  decodeURI(r[2]);} return null;
+            };
+            var userId=$scope.GetQueryString("userId");
+            var newsId=$scope.GetQueryString("newsId");
+
+            $scope.collectImgArr = ["/jsp/common/asset/un_collect.png",
+            "/jsp/common/asset/collected.png"];
+            $scope.collectImg = $scope.collectImgArr[0];
+            //获取新闻
+            $scope.getOneNews = function(callback){
+                ajax.ajax("/news/getOneNews", "POST", {
+                    userId: userId,
+                    newsId: newsId
+                }).success(function (data) {
+                    console.log(data);
+                    if (data.success){
+                        $scope.news = data.value;
+                        if($scope.news.newsCollect !== null){
+                            $scope.collectImg = $scope.collectImgArr[1];
+                        }
+                        callback && callback();
+                    }
+                }).error(function (data) {
+                    console.log(data);
+                });
+            };
+            //收藏
+            $scope.collectNews = function(){
+                ajax.ajax("/news/collectNews", "POST", {
+                    userId: userId,
+                    newsId: newsId
+                }).success(function (data) {
+                    console.log(data);
+                    if (data.success){
+                        $scope.getOneNews();
+                        $scope.collectImg = $scope.collectImgArr[1];
+                    }
+                }).error(function (data) {
+                    console.log(data);
+                });
+            };
+            //取消收藏
+            $scope.cancelNews = function(){
+                ajax.ajax("/news/cancelNews", "POST", {
+                    userId: userId,
+                    newsId: newsId
+                }).success(function (data) {
+                    console.log(data);
+                    if (data.success){
+                        $scope.getOneNews();
+                        $scope.collectImg = $scope.collectImgArr[0];
+                    }
+                }).error(function (data) {
+                    console.log(data);
+                });
+            };
+            $scope.getOneNews();
+            //点击图标
+            $scope.clickImg = function(){
+                if($scope.news.newsCollect !== null){
+                    $scope.cancelNews();
+                } else{
+                    $scope.collectNews();
+                }
+            };
+        });
+</script>
+<body ng-app="m" ng-controller="c">
+    <!-- 收藏和浏览量 -->
+    <div class="clearfix" style="width: 100%;">
+    <div style="float: left;" class="clearfix"></div>
+        <img ng-click="clickImg()" ng-src="{{collectImg}}" style="width: 16px;height: 16px;margin-top: -3px;">&nbsp;收藏
+        <span style="margin-left: 5px;" ng-bind=news.view></span>&nbsp;次浏览
+    </div>
+
+    <h2><font color="#000000">各种大牌垂涎的酵母精华，到底有什么神奇的？</font></h2><section><section><section><p style="text-align: center; "><font color="#808080">这篇文章的开始</font></p><p style="text-align: center; "><font color="#808080">要从大家耳熟能详的酵母精华说起</font></p></section></section></section><section><section><section></section><section></section><section></section><section></section><section></section></section></section><section><section><section><p style="text-align: center; "><font color="#000000">Yeast extract&nbsp;</font></p><p style="" align="center"><font color="#808080"><img src="https://kdfiles.d9lab.net/group1/M00/00/28/cHxzJFuR-rSAPErWAABU804anrs597.jpg" alt="03-1" style="max-width:100%;" class=""><br></font></p><section><section><section><p><font color="#808080">春季作为一年之始，万象更新，生机勃勃。同样，春季也是一年中天气变化幅度最大的时期，皮肤容易受环境变化变得过于脆弱。因此，护肤显得尤为关键。</font></p><p><font color="#808080">说起“风很大”护肤品，小仙女们估计立马就能联想到SK-II、海蓝之谜、迪奥、雅诗兰黛、兰蔻等国际知名品牌。</font></p><p><font color="#808080">但不知道有没有细心的小仙女发现它们都有一个共性，即主打成份都是活肤酵母精华，因为显著的护肤效果，受到了很多小仙女青睐。</font></p></section></section></section><section><section><section><p><font color="#808080">那么酵母精华到底有什么神奇的功效呢？今天，小编就来和大家聊聊关于酵母精华的那些事</font></p><p style="" align="center"><font color="#808080"><img src="https://kdfiles.d9lab.net/group1/M00/00/29/cHxzJFuSHFSAUbIeAAAjvBqthsA032.jpg" alt="line" style="max-width:100%;" class=""><br></font></p><section><section><section><section><section><section><section><section><section><section><section><section><section><p style="text-align: center; "><font color="#000000">酵母精华的神奇功效</font><br></p></section></section></section></section></section></section></section></section></section></section></section></section></section><section><section><section><p><font color="#808080">其实酵母是单细胞微生物，它属于高等微生物的真菌类。</font></p><p><font color="#808080">酵母无害，非常容易生长，分布于整个自然界中，在有氧或者无氧的环境中都能生存，是一种典型的兼性厌氧微生物。</font></p><p><font color="#808080">酵母的主要成分是蛋白质，它从糖类中获取能量，代谢产物富含二氧化碳和乙醇（酒精）。</font></p><p><font color="#808080">作为最早被人类广泛应用的微生物，酵母在几千年前就开始被广泛应用于酿酒和面包发酵。</font></p><p><font color="#808080"><br></font></p><p style="text-align: center;" align="center"><font color="#808080"><img src="https://kdfiles.d9lab.net/group1/M00/00/29/cHxzJFuSI5mAO09_AADvdjSKefo626.jpg" alt="03-2" style="max-width:100%;" class=""><br></font></p><p><font color="#808080">古巴比伦人使用啤酒和酵母来帮助伤口愈合，希腊妇女也常用酿酒发酵产生的泡沫来擦洗脸部和身体，以此来保持皮肤的健康美丽。</font></p><p><font color="#808080">在护肤品领域，酵母中的谷胱甘肽是功能性多肽，作为一种抗氧化剂，它能够抵抗氧化剂对硫氢基的破坏作用，保护红细胞免遭氧化性破坏。</font></p><p><font color="#808080">&nbsp;</font></p><p><font color="#808080">人工从活性酵母中提取的浓缩精华液富含蛋白质、维生素Ｂ、矿物质、免疫多糖等四大类共计50多种天然营养物质，并含有多种生物活性物质，它能够击碎色素群，打散大块、明显的麦拉宁色素群，成为肉眼看不清楚的细小颗粒，均匀肌肤色泽，具有活肤功效。</font></p><p><font color="#808080">&nbsp;</font></p><p><font color="#808080">同时强大的抗氧化性能可以帮助肌肤抵御自由基的侵害，防御肌肤表层受损，让肌肤柔嫩亮白，实现持久白净、无瑕。因此酵母提取物（酵母精华）被各大国际高端化妆品牌所青睐。如SK-II的神仙水， “酵母精华”成分就是它的核心卖点。</font></p></section></section></section></section></section></section><section><section><section><section><section><section><section><section><section><section><section><section><p style="" align="center"><font color="#808080"><img src="https://kdfiles.d9lab.net/group1/M00/00/2A/cHxzJFuSN2mAOV9zAAAjvCEIP6M070.jpg" alt="line" style="max-width:100%;" class=""><br></font></p><section><section><section><section><section><section><section><section><section><section><section><section><section><p style="text-align: center; "><font color="#000000">护肤品不直接使用酵母呢</font></p><p><font color="#808080">&nbsp;“活酵母”直接加入到护肤产品中是很危险的。</font></p><p><font color="#808080">&nbsp;</font></p><p><font color="#808080">酵母本质上还是一种真菌，是一种具有生物活性的微生物，是不能直接用在面部的。</font></p><p><font color="#808080">&nbsp;</font></p><p><font color="#808080">食物在常温状态下，如果没有防腐剂，一般几天时间就会变质。</font></p><p style="text-align: center;" align="center"><font color="#808080"><img src="https://kdfiles.d9lab.net/group1/M00/00/2A/cHxzJFuSN4qAYPweAACcSlJnQs8853.jpg" alt="03-3" style="max-width:100%;" class=""><br></font></p></section></section></section></section></section></section></section></section></section></section></section></section></section></section></section></section><p style="" align="center"><font color="#808080"><br></font></p><p><font color="#808080">试想一下，真菌如果在化妆品中是活的状态，在水分和营养都非常充足的情况下，繁殖速度会有多快，这瓶产品到您手中时，可能满瓶都是真菌了，细菌稍有超标，就会引起皮肤严重过敏，这么多真菌用在面部会是什么后果。</font></p><p><font color="#808080">&nbsp;</font></p><p><font color="#808080">国家对化妆品的微生物有严格的规定，超过标准是不可能通过质监局的检测，连上市销售的机会都没有。</font></p><p><font color="#808080">所有市场上宣传“活酵母”的品牌都在偷换概念，打擦边球。他们添加的不是什么“活酵母”，而是酵母菌提取的成分。</font></p><p><font color="#808080">作为一种安全营养高效的活性物，护肤品中的酵母成分一定是要经过严格的提取、测试和评估。比如兰蔻小黑瓶中的酵母精华，其提取过程模拟天然发酵，借助尖端生物提取科技（超声科技&酶反应），确保酵母精华的稳定性和安全性。</font></p><p style="" align="center"><font color="#808080"><img src="https://kdfiles.d9lab.net/group1/M00/00/29/cHxzJFuSHK2AGUW5AAAjvDH0bAE497.jpg" alt="line" style="max-width:100%;" class=""><br></font></p><section><section><section><section><section><section><section><section><section><section><section><section><section><p style="text-align: center; "><font color="#000000">护肤品中最常见的发酵类提取物</font></p></section></section></section></section></section></section></section></section></section></section></section></section></section><section><section><section><p><font color="#808080">一是酵母滤液提取物是具有强大修护功能的酵母成分，可以称之为「修护酵母」。</font></p><p style="" align="center"><font color="#808080"><img src="https://kdfiles.d9lab.net/group1/M00/00/29/cHxzJFuSHNeAcARLAABekH8GmJ8512.jpg" alt="03-4" style="max-width:100%;" class=""><br></font></p><p><font color="#808080">这种精华成分中含有非常丰富的 B 族维生素、微量元素、叶酸和麦角甾醇，所以能提高皮肤血液循环和新陈代谢，换言之，这种成分的存在可以起到清洁毛孔、抗老化和消除细纹干纹的作用，让已经有「受损」的皮肤重新恢复活力。【明星产品代表SK-II的神仙水】</font></p><p><font color="#808080">&nbsp;</font></p><p><font color="#808080">二是酵母胞溶产物提取物（严格意义上应是细菌发酵），它既有酵母细胞本身的营养物质提取，又有发酵后代谢物质的过滤，其功能更加全面，它可以称为「强韧酵母」。</font></p><p><font color="#808080">它使用的是具有抗炎能力的双歧杆菌作为原料进行一系列的发酵和提取，除了强有力的消炎作用之外，它对皮肤最明显的改善是激活胶原蛋白使皮肤充盈饱满。【明星产品代表法国兰蔻的小黑瓶肌底液，雅诗兰黛的小棕瓶。】</font></p><p><font color="#808080">&nbsp;</font></p><p><font color="#808080">这两大酵母精华分摊了干燥、毛孔粗大、敏感泛红、细纹干纹、痘印沉积等五大肌肤问题，让肌底更健康，使用七天就会有肉眼可见的肤质改变。</font></p><p style="" align="center"><font color="#808080"><img src="https://kdfiles.d9lab.net/group1/M00/00/29/cHxzJFuSHOiAIC0QAAAjvC8eCps316.jpg" alt="line" style="max-width:100%;" class=""><br></font></p><section><section><section><section><section><section><section><section><section><section><section><section><section><p style="text-align: center; "><font color="#000000">安利时间</font></p></section></section></section></section></section></section></section></section></section></section></section></section></section><section><section><section><p><font color="#808080">讲到这里，你就会知道酵母精华为什么如此受女生们的青睐了。</font></p><p><font color="#808080"><br></font></p><p><font color="#808080">说到酵母精华，值得一提的是嫦娥抗衰特聘科学家夏献民博士倾力打造的嫦娥公主面膜，所采用的精华正是酵母滤液提取物。</font></p></section></section></section></section></section></section><p><font color="#808080"><br></font></p><p style="" align="center"><font color="#808080"><img src="https://kdfiles.d9lab.net/group1/M00/00/29/cHxzJFuSHDaAEZmmAADEIVt3v6g225.jpg" alt="04-5" style="max-width:100%;" class=""><br></font></p><p><font color="#808080">其蕴含丰富的氨基酸，能修复细纹及干纹，紧致平滑肌肤，梳理肌肤纹路，有效消除浮肿，改善面部松弛。</font></p><p><font color="#808080">此外精华液中添加有获得三项国内外专利的成分——多肽P55PIK，其独特消炎修复功效，结合酵母精华，能让女性重新塑造紧实幼滑的脸部肌肤，勾勒轮廓清晰脸部曲线。</font></p><p><font color="#808080">25岁以后，面膜用点科技的。</font></p><p><font color="#808080">详情请咨询：400-1680-998</font></p><p><font color="#808080">邮箱：ceks100@163.com.</font></p><p><font color="#808080"><br></font></p><p><font color="#808080"><br></font></p></section></section></section></section></section></section></section></section></section></section></section></section><p><br></p>
+
+</body>
+</html>
+

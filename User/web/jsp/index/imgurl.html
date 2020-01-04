@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript">
+    var imageExists = function (url, callback) {
+        var img = new Image();
+        img.onload = function () {
+            console.log(img.height);
+            if(img.height !== 430){//小程序码的高度430px
+                callback && callback();
+            }
+        };
+        img.onerror = function () {
+            console.log("error!");
+            callback && callback();
+        };
+        img.src = url;
+    };
+    var createSmallCode = function () {
+      //向后台请求生成小程序码
+    };
+
+    imageExists("https://kdfiles.d9lab.net/group1/M00/00/66/cHxzJFvrhfmARfGLAAAAbUFHyl0952.png",
+        createSmallCode);
+    imageExists("https://kdfiles.d9lab.net/group1/M00/00/67/cHxzJFvst0yAY50wAAHj9nuZtcY834.png",
+        createSmallCode);
+
+</script>
+</body>
+</html>
