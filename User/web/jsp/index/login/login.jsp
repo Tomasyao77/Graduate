@@ -34,7 +34,8 @@
         }
         *{padding: 0;margin: 0;}
         .top_div{
-            background: #008ead;
+            background: #FF7752;
+            /*#FF7752 #008ead*/
             width: 100%;
             height: 400px;
         }
@@ -75,7 +76,7 @@
             text-decoration: none;
         }
         .tou{
-            background: url("/jsp/common/asset/img/login_images/tou.png") no-repeat;
+            background: url("/jsp/common/asset/img/login_images/tou1.png") no-repeat;
             width: 97px;
             height: 92px;
             position: absolute;
@@ -134,7 +135,7 @@
 </head>
 <body ng-app="m" ng-controller="c">
     <div style="position: absolute;top: 150px;width:100%;text-align: center;">
-        <p style="font-size: 200%;color: #f5f5f5">变购链云平台</p>
+        <p style="font-size: 200%;color: #f5f5f5">人脸图像智能应用云平台</p>
     </div>
 
     <div class="top_div"></div>
@@ -161,8 +162,9 @@
                 <span ng-show="e" style="float: left"><a href="#" style="color:#ff4438;">用户名或密码错误</a></span>
                 <span style="float: right">
                    <%--<a href="#" style="color:#ccc;margin-right:10px;">注册</a>--%>
-                   <a href="#" style="background: #008ead;padding: 7px 10px;border-radius: 4px;
-                   border: 1px solid #1a7598;color: #FFF;font-weight: bold;"
+                   <a href="#" style="
+                   background: #ff7752;padding: 7px 10px;border-radius: 4px;
+                   border: 1px solid #ff7d59;color: #FFF;font-weight: bold;"
                    ng-click="login()">登录</a>
                </span>
             </p>
@@ -170,9 +172,9 @@
 
     </div>
     <div style="position: fixed;bottom: 0;text-align: center;width: 100%;">
-        Copyright ©2018 <a style="margin-left: 10px;color: #000000;text-decoration: underline"
-                           href="https://kdusers.d9lab.net">
-        https://kdusers.d9lab.net</a>
+        Copyright ©2020 <a style="margin-left: 10px;color: #000000;text-decoration: underline"
+                           href="https://github.com/Tomasyao77/">
+        https://github.com/Tomasyao77/</a>
     </div>
     <script type="text/javascript">
         $(function(){

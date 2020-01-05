@@ -17,14 +17,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.ResourceBundle;
 
-
+//http://47.98.233.56/group1/M00/00/00/L2LpOF4Rf3aAWA5nAAF9MklVsPY656_big.jpg
 public class FileFastDfsUtil{
     private static Logger logger = Logger.getLogger(FileFastDfsUtil.class);
 
     private static String server;
     private static Boolean debug;
     private static String host;
-    private static String debug_host = "http://39.108.180.232/";
+    private static String debug_host = "http://47.98.233.56/";
     public static String getServer() {
         return server;
     }
