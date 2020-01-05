@@ -12,8 +12,6 @@ import com.whut.tomasyao.base.service.IAreaService;
 import com.whut.tomasyao.base.util.HqlUtil;
 import com.whut.tomasyao.base.vo.Page;
 import com.whut.tomasyao.base.vo.Parameter;
-import com.whut.tomasyao.dubbo.config.service.IDubboConfigService;
-import com.whut.tomasyao.dubbo.store.service.IDubboStoreService;
 import com.whut.tomasyao.message.common.SmsPlatform;
 import com.whut.tomasyao.message.common.SmsType;
 import com.whut.tomasyao.message.model.Message;
@@ -41,10 +39,6 @@ public class UserVerifyServiceImpl implements IUserVerifyService {
     private IUserDao userDao;
     @Autowired
     private IAreaService areaService;
-    @Autowired
-    private IDubboStoreService dubboStoreService;
-    @Autowired
-    private IDubboConfigService dubboConfigService;
     @Autowired
     private UserMapper userMapper;
 
@@ -95,21 +89,8 @@ public class UserVerifyServiceImpl implements IUserVerifyService {
                 user.setPhone(userVerify.getPhone());
                 user.setName(userVerify.getName());
                 userDao.update(user);
-
-                //dubbo更新store信息
-                dubboStoreService.updateStoreNameByUser(user.getId(), userVerify.getStoreName(), userVerify.getParentInviteCode());
-                //dubbo config短信模板
-                String user_verify_success = (String) dubboConfigService.getConfig("user_verify_success");
-                Message message = new Message(userVerify.getPhone(), SmsType.普通短信, SmsPlatform.YiTD,
-                        "", "", user_verify_success);
-                MessageUtil.send(message, null);
             }
         } else if (verify == 2) {//审核不通过
-            //dubbo config短信模板
-            String user_verify_failure = (String) dubboConfigService.getConfig("user_verify_failure");
-            Message message = new Message(userVerify.getPhone(), SmsType.普通短信, SmsPlatform.YiTD,
-                    "", "", user_verify_failure);
-            MessageUtil.send(message, null);
         }
         return userVerify;
     }

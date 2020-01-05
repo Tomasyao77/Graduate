@@ -2,11 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="edu.whut.pocket.admin.mapper.AdminMapper">
+<mapper namespace="com.whut.tomasyao.admin.mapper.AdminMapper">
     <!--暂时不使用缓存-->
     <!--<cache eviction="LRU" flushInterval="60000" size="1024" readOnly="true"/>-->
 
-    <resultMap id="getModuleRM" type="edu.whut.pocket.admin.vo.ModuleVo">
+    <resultMap id="getModuleRM" type="com.whut.tomasyao.admin.vo.ModuleVo">
         <id property="id" column="id"/>
         <result property="name" column="name"/>
         <result property="parentId" column="parent_id"/>
@@ -22,7 +22,7 @@
     </resultMap>
 
     <!--好像没有用了-->
-	<select id="getAdminMB" parameterType="int" resultType="edu.whut.pocket.admin.vo.AdminVo">
+	<select id="getAdminMB" parameterType="int" resultType="com.whut.tomasyao.admin.vo.AdminVo">
 		select
 		a.id as adminId, a.name as adminName, a.create_time as adminCreateTime,
 		i.id as institutionId, i.name as institutionName,

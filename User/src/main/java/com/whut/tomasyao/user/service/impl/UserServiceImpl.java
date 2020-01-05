@@ -11,7 +11,6 @@ import com.whut.tomasyao.base.util.HqlUtil;
 import com.whut.tomasyao.base.util.StringUtil;
 import com.whut.tomasyao.base.vo.Page;
 import com.whut.tomasyao.base.vo.Parameter;
-import com.whut.tomasyao.dubbo.user.service.IDubboUserService;
 import com.whut.tomasyao.user.mapper.UserMapper;
 import com.whut.tomasyao.user.vo.UserVo;
 import org.springframework.stereotype.Service;
@@ -31,8 +30,6 @@ public class UserServiceImpl implements IUserService {
     private IUserDao userDao;
     @Autowired
     private UserMapper userMapper;
-    @Autowired
-    private IDubboUserService dubboUserService;
 
     @Override
     public UserVo getOneUser(int id) throws Exception {
@@ -134,8 +131,6 @@ public class UserServiceImpl implements IUserService {
             user.setStatus(true);
             user.setWx_name(wxName);
             userDao.save(user);
-            //新增用户的时候在trade中增加等级记录
-            dubboUserService.addUserGrade(user.getId());
         }
         return user;
     }

@@ -1,9 +1,9 @@
 package com.whut.tomasyao.auth.vo;
 
 
-import edu.whut.pocket.auth.model.UserType;
-import edu.whut.pocket.base.model.User;
-import edu.whut.pocket.login.model.UserPlatform;
+import com.whut.tomasyao.auth.model.UserType;
+import com.whut.tomasyao.base.model.User;
+import com.whut.tomasyao.login.model.UserPlatform;
 
 import java.io.Serializable;
 import java.util.Date;

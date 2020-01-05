@@ -166,14 +166,6 @@ public class UserController {
     public Map updateOneUser(HttpServletRequest request, int userId, int id,
                              String phone, String name, String code) throws Exception {
         ResponseMap map = ResponseMap.getInstance();
-        //dubbo config是否开启短信验证
-        Object if_message_verify = dubboConfigService.getConfig("if_message_verify");
-        if(if_message_verify != null && (boolean)if_message_verify){
-            //判断code是否正确
-            if(!logMessageService.checkCode(phone, code)){
-                return map.putFailure("验证码错误", -1);
-            }
-        }
 
         User user = userService.updateOneUser(id, phone, name);
         if (user == null) {
@@ -197,8 +189,6 @@ public class UserController {
         File picture = null, pictureThumb = null;
         List<String[]> resultFiles = fileService.uploadWithThumbnails(request);
         if (resultFiles.size() > 0) {
-            picture = dubboFileService.addOneFile(resultFiles.get(0)[0]);
-            pictureThumb = dubboFileService.addOneFile(resultFiles.get(0)[1]);
         }
         logger.info("resultFiles.size(): " + resultFiles.size());
         User user = userService.updateAvatar(id, picture, pictureThumb);
@@ -400,33 +390,12 @@ public class UserController {
     public Map addUserVerify(HttpServletRequest request, int userId, String phone, String name,
                              String code, String storeName, String region, String reason, String parentInviteCode) throws Exception {
         ResponseMap map = ResponseMap.getInstance();
-        //dubbo config是否开启短信验证
-        Object if_message_verify = dubboConfigService.getConfig("if_message_verify");
-        if(if_message_verify != null && (boolean)if_message_verify){
-            //判断code是否正确
-            if(!logMessageService.checkCode(phone, code)){
-                return map.putFailure("验证码错误", -1);
-            }
-        }
-        //邀请码是否存在
-        if(parentInviteCode != null && !parentInviteCode.isEmpty()){//填了邀请码才判断是否正确
-            Integer codeCount = dubboStoreService.getCountStoreInviteCode(parentInviteCode);//是否存在
-            if(codeCount == null || codeCount < 1){
-                return map.putFailure("邀请码错误", -1);
-            }
-            Integer useCount = dubboStoreService.getUseCountStoreInviteCode(parentInviteCode);//使用次数
-            if(useCount != null && useCount >= 200){
-                return map.putFailure("邀请码使用次数达到上限", -1);
-            }
-        }
 
         UserVerify userVerify = userVerifyService.addUserVerify(userId, phone, name,
                 storeName, region, reason, parentInviteCode);
         if (userVerify == null) {
             return map.putFailure("提交失败", 0);
         }
-        //给周炜学长发短信
-        dubboConfigService.sendOpenStoreMessage(userId);
         return map.putValue(userVerify, "提交成功");
     }
 
@@ -460,14 +429,6 @@ public class UserController {
     public Map updateUserVerify(HttpServletRequest request, int userId, int id, String phone, String name, String unit,
                                 String code, int areaCode, String address, String storeName, String region, String reason) throws Exception {
         ResponseMap map = ResponseMap.getInstance();
-        //dubbo config是否开启短信验证
-        Object if_message_verify = dubboConfigService.getConfig("if_message_verify");
-        if(phone != null && !phone.isEmpty() && if_message_verify != null && (boolean)if_message_verify){
-            //判断code是否正确
-            if(!logMessageService.checkCode(phone, code)){
-                return map.putFailure("验证码错误", -1);
-            }
-        }
         UserVerify userVerify = userVerifyService.updateUserVerify(id, phone, name, unit, areaCode, address, storeName, region, reason);
         if (userVerify == null) {
             return map.putFailure("编辑失败", 0);
@@ -552,14 +513,6 @@ public class UserController {
         ResponseMap map = ResponseMap.getInstance();
         User user = userService.getUserByOpenId(openId);
         return map.putValue(user, "获取成功");
-    }
-
-    @ApiIgnore
-    @RequestMapping(value = "/addUserGrade", method = RequestMethod.POST)
-    public Map addUserGrade(HttpServletRequest request, int userId) throws Exception {
-        ResponseMap map = ResponseMap.getInstance();
-        Integer addUserGrade = dubboUserService.addUserGrade(userId);
-        return map.putValue(addUserGrade, "新增成功");
     }
 
     @ApiIgnore

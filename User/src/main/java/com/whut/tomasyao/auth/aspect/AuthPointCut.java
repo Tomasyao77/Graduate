@@ -7,7 +7,7 @@ import org.aspectj.lang.annotation.Pointcut;
 @Aspect
 public class AuthPointCut {
 
-    @Pointcut("@annotation(edu.whut.pocket.auth.aspect.AuthAnnotation)")
+    @Pointcut("@annotation(com.whut.tomasyao.auth.aspect.AuthAnnotation)")
     public void authAccess() {
     }
 

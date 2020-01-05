@@ -2,11 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="edu.whut.pocket.log.mapper.LogUserMapper">
+<mapper namespace="com.whut.tomasyao.log.mapper.LogUserMapper">
     <!--日志查询可以使用缓存,减少服务器压力.但其实也没太大影响,系统运行中不断的调用接口就会产生日志,会不断触发缓存刷新哈哈-->
     <cache eviction="LRU" flushInterval="60000" size="1024" readOnly="true"/>
 
-    <resultMap id="getLogUserRM" type="edu.whut.pocket.log.vo.LogUserVo">
+    <resultMap id="getLogUserRM" type="com.whut.tomasyao.log.vo.LogUserVo">
         <id property="id" column="id"/>
         <result property="createTime" column="create_time"/>
         <result property="params" column="params"/>
@@ -18,10 +18,10 @@
         <result property="opType" column="op_type"/>
         <result property="description" column="description"/>
         <result property="result" column="result"/>
-        <association property="user" column="user_id" select="edu.whut.pocket.user.mapper.UserMapper.getUser"/>
+        <association property="user" column="user_id" select="com.whut.tomasyao.user.mapper.UserMapper.getUser"/>
     </resultMap>
 
-    <insert id="addLogUser" parameterType="edu.whut.pocket.log.model.LogUser" useGeneratedKeys="true"
+    <insert id="addLogUser" parameterType="com.whut.tomasyao.log.model.LogUser" useGeneratedKeys="true"
             keyProperty="id">
         insert into log_user(user_id, create_time, params, method_starttime, clazz, method_timetaking, method,
          maven_module, ip, op_type, description, result)
