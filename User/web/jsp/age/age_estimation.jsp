@@ -25,7 +25,7 @@
     <script src="/jsp/common/js/bootstrap-datetimepicker.zh-CN.js"></script>
     <script src="/jsp/common/js/moment.min.js"></script>
 </head>
-<body ng-app="m" ng-controller="c" ng-init='index = "用户管理"'>
+<body ng-app="m" ng-controller="c" ng-init='index = "年龄估计"'>
 <jsp:include page="/jsp/common/nav.jsp"/>
 <div class="container" style="width: 98%;">
     <div class="panel panel-default m-t-lg">
