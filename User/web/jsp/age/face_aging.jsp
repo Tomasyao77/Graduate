@@ -30,13 +30,18 @@
 <div class="container" style="width: 98%;">
     <div class="panel panel-default m-t-lg">
         <div class="panel-heading">
-            <h4>用户列表</h4>
+            <h4>年龄面貌合成</h4>
             <div class="clearfix">
-                <%--<label>
+                <label>
                     <button class="btn btn-success" ng-click="entity._openModal('add')">
-                        <span class="icon-plus m-r"></span>新增&nbsp;用户
+                        <span class="icon-plus m-r"></span>上传&nbsp;图片
                     </button>
-                </label>--%>
+                </label>
+                <label>
+                    <button class="btn btn-warning" ng-click="entity._openModal('add')">
+                        <span class="icon-camera-retro m-r"></span>拍摄&nbsp;照片
+                    </button>
+                </label>
                     <%--仅做测试<label>
                         <button class="btn btn-success" ng-click="download()">
                             <span class="icon-plus m-r"></span>download
@@ -49,14 +54,33 @@
                                 ng-change="page.refreshTo(1)">
                         </select>
                     </label>--%>
-                    <input class="form-control m-l" type="text" placeholder="姓名" ng-model="search">
-                    <button class="btn btn-primary" type="submit">
-                        <span class="icon-search m-r"></span> 搜索
-                    </button>
+                    <%--<input class="form-control m-l" type="text" placeholder="姓名" ng-model="search">--%>
+                    <%--<button class="btn btn-primary" type="submit">--%>
+                        <%--<span class="icon-search m-r"></span> 搜索--%>
+                    <%--</button>--%>
                 </form>
             </div>
         </div>
-        <%@ include file="/jsp/common/table.jspf" %>
+        <%--<%@ include file="/jsp/common/table.jspf" %>--%>
+        <div style="margin: 10px 10px;">
+            <div class="m-a-md">（示例）根据原始图片合成指定年龄段的图片：</div>
+            <div class="m-a-md">共10个年龄段0-80岁：0-5 6-10 11-15 16-20 21-30 31-40 41-50 51-60 61-70 71-80</div>
+            <div class="m-a-md">
+                <img src="/jsp/common/asset/age/6_1_3.jpg" style="width: 130px;height: 130px;">
+                <span class="icon-arrow-right icon-2x m-l m-r"></span>
+                <div class="m-t-md">
+                    <img src="/jsp/common/asset/age/epoch100_6_1_3.jpg.png" style="width: 100%;height: 130px;">
+                </div>
+            </div>
+            <hr/>
+            <div class="m-a-md">
+                <img src="/jsp/common/asset/age/7_0_1.jpg" style="width: 130px;height: 130px;">
+                <span class="icon-arrow-right icon-2x m-l m-r"></span>
+                <div class="m-t-md">
+                    <img src="/jsp/common/asset/age/epoch100_7_0_1.jpg.png" style="width: 100%;height: 130px;">
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <script>
@@ -97,22 +121,9 @@
                 ExportForm.action = postUrl;
                 ExportForm.submit();
             };
-            //获取角色list
-            /*$scope.getRoleList = function (callback) {
-                ajax.ajax("/user/admin/getRoleList", "POST", {
-                    userId: 1
-                }).success(function (data) {
-                    $scope.roleList = data.list;
-                    $scope.adminRoleList = angular.copy(data.list);
-                    $scope.roleList.unshift({id: 0, name: "全部"});//往array首部插入一个元素，其它顺移
-                    $scope.searchRole = $scope.roleList[0].id;
-                    callback();
-                }).error(function (data) {
-                    console.log(data);
-                });
-            };*/
+
             $scope.load = function (current, size, orderBy, asc) {
-                ajax.ajax("/user/user/getUserPageList", "POST",
+                /*ajax.ajax("/user/user/getUserPageList", "POST",
                     {
                         userId: 1,
                         current: current,
@@ -127,7 +138,7 @@
                         if (data.success) {
                             $scope.page.refreshPage(data);
                         }
-                })
+                })*/
             };
             $scope.searchArea = {
                 code: 100000,
