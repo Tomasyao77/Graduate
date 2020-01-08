@@ -16,18 +16,18 @@ public class KafkaProducerUtil {
     private static Logger logger = Logger.getLogger(KafkaProducerUtil.class);
     private static Producer<String, String> producer;
 
-    static {
-        ResourceBundle bundle = ResourceBundle.getBundle("kafka");
-        Properties props = new Properties();
-        props.put("bootstrap.servers", bundle.getString("bootstrap.servers"));
-        props.put("acks", "0");
-        props.put("retries", 0);
-        props.put("batch.size", 16384);
-        props.put("key.serializer", bundle.getString("serializer"));
-        props.put("value.serializer", bundle.getString("serializer"));
-
-        producer = new KafkaProducer<>(props);
-    }
+//    static {
+//        ResourceBundle bundle = ResourceBundle.getBundle("kafka");
+//        Properties props = new Properties();
+//        props.put("bootstrap.servers", bundle.getString("bootstrap.servers"));
+//        props.put("acks", "0");
+//        props.put("retries", 0);
+//        props.put("batch.size", 16384);
+//        props.put("key.serializer", bundle.getString("serializer"));
+//        props.put("value.serializer", bundle.getString("serializer"));
+//
+//        producer = new KafkaProducer<>(props);
+//    }
 
     public static void producer(String topic, String k, String v){
 

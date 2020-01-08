@@ -88,8 +88,9 @@ public class LogAspect {
         }
         /**
          * kafka producer(调用kafka生产者往消息队列里面传入日志信息)
+         * 暂时不用kafka
          */
-        KafkaProducerUtil.producer("logUser", "logUser", jsonObject.toString());
+//        KafkaProducerUtil.producer("logUser", "logUser", jsonObject.toString());
         return result;
     }
 

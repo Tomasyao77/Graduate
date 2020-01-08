@@ -112,20 +112,20 @@
                 });
             };*/
             $scope.load = function (current, size, orderBy, asc) {
-                ajax.ajax("/user/redirect/trade/user/getUserTradeList", "POST",
-                    {
-                        userId: 1,
-                        current: current,
-                        size: size,
-                        search: $scope.search,
-                        orderBy: orderBy,
-                        asc: asc
-                    }).success(function (data) {
-                    console.log(data);
-                    if (data.success) {
-                        $scope.page.refreshPage(data);
-                    }
-                })
+//                ajax.ajax("/user/redirect/trade/user/getUserTradeList", "POST",
+//                    {
+//                        userId: 1,
+//                        current: current,
+//                        size: size,
+//                        search: $scope.search,
+//                        orderBy: orderBy,
+//                        asc: asc
+//                    }).success(function (data) {
+//                    console.log(data);
+//                    if (data.success) {
+//                        $scope.page.refreshPage(data);
+//                    }
+//                })
             };
             $scope.searchArea = {
                 code: 100000,

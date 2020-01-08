@@ -36,7 +36,7 @@
 <body ng-app="m" ng-controller="c" ng-init='index = "模块角色";subIndex = "模块管理"'>
 <jsp:include page="/jsp/common/nav.jsp"/>
 <div class="container" style="width: 98%;">
-    <div class="panel panel-default m-t-lg">
+    <div class="panel panel-warning m-t-lg">
         <div class="panel-heading">
             <h4>模块列表</h4>
             <div class="clearfix">

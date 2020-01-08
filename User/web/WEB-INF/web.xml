@@ -54,14 +54,14 @@
     </filter-mapping>-->
 
     <!--验证是否登录-对jsp等页面或配置文件进行拦截,不拦截方法-->
-    <!--<filter>-->
-        <!--<filter-name>token</filter-name>-->
-        <!--<filter-class>com.whut.tomasyao.auth.filter.LoginCheckFilter</filter-class>-->
-    <!--</filter>-->
-    <!--<filter-mapping>-->
-        <!--<filter-name>token</filter-name>-->
-        <!--<url-pattern>*.jsp</url-pattern>-->
-    <!--</filter-mapping>-->
+    <filter>
+        <filter-name>token</filter-name>
+        <filter-class>com.whut.tomasyao.auth.filter.LoginCheckFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>token</filter-name>
+        <url-pattern>*.jsp</url-pattern>
+    </filter-mapping>
 
     <!--验证swagger-->
     <!--<filter>
@@ -74,30 +74,30 @@
     </filter-mapping>-->
 
     <!--跨域-->
-    <filter>
-        <filter-name>CORSFilter</filter-name>
-        <filter-class>com.thetransactioncompany.cors.CORSFilter</filter-class>
-        <init-param>
-            <param-name>cors.allowOrigin</param-name>
-            <param-value>*</param-value>
-        </init-param>
-        <init-param>
-            <param-name>cors.supportedMethods</param-name>
-            <param-value>GET,POST</param-value>
-        </init-param>
-        <init-param>
-            <param-name>cors.exposedHeaders</param-name>
-            <param-value>Set-Cookie</param-value>
-        </init-param>
-        <init-param>
-            <param-name>cors.supportsCredentials</param-name>
-            <param-value>true</param-value>
-        </init-param>
-    </filter>
-    <filter-mapping>
-        <filter-name>CORSFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
+    <!--<filter>-->
+        <!--<filter-name>CORSFilter</filter-name>-->
+        <!--<filter-class>com.thetransactioncompany.cors.CORSFilter</filter-class>-->
+        <!--<init-param>-->
+            <!--<param-name>cors.allowOrigin</param-name>-->
+            <!--<param-value>*</param-value>-->
+        <!--</init-param>-->
+        <!--<init-param>-->
+            <!--<param-name>cors.supportedMethods</param-name>-->
+            <!--<param-value>GET,POST</param-value>-->
+        <!--</init-param>-->
+        <!--<init-param>-->
+            <!--<param-name>cors.exposedHeaders</param-name>-->
+            <!--<param-value>Set-Cookie</param-value>-->
+        <!--</init-param>-->
+        <!--<init-param>-->
+            <!--<param-name>cors.supportsCredentials</param-name>-->
+            <!--<param-value>true</param-value>-->
+        <!--</init-param>-->
+    <!--</filter>-->
+    <!--<filter-mapping>-->
+        <!--<filter-name>CORSFilter</filter-name>-->
+        <!--<url-pattern>/*</url-pattern>-->
+    <!--</filter-mapping>-->
 
     <!--utf8编码-->
     <filter>

@@ -1,4 +1,4 @@
-<%@ page import="edu.whut.pocket.auth.vo.AdminRedisVo" %>
+<%@ page import="com.whut.tomasyao.auth.vo.AdminRedisVo" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -34,7 +34,7 @@
                 <span style="font-size: 100%;word-break: keep-all;" class="text-primary">变购链管理平台</span>
             </div>值得保留，毕竟手动居中 --%>
             <div class="text-center" style="position: absolute;top: 15px;left: 0;width: 100%;">
-                <span class="text-white" style="font-size: 120%;">变购链管理平台</span>
+                <span class="text-white" style="font-size: 120%;">人脸图像智能应用云平台</span>
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">

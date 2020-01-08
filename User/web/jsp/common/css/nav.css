@@ -21,7 +21,7 @@ body.nav-collapse {
 .navbar {
     border: 0;
     height: 50px;
-    background-color: #3f7db7;
+    background-color: #ff8259;
 }
 .navbar .navbar-nav > li > a {
     color: #5d5d5d;
@@ -30,27 +30,28 @@ body.nav-collapse {
 /**, .navbar .navbar-nav > li > a:focus */
 {
     color: white;
-    background-color: rgba(58,123,183,0.8)/**#3a7bb7;*/
+    background-color: rgba(255, 103, 71, 0.8) /**#FF7752;*/
 }
 .navbar .navbar-nav > li.open > a,
 .navbar .navbar-nav > li.open > a:hover,
 .navbar .navbar-nav > li.open > a:focus {
     color: #333;
-    background-color: #2e73b7;
+    background-color: #ff6447;
 }
 /*
  * Sidebar
  */
 .sidebar {
-  display: block;
-  width: 170px;
-  position: fixed;
-  top: 50px;
-  bottom: 0;
-  left: 0;
-  margin-top: 0;
-  z-index: 1000;
-  background-color: #404b56;
+    display: block;
+    width: 170px;
+    position: fixed;
+    top: 50px;
+    bottom: 0;
+    left: 0;
+    margin-top: 0;
+    z-index: 1000;
+    background-color: #ffffff;
+    border-right: solid 1px #dcdcdc;
 }
 
 .sidebar.collapse {
@@ -59,7 +60,7 @@ body.nav-collapse {
 }
 
 .sidebar .nav-sidebar.nav-line {
-    border-top: solid 1px #777777;
+    border-top: solid 1px #dcdcdc;
 }
 
 .sidebar .nav-sidebar > li, /*有空格: 后代选择器*/
@@ -76,7 +77,7 @@ body.nav-collapse {
     bottom: 0;
     width: 140px;
     color: white;
-    background-color: rgba(34, 40, 46, 0.8);
+    background-color: rgba(255, 99, 72, 0.9);
     right: -146px; /*140+6=146*/
     padding: 10px 20px;
     text-align: center;
@@ -99,8 +100,9 @@ body.nav-collapse {
 
 .sidebar .nav-sidebar > li a,
 .sidebar .nav-sidebar-sub > li a {
+    /*文字*/
     padding: 10px 20px;
-    color: white;
+    color: #ff7752;
     white-space: nowrap;
     text-overflow: clip; /*文本过长只是裁剪而不显示省略号,ellipsis会显示省略号*/
     overflow: hidden;
@@ -110,7 +112,7 @@ body.nav-collapse {
 .sidebar .nav-sidebar-sub > li a:focus {
 
   color: white;
-  background-color: #404b56;
+  background-color: #ff6348;
 }
 
 .sidebar .nav-sidebar > li a:hover,
@@ -118,7 +120,7 @@ body.nav-collapse {
 .sidebar .nav-sidebar > li a.hover,
 .sidebar .nav-sidebar-sub > li a.hover {
     color: white;
-    background-color: #37424f;
+    background-color: #ff7758;
 }
 
 .sidebar .nav-sidebar > li.active > a,
@@ -127,13 +129,14 @@ body.nav-collapse {
 .sidebar .nav-sidebar-sub > li.active > a:hover,
 .sidebar .nav-sidebar > li.active > a:focus,
 .sidebar .nav-sidebar-sub > li.active > a:focus {
-  color: white;
-  background-color: #337ab7;
+    /*激活*/
+    color: white;
+    background-color: #ff6348;
 }
 
 .sidebar .nav-sidebar-sub > li > a {
-    color: white;
-    background-color: #455363;
+    color: #ff7752;
+    background-color: #fff2e7;
 }
 
 .sidebar .nav-sidebar-sub > li > a span:not([class^='icon-']) {
@@ -143,5 +146,5 @@ body.nav-collapse {
  * panel default style overwrite
  */
 .panel-heading {
-    background-color: rgba(51, 122, 183, 0.2) !important;
+    background-color: rgba(255, 221, 153, 0.2) !important;
 }
