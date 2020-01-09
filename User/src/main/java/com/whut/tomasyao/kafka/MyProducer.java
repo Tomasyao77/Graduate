@@ -37,7 +37,7 @@ public class MyProducer{
                 while(true) {
                     JSONObject jsonObject = new JSONObject();
                     JSONObject jsonObject1 = new JSONObject();
-                    jsonObject1.put("controller", "UserController");
+                    jsonObject1.put("controller", "AgeEstimationController");
                     jsonObject1.put("method", "POST");
                     jsonObject1.put("service", "updateUser");
                     jsonObject1.put("date", ""+(new Date().getTime()));
