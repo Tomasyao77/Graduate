@@ -24,6 +24,10 @@
     <script src="/jsp/common/js/bootstrap-datetimepicker.min.js"></script>
     <script src="/jsp/common/js/bootstrap-datetimepicker.zh-CN.js"></script>
     <script src="/jsp/common/js/moment.min.js"></script>
+    <!-- chart -->
+    <link href="/jsp/common/css/angular-chart.min.css" rel="stylesheet">
+    <script src="/jsp/common/js/Chart.min.js"></script>
+    <script src="/jsp/common/js/angular-chart.min.js"></script>
 </head>
 <body ng-app="m" ng-controller="c" ng-init='index = "数据统计"; subIndex = "合成试验"'>
 <jsp:include page="/jsp/common/nav.jsp"/>
@@ -60,7 +64,7 @@
     </div>
 </div>
 <script>
-    angular.module("m", ["nm"])
+    angular.module("m", ["nm", "chart.js"])
         .controller("c", function ($scope, page, ajax, entity, $filter, md5, alertService) {
             $scope.download = function () {//应用普通form提交
                 var protocolStr = document.location.protocol.replace(":", ""),

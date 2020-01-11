@@ -3,7 +3,7 @@
  * 简化之前繁琐的依赖注入,优化其内部实现代码,并适当扩展其功能
  * --2017 12 17 17:36 zouy
  */
-(function (angular, $) {
+;(function (angular, $) {
     "use strict";
 
     /*var config = {

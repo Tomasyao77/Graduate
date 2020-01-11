@@ -1,0 +1,176 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: zouy
+  Date: 17-8-25
+  Time: 上午11:00
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<script>
+    var detection_c = m.controller("detection_c", function ($scope, ajax) {
+        //var today = moment().format("YYYY-MM-DD");
+        var tomorrow = moment().subtract(-1, 'days').format("YYYY-MM-DD");
+        $scope.timeTypes = [{
+            name: "最近7天",
+            day: 7
+        }, {
+            name: "最近15天",
+            day: 15
+        }, {
+            name: "最近30天",
+            day: 30
+        }, {
+            name: "最近60天",
+            day: 60
+        }
+        ];
+        /**
+         * 曲线图
+         */
+        //获取数据
+        $scope.loadCurve = function () {
+            var data = [0, 9, 7, 6, 3, 3, 10, 7, 5, 8, 5, 4, 9, 0, 7, 7,
+                2, 4, 9, 6, 7, 4, 1, 4, 4, 1, 4, 7, 9, 9, 8, 4, 9, 2, 2,
+                8, 1, 4, 6, 1, 9, 3, 5, 4, 9, 1, 5, 0, 0, 8, 4, 1, 10, 3, 9, 0, 9, 7, 4, 5];
+//            var total = 0;
+//            for(var i=0; i<60; i++){
+//                var tmp = Math.round(Math.random()*10);
+//                data.push(tmp);
+//                total += tmp;
+//            }
+//            console.log(total);
+//            console.log(data);
+            //拓客数 报告数 阅读数 评论数
+            $scope.curveData = {
+                customer: {copyData: [], data: [], labels: [], series: [], type: 0, timeTypesActive: 0}
+            };
+            //data不一定有60条,这里需要进行补0操作
+            var temp = [], tempResult = [];
+            if (data.length < 60) {
+                for (var i = 0; i < (60 - data.length); i++) {
+                    temp.push(0);
+                }
+                tempResult = temp.concat(data);
+            } else {
+                tempResult = data;
+            }
+            $.each(tempResult, function (k, v) {
+                $scope.curveData.customer.data.push(v);
+            });
+            //保留原始数据
+            $scope.curveData.customer.copyData = angular.copy($scope.curveData.customer.data);
+            $scope.processCurveData(7, -1);
+        };
+        //处理数据
+        $scope.processCurveData = function (day, type) {
+            var dataArray = $scope.dateRangeFunc(day),
+                t1 = $scope.curveData.customer.copyData;
+            //console.log(dataArray);
+            if (type == -1 || type == 0) {
+                //data y轴数据 变成二维数组--chatjs需要
+                $scope.curveData.customer.data = [t1.slice(60 - day)];
+                //labels x轴数据
+                $scope.curveData.customer.labels = dataArray;
+                //series
+                $scope.curveData.customer.series = ['最近' + day + '天 检测次数'];
+            }
+        };
+        //日期格式化
+        $scope.dateRangeFunc = function (days) {
+            var date = [], i = days;
+            for (; i > 0; i--) {
+                date.push(moment().subtract(i, 'days').format("YYYY-MM-DD").substring(5));
+                //console.log(moment().subtract(i, 'days').format("YYYY-MM-DD"));
+            }
+            return date;
+        };
+        //时段分析
+        $scope.changeDateRange = function ($index, day, type) {
+            if (type == 0) {
+                $scope.curveData.customer.timeTypesActive = $index;
+            }
+            //0拓客数 1报告数 2阅读数 3评论数
+            $scope.processCurveData(day, type);
+        };
+
+        $scope.ageLabels = ["20岁以下", "20岁~30岁", "30岁~40岁", "40岁~50岁", "50岁以上"];
+        $scope.ageLegend = ["实际年龄", "检测年龄"];
+        $scope.ageData = [[1,2,5,6,3], [1,2,5,6,3]];
+        $scope.scoreLabels = ["60分以下", "60分~70分", "70分到80分", "80分以上"];
+        $scope.scoreLegend = ["60分以下", "60分~70分", "70分到80分", "80分以上"];
+        $scope.scoreData = [1, 2, 3, 4];
+        $scope.genderLabels = ["男", "女"];
+        $scope.genderLegend = ["男", "女"];
+        $scope.genderData = [10, 25];
+
+        $scope.$watch('$viewContentLoaded', function () {
+            $scope.loadCurve();
+        });
+    });
+</script>
+<div ng-controller="detection_c" class="container" style="margin-top: 10px;width: 96%;">
+    <h4 style="color: #505050;">检测统计</h4>
+    <hr/>
+    <div class="row">
+        <div class="col-md-6"><h4 class="text-center"><span style="color: #505050;">今日检测数:</span>&nbsp;
+            <span style="color:#FF0922;">5</span></h4></div>
+        <div class="col-md-6"><h4 class="text-center"><span style="color: #505050;">累计检测数:</span>&nbsp;
+            <span style="">302</span></h4></div>
+    </div>
+    <h4 class="text-muted">时段分析:</h4>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <p class="m-b-0">
+               <span ng-repeat="item in timeTypes" class="label m-r pointer"
+                     ng-click="changeDateRange($index,item.day,0)"
+                     ng-class='{"label-default":curveData.customer.timeTypesActive != $index, "label-info":curveData.customer.timeTypesActive == $index}'
+                     ng-bind="item.name">
+               </span>
+            </p>
+        </div>
+    </div>
+
+    <div class="container" style="width: 98%;">
+        <%--曲线图--%>
+        <canvas id="customer-id" class="chart chart-line" chart-data="curveData.customer.data"
+                chart-labels="curveData.customer.labels" chart-legend="true" chart-series="curveData.customer.series"
+                height="50">
+        </canvas>
+        <%--柱状图--%>
+        <div class="<%--p-y-lg --%>clearfix col-md-6" style="text-align: center">
+            <h4 class="text-muted">
+            <span class="m-l">解码年龄分析
+                <span class="btn-link icon-question-sign"
+                      data-toggle="tooltip" data-placement="bottom"
+                      title="参与解码顾客的真实年龄与解码年龄的分布柱状图，用于分析整体检测的年龄趋势，及参与解码顾客的年龄分布"></span>
+            </span></h4>
+            <canvas id="Bar" class="chart chart-Bar" chart-data="ageData"
+                    chart-labels="ageLabels" chart-legend="true" chart-series="ageLegend"
+                    height="230">
+            </canvas>
+        </div>
+        <%--饼状图--%>
+        <div class="<%--p-y-lg --%>clearfix col-md-6" style="text-align: center">
+            <h4 class="text-muted">
+                <span class="m-l">解码结果分析
+                    <span class="btn-link icon-question-sign"
+                          data-toggle="tooltip" data-placement="bottom"
+                          title="参与解码顾客的得分分布，用来统计顾客解码的分数段，可供给专家或顾问作参考"></span>
+            </span></h4>
+            <canvas id="Radar" class="chart chart-Doughnut" chart-data="scoreData"
+                    chart-labels="scoreLabels" chart-legend="true" chart-series="scoreLegend"
+                    height="100">
+            </canvas>
+            <h4 class="text-muted">
+                <span class="m-l">用户性别分布
+                    <span class="btn-link icon-question-sign"
+                          data-toggle="tooltip" data-placement="bottom"
+                          title="参与解码顾客的性别比例"></span>
+            </span></h4>
+            <canvas id="Pie" class="chart chart-Pie" chart-data="genderData"
+                    chart-labels="genderLabels" chart-legend="true" chart-series="genderLegend"
+                    height="100">
+            </canvas>
+        </div>
+    </div>
+</div>

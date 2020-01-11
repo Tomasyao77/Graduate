@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="renderer" content="webkit">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>文件管理</title>
+    <title>图片管理</title>
     <%--基础css--%>
     <link href="/jsp/common/css/bootstrap.min.css" rel="stylesheet">
     <link href="/jsp/common/css/font-awesome.min.css" rel="stylesheet">
@@ -25,12 +25,12 @@
     <script src="/jsp/common/js/bootstrap-datetimepicker.zh-CN.js"></script>
     <script src="/jsp/common/js/moment.min.js"></script>
 </head>
-<body ng-app="m" ng-controller="c" ng-init='index = "系统运维"; subIndex = "文件管理"'>
+<body ng-app="m" ng-controller="c" ng-init='index = "图片管理"'>
 <jsp:include page="/jsp/common/nav.jsp"/>
 <div class="container" style="width: 98%;">
     <div class="panel panel-default m-t-lg">
         <div class="panel-heading">
-            <h4>文件列表</h4>
+            <h4>图片列表</h4>
             <div class="clearfix">
                 <%--<label>
                     <button class="btn btn-success" ng-click="entity._openModal('add')">

@@ -153,26 +153,26 @@
                 value: function (row) {
                     return row.parentName;
                 },
-                width: "10%"
+                width: "5%"
             }, {
                 name: "值类型",
                 value: function (row) {
                     return row.valueType;
                 },
-                width: "10%"
+                width: "5%"
             }, {
                 name: "值",
                 value: function (row) {
                     return row.value;
                 },
-                width: "10%"
+                width: "5%"
             },{
                 name: "创建时间",
                 value: function (row) {
                     return $filter("fmtDateYMdHMcn")(row.createTime);
                 },
                 orderBy: "createTime",
-                width: "15%"
+                width: "10%"
             }
         ];
         $scope.operations = [

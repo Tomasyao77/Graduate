@@ -1,0 +1,208 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: zouy
+  Date: 17-8-25
+  Time: 上午11:00
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<script>
+    var c = m.controller("baogao_c", function ($scope, ajax) {
+        //var today = moment().format("YYYY-MM-DD");
+        var tomorrow = moment().subtract(-1, 'days').format("YYYY-MM-DD");
+        $scope.timeTypes = [{
+            name: "最近7天",
+            day: 7
+        }, {
+            name: "最近15天",
+            day: 15
+        }, {
+            name: "最近30天",
+            day: 30
+        }, {
+            name: "最近60天",
+            day: 60
+        }
+        ];
+        $scope.getParlorId = function () {
+            ajax.ajax("/server/adminParlor/getAdminParlorVos", "POST",
+                {
+                    userId: userId,
+                    current: 1,
+                    size: 1,
+                    areaCode:100000,
+                    level:0
+                }).success(function (data) {
+                console.log(data);
+                if (data.success&&data.page.list.length>0) {
+                    $scope.parlorId = data.page.list[0].id;
+                    $scope.loadCurve($scope.parlorId);
+                    $scope.loadTable($scope.parlorId);
+                }else {//如果登录的不是商家那就是顾问
+                    ajax.ajax("/server/adminParlor/getParlorOfAdvisor", "POST",
+                        {
+                            userId: userId
+                        }).success(function (data) {
+                        if(data.success){
+                            $scope.parlorId = data.page.list[0].id;
+                            $scope.loadCurve($scope.parlorId);
+                            $scope.loadTable($scope.parlorId);
+                        }
+                    });
+                }
+            });
+        };
+        /**
+         * 表格统计
+         * @param parlorId
+         */
+        $scope.loadTable = function (parlorId) {
+            ajax.ajax("/server/redirect/detection/detection/getFourTypeCountFromVariousDate", "POST", {
+                parlorId: parlorId
+            }).success(function (data) {
+                console.log(data);
+                if (data.success) {
+                    $scope.tableData = data.list;
+                }
+            });
+        };
+        /**
+         * 曲线图
+         * @param parlorId
+         */
+        //获取数据
+        $scope.loadCurve = function (parlorId) {
+            ajax.ajax("/server/redirect/detection/detection/getEveryDayCountOfParlor", "POST", {
+                parlorId: parlorId
+            }).success(function (data) {
+                console.log(data);
+                if(data.success){
+                    //拓客数 报告数 阅读数 评论数
+                    $scope.curveData = {
+                        customer:{copyData:[],data:[],labels:[],series:[],type:0,timeTypesActive:0},
+                        report:{copyData:[],data:[],labels:[],series:[],type:1,timeTypesActive:0},
+                        view:{copyData:[],data:[],labels:[],series:[],type:2,timeTypesActive:0},
+                        review:{copyData:[],data:[],labels:[],series:[],type:3,timeTypesActive:0}
+                    };
+                    //data.list不一定有60条,这里需要进行补0操作
+                    var temp = [],tempResult =[];
+                    if(data.list.length<60){
+                        for(var i=0;i<(60-data.list.length);i++){
+                            temp.push(0);
+                        }
+                        tempResult = temp.concat(data.list);
+                    }else{
+                        tempResult = data.list;
+                    }
+                    $.each(tempResult,function (k,v) {
+                        $scope.curveData.customer.data.push(v.customerCount);
+                        $scope.curveData.report.data.push(v.reportCount);
+                        $scope.curveData.view.data.push(v.viewCount==null?0:v.viewCount);
+                        $scope.curveData.review.data.push(v.reviewCount==null?0:v.reviewCount);
+                    });
+                    //保留原始数据
+                    $scope.curveData.customer.copyData = angular.copy($scope.curveData.customer.data);
+                    $scope.curveData.report.copyData = angular.copy($scope.curveData.report.data);
+                    $scope.curveData.view.copyData = angular.copy($scope.curveData.view.data);
+                    $scope.curveData.review.copyData = angular.copy($scope.curveData.review.data);
+                    $scope.processCurveData(7,-1);
+                }
+            });
+        };
+        //处理数据
+        $scope.processCurveData = function (day,type) {
+            var dataArray = $scope.dateRangeFunc(day),
+                t1 = $scope.curveData.customer.copyData,
+                t2 = $scope.curveData.report.copyData,
+                t3 = $scope.curveData.view.copyData,
+                t4 = $scope.curveData.review.copyData;
+            if(type==-1 || type==0){
+                //data y轴数据 变成二维数组--chatjs需要
+                $scope.curveData.customer.data = [t1.slice(60-day)];
+                //labels x轴数据
+                $scope.curveData.customer.labels = dataArray;
+                //series
+                $scope.curveData.customer.series = ['最近'+day+'天 拓客数'];
+            }
+            if(type==-1 || type==1){
+                $scope.curveData.report.data = [t2.slice(60-day),t3.slice(60-day),t4.slice(60-day)];
+                $scope.curveData.report.labels = dataArray;
+                $scope.curveData.report.series = ['最近'+day+'天 报告数','最近'+day+'天 报告阅读数','最近'+day+'天 报告点评数'];
+            }
+            if(type==-1 || type==1){
+                $scope.curveData.view.data = [t3.slice(60-day)];
+                $scope.curveData.view.labels = dataArray;
+                $scope.curveData.view.series = ['最近'+day+'天 报告阅读数'];
+            }
+            if(type==-1 || type==1){
+                $scope.curveData.review.data = [t4.slice(60-day)];
+                $scope.curveData.review.labels = dataArray;
+                $scope.curveData.review.series = ['最近'+day+'天 报告点评数'];
+            }
+        };
+        //日期格式化
+        $scope.dateRangeFunc = function (days) {
+            var date = [],i=days;
+            for(;i>0;i--){
+                date.push(moment().subtract(i, 'days').format("YYYY-MM-DD").substring(5));
+            }
+            return date;
+        };
+        //时段分析
+        $scope.changeDateRange = function ($index,day,type) {
+            if(type == 0){
+                $scope.curveData.customer.timeTypesActive = $index;
+            }else if(type == 1){
+                $scope.curveData.report.timeTypesActive = $index;
+            }
+            //0拓客数 1报告数 2阅读数 3评论数
+            $scope.processCurveData(day,type);
+        };
+
+        $scope.$on("onNav", function (e, data) {
+            if (data.type == 1) {
+                $scope.getParlorId();
+                console.log("大数据分析中......");
+            }
+        });
+    });
+</script>
+<div ng-controller="baogao_c" class="container" style="margin-top: 20px;width: 96%;">
+    <h4 style="color: #505050;">报告统计</h4>
+    <hr/>
+    <table class="table table-hover table-striped" style="table-layout: fixed">
+        <thead>
+        <th width="20%"></th>
+        <th width="20%">报告数</th>
+        <th width="20%">报告阅读数</th>
+        <th width="20%">报告点评数</th>
+        </thead>
+        <tbody>
+        <tr style="color: #666666;"><td>今日</td>
+            <td ng-bind="tableData[0]"></td>
+            <td ng-bind="tableData[1]"></td>
+            <td ng-bind="tableData[2]"></td></tr>
+        <tr style="color: #666666;"><td>累计</td>
+            <td ng-bind="tableData[16]"></td>
+            <td ng-bind="tableData[17]"></td>
+            <td ng-bind="tableData[18]"></td></tr>
+        </tbody>
+    </table>
+    <h4 class="text-muted">时段分析:</h4>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <p class="m-b-0">
+               <span ng-repeat="item in timeTypes" class="label m-r pointer" ng-click="changeDateRange($index,item.day,1)"
+                     ng-class='{"label-default":curveData.report.timeTypesActive != $index, "label-info":curveData.report.timeTypesActive == $index}'
+                     ng-bind="item.name">
+               </span>
+            </p>
+        </div>
+    </div>
+    <div class="container" style="width: 98%">
+        <canvas id="report-id" class="chart chart-line" chart-data="curveData.report.data"
+                chart-labels="curveData.report.labels" chart-legend="true" chart-series="curveData.report.series"
+                height="50">
+        </canvas>
+    </div>
+</div>
