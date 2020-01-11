@@ -1,5 +1,4 @@
 package com.whut.tomasyao.age_estimation.util;
-
 /**
  * Created by zouy on 20-1-8.
  */
@@ -7,14 +6,13 @@ package com.whut.tomasyao.age_estimation.util;
 import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.InputStreamReader;
 
 /**
  * Java执行shell脚本工具类
  */
 public class ShellExcutor {
-    private static Logger log = Logger.getLogger(ShellExcutor.class);
+    //    private static Logger log = Logger.getLogger(ShellExcutor.class);
     private static String base = "/media/zouy/workspace/gitcloneroot/age-estimation-pytorch";
 
     /**
@@ -29,7 +27,7 @@ public class ShellExcutor {
             //执行脚本
             return callScript(shellPath);
         } catch (Exception e) {
-            log.error("ShellExcutor异常" + e.getMessage(), e);
+            System.out.println("ShellExcutor异常" + e.getMessage());
             throw e;
         }
     }
@@ -41,15 +39,15 @@ public class ShellExcutor {
      */
     private String callScript(String script) throws Exception{
         try {
-            String cmd = "zsh " + script + " graduate_age_estimation";
-            log.info("cmd " + cmd);
+            String cmd = " " + script + " graduate_age_estimation";
+            System.out.println("cmd: " + cmd);
 
             //启动独立线程等待process执行完成
             CommandWaitForThread commandThread = new CommandWaitForThread(cmd);
             commandThread.start();
 
             while (!commandThread.isFinish()) {
-                log.info("shell " + script + " 还未执行完毕,100ms后重新探测");
+                System.out.println("shell: " + script + " 还未执行完毕,100ms后重新探测");
                 Thread.sleep(100);
             }
 
@@ -87,10 +85,10 @@ public class ShellExcutor {
                 BufferedReader errorInput = new BufferedReader(new InputStreamReader(process.getErrorStream()));
                 String line = "";
                 while ((line = infoInput.readLine()) != null) {
-                    log.info(line);
+                    System.out.println(line);
                 }
                 while ((line = errorInput.readLine()) != null) {
-                    log.error(line);
+                    System.out.println(line);
                 }
                 infoInput.close();
                 errorInput.close();
@@ -98,7 +96,7 @@ public class ShellExcutor {
                 //阻塞执行线程直至脚本执行完成后返回
                 this.exitValue = process.waitFor();
             } catch (Throwable e) {
-                log.error("CommandWaitForThread accure exception,shell " + cmd, e);
+                System.out.println("CommandWaitForThread accure exception,shell " + cmd);
                 exitValue = 110;
             } finally {
                 finish = true;
