@@ -33,7 +33,6 @@ public class RedirectUtil {
         DEBUG = SERVER_HOST.equals("localhost");
         hostPrefixMap = new HashMap<String, String>();
         hostPrefixMap.put("user", bundle.getString("user"));
-        hostPrefixMap.put("trade", bundle.getString("trade"));
     }
 
     public static String getHost(String hostPrefix) {
@@ -52,7 +51,7 @@ public class RedirectUtil {
                 //host = hostPrefix + "." + host;//例如: app + . + ceks100.com
                 if(hostPrefix.equals("trade")){
                     //服务器上的话改变host即可,不需要改变url前缀
-                    host = "118.126.96.78";//例如: trade服务器
+                    host = "47.98.233.56";//例如: trade服务器
                 }
             }
         }

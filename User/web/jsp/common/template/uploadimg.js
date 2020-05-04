@@ -1,7 +1,7 @@
 (function (angular, $) {
     "use strict";
 
-    angular.module("uploadModule", [])
+    angular.module("uploadModule", ["alertModule"])
         /**
          * 图片读取
          */
@@ -40,14 +40,17 @@
         /**
          * 图片上传预览
          */
-        .directive('file', ['$parse', 'fileReader', function ($parse, fileReader) {
+        .directive('file', ['$parse', 'fileReader', 'alertService', function ($parse, fileReader, alertService) {
             return {
                 restrict: 'A',
                 link: function (scope, element, attrs) {
+                    //console.log(element);
                     var model = $parse(attrs.file);
                     var modelSetter = model.assign;
                     element.bind('change', function (event) {
                         if(scope.volume <= scope.imgshows.length){//张数限制
+                            //先清空+组件的内容
+                            $("#" + scope.component).val("");
                             return;
                         }
                         scope.$apply(function () {
@@ -63,9 +66,20 @@
                             }
                             fileReader.readAsDataUrl(imgupload, scope)
                                 .then(function (result) {
-                                    scope.imgshows.push(result);
                                     var file = document.getElementById("" + scope.component).files[0];
+                                    if(file.size / 1024 / 1024 > 1){//不能超过1MB
+                                        alertService.show("图片大小限制<1MB!", "danger", "80%", "remove");
+                                        $("#" + scope.component).val("");
+                                        return;
+                                    }
+                                    $("#" + scope.preview).attr("src", result);
+                                    scope.imgshows.push(result);
                                     scope.uploadimgs.push(file);//这里是放着传给后台的数据file，下面controller的时候会有
+                                    /**
+                                     * 这里要清空上传file组件的内容（也就是中间有个+的）
+                                     * 否则该组件不能连续选择相同的文件,无法触发change事件(2020-2-11)
+                                     */
+                                    $("#" + scope.component).val("");
                                 });
                         }
                     });
@@ -80,7 +94,7 @@
                 restrict: 'E',
                 scope: {
                     imgshows: "=shows", uploadimgs: "=imgs", volume: "=v",
-                    component: "@cp"
+                    component: "@cp", preview: "@pv"
                 },
                 template: '<div class="clearfix">' +
                 <!--图片显示-->
@@ -89,6 +103,7 @@
                 ' width=100%; height=100%;/>' +
                 '<i class="icon-remove-sign icon-large" style="position:absolute;cursor:pointer;top:5px;right:5px;"' +
                 ' ng-click="uploadimg_del($index)"></i>' +
+
                 '</div>' +
                 <!--图片选择,选择后input中存放的就是最新的那一张图片-->
                 '<div class="fileupload pull-left clearfix" style="position: relative;">' +
@@ -100,6 +115,7 @@
                 '</div>',
                 link: function (scope, element, attrs) {
                     scope.uploadimg_del = function (index) {
+                        $("#" + scope.preview).attr("src", "/jsp/common/asset/white.png");
                         scope.imgshows.splice(index, 1);
                         scope.uploadimgs.splice(index, 1);
                     };

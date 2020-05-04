@@ -24,8 +24,16 @@ public class File implements Serializable{
     private boolean isDeleted;
     @Enumerated
     private FileType type;
+    private Integer age;
 
     public File() {
+    }
+
+    public File(String url) {
+        this.url = url;
+        this.createTime = new Date();
+        this.isDeleted = false;
+        this.type = FileType.图片;
     }
 
     public File(String url, Date createTime, boolean isDeleted) {
@@ -80,5 +88,13 @@ public class File implements Serializable{
 
     public void setDeleted(boolean deleted) {
         isDeleted = deleted;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
     }
 }

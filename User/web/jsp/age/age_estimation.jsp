@@ -34,13 +34,19 @@
             <h4>年龄估计</h4>
             <div class="clearfix">
                 <label>
-                    <button class="btn btn-success" ng-click="entity._openModal('add')">
-                        <span class="icon-plus m-r"></span>上传&nbsp;图片
+                    <button class="btn btn-default" ng-click="">
+                        <%--<span class="icon-plus m-r"></span>上传&nbsp;图片--%>
+                        <uploadimg shows="imgshows_file" imgs="uploadimgs_file" cp="cp-file-id" pv="preview-id" v="1"></uploadimg>
                     </button>
                 </label>
                 <label>
-                    <button class="btn btn-warning" ng-click="entity._openModal('add')">
-                        <span class="icon-camera-retro m-r"></span>拍摄&nbsp;照片
+                    <button class="btn btn-success" ng-click="haveImg = true;age_estimation()">
+                        <span class="icon-camera-retro m-r"></span>开始检测
+                    </button>
+                </label>
+                <label>
+                    <button class="btn btn-warning" ng-click="haveImg = false;init()">
+                        <span class="icon-camera-retro m-r"></span>重置
                     </button>
                 </label>
                     <%--仅做测试<label>
@@ -48,234 +54,70 @@
                             <span class="icon-plus m-r"></span>download
                         </button>
                     </label>--%>
-                <form class="form-inline pull-right" ng-submit="page.refreshTo(1)">
-                    <%--<label>角色类型&nbsp;
-                        <select class="form-control" ng-model="searchRole"
-                                ng-options="x.id as x.name for x in roleList"
-                                ng-change="page.refreshTo(1)">
-                        </select>
-                    </label>--%>
-                    <%--<input class="form-control m-l" type="text" placeholder="姓名" ng-model="search">--%>
-                    <%--<button class="btn btn-primary" type="submit">--%>
-                        <%--<span class="icon-search m-r"></span> 搜索--%>
-                    <%--</button>--%>
-                </form>
             </div>
         </div>
         <%--<%@ include file="/jsp/common/table.jspf" %>--%>
-        <div style="margin: 10px 10px;">
+        <div style="margin: 10px 10px;" ng-hide="haveImg">
             <div class="m-a-md">（示例）估计一张图片中的人脸年龄：</div>
             <img src="/jsp/common/asset/age/3.jpg" style="width: 400px;height: 460px;">
             <span class="icon-arrow-right icon-2x m-l m-r"></span>
             <img src="/jsp/common/asset/age/3_age.jpg" style="width: 400px;height: 460px;">
         </div>
+        <div ng-show="haveImg">
+            <h3>年龄估计结果（岁）：&nbsp;<span ng-bind="age_result" class="text-danger"></span></h3>
+        </div>
     </div>
 </div>
 <script>
     angular.module("m", ["nm", "uploadModule"])
-        .controller("c", function ($scope, page, ajax, entity, $filter, md5, alertService) {
-            $scope.download = function () {//应用普通form提交
-                var protocolStr = document.location.protocol.replace(":", ""),
-                    baseUrl = "";
-                if(protocolStr === "http") {
-                    baseUrl = "/trade"
-                } else if(protocolStr === "https") {
-                    baseUrl = "https://kdtrade.d9lab.net";
-                }
-                var postUrl = baseUrl + "/product/downloadProducts";//提交地址
-                var data1 = 1;//第一个数据
-                /*var data2 = $scope.deviceSn;//第二个数据
-                var data3 = $scope.appId;//第三个数据*/
-                var ExportForm = document.createElement("FORM");
-                document.body.appendChild(ExportForm);
-                ExportForm.method = "POST";
-                //生成input临时元素
-                var newElement = document.createElement("input");
-                newElement.setAttribute("name", "userId");
-                newElement.setAttribute("type", "hidden");
-                /*var newElement2 = document.createElement("input");
-                newElement2.setAttribute("name", "deviceSn");
-                newElement2.setAttribute("type", "hidden");
-                var newElement3 = document.createElement("input");
-                newElement3.setAttribute("name", "appId");
-                newElement3.setAttribute("type", "hidden");*/
-                //添加到表单并设置value
-                ExportForm.appendChild(newElement);
-                /*ExportForm.appendChild(newElement2);
-                ExportForm.appendChild(newElement3);*/
-                newElement.value = data1;
-                /*newElement2.value = data2;
-                newElement3.value = data3;*/
-                ExportForm.action = postUrl;
-                ExportForm.submit();
+        .controller("c", function ($scope, page, ajax, entity, $filter, md5, alertService, Upload) {
+            $scope.age_estimation = function () {
+                var data = {
+                    userId: userId
+                };
+                //处理要上传的图片
+                data.file = $scope.uploadimgs_file[0];
+                Upload.upload({
+                    url: '/file/redirect/user/age/estimation',
+                    data: data
+                }).then(function (resp) {
+                    console.log(resp);
+                    if (resp.status === 200 && resp.data.success) {
+                        alertService.show("操作成功!", "success", "80%");
+                        //$scope.init();
+                        $scope.age_result = resp.data.value;
+                    } else {
+                        swal("Sorry!", "检测失败!", "error");
+                    }
+                    //$scope.fileReturn = resp.data.value.url;
+                    //console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+                }, function (resp) {
+                    console.log(resp);
+                    swal("提示!", "操作失败!", "error");
+                }, function (evt) {
+                    var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                    console.log(evt);
+                    //console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+                });
             };
 
-            $scope.load = function (current, size, orderBy, asc) {
-                /*ajax.ajax("/user/user/getUserPageList", "POST",
-                    {
-                        userId: 1,
-                        current: current,
-                        size: size,
-                        areaCode: $scope.searchArea.code,
-                        level: $scope.searchArea.level,
-                        name: $scope.search,
-                        orderBy: orderBy,
-                        asc: asc
-                    }).success(function (data) {
-                        console.log(data);
-                        if (data.success) {
-                            $scope.page.refreshPage(data);
-                        }
-                })*/
+            $scope.init = function () {
+                /**
+                 * 多图上传
+                 */
+                $scope.imgshows_file = [];//显示url集合
+                $scope.uploadimgs_file = [];//上传file集合
+
+                //清空文件组件的内容
+                $("#cp-file-id").val("");
+
+                $scope.haveImg = false;
             };
-            $scope.searchArea = {
-                code: 100000,
-                level: 0,
-                change: function (area) {
-                    this.code = area.code;
-                    this.level = area.level;
-                    $scope.page.refreshTo(1);
-                }
-            };
-            $scope.page = page.page($scope.load);
-            $scope.ths = [
-                {width: "1%"},
-                {
-                    name: "用户名",
-                    value: function (row) {
-                        var t =  row.username;
-                        var username = t.substring(0,6)+"***"+t.substring(t.length-6);
-                        return username;
-                    },
-                    width: "5%"
-                }/*, {
-                    name: "姓名",
-                    value: function (row) {
-                        return row.name;
-                    },
-                    width: "5%"
-                }*/, {
-                    name: "昵称",
-                    value: function (row) {
-                        return row.wx_name;
-                    },
-                    width: "5%"
-                }, {
-                    name: "手机号",
-                    value: function (row) {
-                        var t = row.phone;
-                        var phone = t.substring(0,3)+"***"+t.substring(t.length-4);
-                        return phone;
-                    },
-                    width: "5%"
-                },{
-                    name: "状态",
-                    style: function (row) {
-                        return {
-                            "color": row.status === true ? "green" : "red"
-                        }
-                    },
-                    value: function (row) {
-                        return row.status === true ? "正常" : "被禁";
-                    },
-                    width: "5%"
-                },{
-                    name: "微信Id",
-                    value: function (row) {
-                        return row.openId && row.openId.substring(0, 10);
-                    },
-                    width: "8%"
-                },{
-                    name: "创建时间",
-                    value: function (row) {
-                        return $filter("fmtDateYMdHMcn")(row.createTime);
-                    },
-                    width: "15%"
-                }
-            ];
-            $scope.operations = [
-                /*{
-                    name: function (row) {
-                        return row.status === true ? "禁用" : "启用";
-                    },
-                    clas: function (row) {
-                        return {
-                            "btn btn-xs btn-warning": row.status === true,
-                            "btn btn-xs btn-success": row.status !== true
-                        };
-                    },
-                    click: function (row) {
-                        /!*ajax.ajax("/user/admin/deleteOneUser", "POST", {
-                            userId: 1,
-                            id: row.id
-                        }).success(function (data) {
-                            console.log(data);
-                            $scope.page.refresh();
-                        }).error(function (data) {
-                            console.log(data);
-                        });*!/
-                    }
-                }*/
-            ];
-            /**
-             * 角色entity
-             */
-            $scope.entity = entity.getEntity(
-                {username: "", password: "", confirmPassword: "", name: "", phone: ""},
-                {username: {}, password: {}, confirmPassword: {}
-                }, function (action, row) {//beforeOpen
-                    if ($scope.entity.action === "add") {
-
-                    } else if ($scope.entity.action === "edit") {
-                        $scope.entity.entity = angular.copy(row);
-
-                    }
-                }, function () {//submit
-                    if ($scope.entity.action === "add") {
-                        ajax.ajax("/user/user/addOneUser", "POST", {
-                            userId: 1,
-                            username: $scope.entity.entity.username,
-                            password: md5.createHash($scope.entity.entity.password),
-                            name: $scope.entity.entity.name,
-                            phone: $scope.entity.entity.phone
-                        }).success(function (data) {
-                            console.log(data);
-                            if (data.success){
-                                alertService.show("操作成功!", "success", "80%");
-                                $scope.page.refresh();
-                            } else {
-                                swal("提示!", "新增失败!用户名已存在!", "error");
-                            }
-                        }).error(function (data) {
-                            console.log(data);
-                        });
-                    } else if ($scope.entity.action === "edit") {
-
-                    }
-                    $scope.entity._success();//隐藏模态框
-                }, "modal");
 
             $scope.$watch('$viewContentLoaded', function () {
-                $scope.page.refreshTo(1);
+                $scope.init();
             });
-            $scope.selectChange = function () {
-                console.log($scope.entity.entity.selectRole);
-            };
         });
 </script>
-<%--模态框--%>
-<div entity-modal="modal" title="账号" e="entity">
-    <entity-modal-body>
-        <div entity-edit-text="username" type="text" title="用户名" entity="entity.entity" e="entity"
-             vld="entity.validate">
-        </div>
-        <div entity-edit-text="password" type="password" title="密码" entity="entity.entity" e="entity"
-             vld="entity.validate"></div>
-        <div entity-edit-text="confirmPassword" type="password" title="确认密码" entity="entity.entity" e="entity"
-             vld="entity.validate" confirm="yes"></div>
-        <div entity-edit-text="name" type="text" title="姓名" entity="entity.entity" e="entity"></div>
-        <div entity-edit-text="phone" type="tel" title="手机号" entity="entity.entity" e="entity"></div>
-    </entity-modal-body>
-</div>
 </body>
 </html>

@@ -38,9 +38,9 @@ public class FileManageController {
 
     @RequestMapping(value = "/getFilePage", method = RequestMethod.POST)
     public Map getFilePage(HttpServletRequest request, int userId, int current, int size, String orderBy, Boolean asc,
-                           Integer id, String url, Integer isDeleted) throws Exception {
+                           Integer id, Integer searchAge, Integer isDeleted) throws Exception {
         ResponseMap map = ResponseMap.getInstance();
-        Page<FileVo> page = fileManageService.getFilePage(current, size, orderBy, asc, id, url, isDeleted);
+        Page<FileVo> page = fileManageService.getFilePage(current, size, orderBy, asc, id, searchAge, isDeleted);
         return map.putPage(page, "获取成功");
     }
 

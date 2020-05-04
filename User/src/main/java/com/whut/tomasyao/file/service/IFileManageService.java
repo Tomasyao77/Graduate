@@ -14,7 +14,11 @@ public interface IFileManageService {
     FileVo getOneFile(int id) throws Exception;
 
     Page<FileVo> getFilePage(int current, int size, String orderBy, Boolean asc,
-                             Integer id, String url, Integer isDeleted) throws Exception;
+                             Integer id, Integer searchAge, Integer isDeleted) throws Exception;
 
     Integer deleteFile(int id) throws Exception;
+
+    Integer addOneFile(String url) throws Exception;
+
+    void updateOneFile(int id, Integer age) throws Exception;
 }

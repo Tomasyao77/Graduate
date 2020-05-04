@@ -49,8 +49,13 @@
                                 ng-change="page.refreshTo(1)">
                         </select>
                     </label>
-                    <input class="form-control m-l" type="text" placeholder="性别" ng-model="searchId">
-                    <input class="form-control m-l" type="text" placeholder="年龄" ng-model="searchUrl">
+                    <%--<label>性别&nbsp;
+                        <select class="form-control" ng-model="searchGender"
+                                ng-options="x.id as x.name for x in genderList"
+                                ng-change="page.refreshTo(1)">
+                        </select>
+                    </label>--%>
+                    <input class="form-control m-l" type="text" placeholder="年龄" ng-model="searchAge">
                     <button class="btn btn-primary" type="submit">
                         <span class="icon-search m-r"></span> 搜索
                     </button>
@@ -72,8 +77,8 @@
                         userId: 1,
                         current: current,
                         size: size,
-                        id: $scope.searchId,
-                        url: $scope.searchUrl,
+                        //id: $scope.searchId,
+                        searchAge: $scope.searchAge,
                         isDeleted: $scope.searchStatus,
                         orderBy: orderBy,
                         asc: asc
@@ -111,6 +116,12 @@
                         return row.url;
                     },
                     width: "20%"
+                },{
+                    name: "年龄",
+                    value: function (row) {
+                        return row.age;
+                    },
+                    width: "2%"
                 },{
                     name: "状态",
                     style: function (row) {

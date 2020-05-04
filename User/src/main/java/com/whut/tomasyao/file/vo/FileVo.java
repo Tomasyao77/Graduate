@@ -10,6 +10,7 @@ public class FileVo {
     private Date create_time;
     private boolean is_deleted;
     private FileType type;
+    private Integer age;
 
     public FileVo() {
     }
@@ -52,5 +53,13 @@ public class FileVo {
 
     public void setType(FileType type) {
         this.type = type;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
     }
 }

@@ -21,15 +21,15 @@ public class ShellExcutor {
 
     /**
      * Java执行shell脚本入口
-     * @param shellName 脚本文件名
+     * @param url 图片路径
      * @throws Exception
      */
-    public Map<String, String> service(String shellName) throws Exception{
+    public Map<String, String> service(String url) throws Exception{
         try {
             //拼接完整的脚本目录
             String shellPath = base + "/start.sh";
             //执行脚本
-            return callScript(shellPath);
+            return callScript(shellPath, url);
         } catch (Exception e) {
             System.out.println("ShellExcutor异常" + e.getMessage());
             throw e;
@@ -41,10 +41,10 @@ public class ShellExcutor {
      * @param script 脚本文件绝对路径
      * @throws Exception
      */
-    private Map<String, String> callScript(String script) throws Exception{
+    private Map<String, String> callScript(String script, String url) throws Exception{
         try {
-            String cmd = " " + script + " graduate_age_estimation";
-            //System.out.println("cmd: " + cmd);
+            String cmd = " " + script + " graduate_age_estimation " + url;
+            System.out.println("cmd: " + cmd);
 
             //启动独立线程等待process执行完成
             CommandWaitForThread commandThread = new CommandWaitForThread(cmd);

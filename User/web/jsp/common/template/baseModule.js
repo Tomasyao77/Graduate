@@ -272,9 +272,9 @@
                 replace: true,
                 scope: {
                     type: "@", name: "@entityEditText", title: "@", confirm: "@", rewidth: "@",
-                    midHint: "@",
+                    midHint: "@", placeholder: "@",
                     entity: "=", validate: "=vld", e: "=",
-                    step: "=", min: "=", max: "=", maxlength: "="
+                    step: "=", min: "=", max: "=", maxlength: "=", inputRightText: "@"
                 },
                 template: '<div class="form-group">' +
                 '<label class="col-sm-{{leftw}} col-sm-offset-{{offset}} control-label">' +
@@ -283,16 +283,20 @@
                 '</label>' +
                 '<div class="col-sm-{{rightw}}">' +
                 '<input ng-class="{\'input-error\':inputError() && !e.modalInitial}" class="form-control" name="myForm"' +
-                ' type="{{type}}" placeholder="请输入{{title}}" ng-model="entity[name]" ' +
+                ' type="{{type}}" placeholder="{{placeholder}}" ng-model="entity[name]" ' +
                 ' step="{{step}}" min="{{min}}" max="{{max}}" ng-focus="inputFocus()" ng-blur="inputBlur()"' +
-                ' maxlength="{{maxlength}}">' +
+                ' maxlength="{{maxlength}}" />' +
+                // '<label ng-if="inputRightText != null" class="col-sm-2 col-sm-offset-8 control-label">' +
+                // '<span ng-bind="inputRightText"></span>' +
+                // '</label>' +
                 /*'<div style="margin-top: 8px;font-size: 80%;" class="text-muted pull-left">{{midHint}}</div>' +*/
                 '<div ng-if="midHint" style="margin-top: 8px;font-size: 80%;" class="text-muted pull-right">' +
                 '还可以输入&nbsp;{{maxlength-entity[name].length}}&nbsp;/&nbsp;{{maxlength}}&nbsp;个字符</div>' +
                 '</div>' +
                 '<p ng-if="isNeedValidate" class="col-sm-2 text-danger" style="padding-top: 6px;margin-bottom: 0;">' +
                 '<span ng-show="validate[name].triggle && !e.modalInitial">' +
-                '<span ng-show="ifEmpty() && type!==\'email\'">{{title}}不能为空</span>' +
+                '<span ng-show="!ifLengthError() && ifEmpty() && type!==\'email\'">{{title}}不能为空</span>' +
+                '<span ng-show="ifLengthError() && type!==\'email\'">{{validate[name].hint}}</span>' +
                 '<span ng-if="confirm !== \'yes\'" ng-show="type===\'password\' && !ifEmpty() && !ifPassword()">密码长度6到15位</span>' +
                 '<span ng-if="confirm === \'yes\'"><span ng-show="type===\'password\' && !ifConfirmPassword() && !ifEmpty()">两次密码不一致</span></span>' +
                 '<span ng-show="type===\'tel\' && !ifEmpty() && !ifTel()">电话应为11位合法数字</span>' +
@@ -301,6 +305,7 @@
                 '</p>' +
                 '</div>',
                 link: function (scope) {
+                    //console.log(scope.showvld);
                     //宽度初始化
                     (function () {
                         if (scope.rewidth === null || scope.rewidth === undefined || scope.rewidth === "") {
@@ -335,6 +340,9 @@
                         if (scope.ifEmpty()) {
                             return true;
                         }
+                        if (scope.ifLengthError()) {
+                            return true;
+                        }
 
                         switch (scope.type) {
                             case "text":
@@ -353,6 +361,13 @@
                     scope.ifEmpty = function () {
                         var t = scope.entity[scope.name];
                         return t === null || t === "" || typeof t === "undefined";
+                    };
+                    scope.ifLengthError = function () {
+                        var t = scope.validate[scope.name].type;
+                        if (t !== "length") return false;
+
+                        return scope.entity[scope.name].length < scope.validate[scope.name].minLen ||
+                            scope.entity[scope.name].length > scope.validate[scope.name].maxLen;
                     };
                     scope.ifTel = function () {
                         return /^1[34578]\d{9}$/g.test(scope.entity[scope.name]);
@@ -390,7 +405,7 @@
                 '<span ng-bind="title"></span>' +
                 '</label>' +
                 '<div class="col-sm-{{rightw}}">' +
-                '<textarea rows="6" class="form-control" placeholder="请输入{{title}}" ng-model="entity[name]"' +
+                '<textarea rows="6" class="form-control" placeholder="{{placeholder}}" ng-model="entity[name]"' +
                 ' ng-class="{\'input-error\':inputError() && !e.modalInitial}" style="resize: none;"' +
                 ' ng-focus="inputFocus()" ng-blur="inputBlur()" maxlength="{{maxlength}}"></textarea>' +
                 /*'<div style="margin-top: 8px;font-size: 80%;" class="text-muted pull-left">{{midHint}}</div>' +*/
@@ -399,7 +414,8 @@
                 '</div>' +
                 '<p ng-if="isNeedValidate" class="col-sm-2 text-danger" style="padding-top: 6px;margin-bottom: 0;">' +
                 '<span ng-show="validate[name].triggle && !e.modalInitial">' +
-                '<span ng-show="ifEmpty()">{{title}}不能为空</span>' +
+                '<span ng-show="!ifLengthError() && ifEmpty()">{{title}}不能为空</span>' +
+                '<span ng-show="ifLengthError()">{{validate[name].hint}}</span>' +
                 '</span>' +
                 '</p>' +
                 '</div>',
@@ -438,10 +454,21 @@
                         if (scope.ifEmpty()) {
                             return true;
                         }
+                        if (scope.ifLengthError()) {
+                            return true;
+                        }
                     };
+
                     scope.ifEmpty = function () {
                         var t = scope.entity[scope.name];
                         return t === null || t === "" || typeof t === "undefined";
+                    };
+                    scope.ifLengthError = function () {
+                        var t = scope.validate[scope.name].type;
+                        if (t !== "length") return false;
+
+                        return scope.entity[scope.name].length < scope.validate[scope.name].minLen ||
+                            scope.entity[scope.name].length > scope.validate[scope.name].maxLen;
                     };
                     if (scope.isNeedValidate) {//初次不触发验证,并赋值验证函数
                         scope.validate[scope.name].triggle = false;
@@ -485,7 +512,7 @@
                 }
             }
         })
-        .directive("entityEditImg", function () {
+        .directive("entityEditImg", function () {//图片
             return {
                 restrict: 'A',
                 replace: true,
@@ -535,7 +562,7 @@
                     });
                 }
             }
-        })//图片
+        })
         .directive("entityEditFile", function () {//任意类型文件
             return {
                 restrict: 'A',
@@ -592,10 +619,11 @@
                 scope: {
                     value: "=entityViewText",
                     title: "@",
-                    icon: "@", rewidth: "@"
+                    icon: "@", rewidth: "@",
+                    color: "@", show1: "@", show2: "@"
                 },
                 template: '<div class="m-t row">' +
-                '<p class="col-sm-{{leftw}} text-muted">' +
+                '<p class="col-sm-{{leftw}} text-muted {{color}}">' +
                 '<span class="m-r {{icon}}"></span><span ng-bind="title"></span>' +
                 '</p>' +
                 '<div class="col-sm-{{rightw}}">' +
@@ -652,7 +680,7 @@
                         }
                     })();
                     scope.$watch('value', function () {
-                        if(scope.value === undefined|| scope.value === null){
+                        if (scope.value === undefined || scope.value === null) {
                             var $img = elements.children().next().children();//找到img元素
                             $img.attr("src", "");
                         }
@@ -727,14 +755,14 @@
         .service("page", function () {
             this.page = function (load, orderBy, asc) {
                 var page = {
-                    sizes: [10, 15, 30, 50],
-                    size: 15,
+                    sizes: [5, 8, 10, 15],
+                    size: 8,//每页大小
                     jump: 1,
                     hasPrev: false,
                     hasNext: false,
-                    current: 1,
-                    total: 1,
-                    count: 0,
+                    current: 1,//当前页
+                    total: 1,//共几页
+                    count: 0,//共多少元素
                     orderBy: typeof orderBy == "undefined" ? "" : orderBy,
                     asc: typeof asc == "undefined" ? true : asc,
                     pages: [1],
@@ -745,7 +773,7 @@
                             var interval = setInterval(function () {
                                 time++;
                                 $("[data-toggle='tooltip']").tooltip();//触发提示框
-                                if($("[data-toggle='tooltip']").length > 0 || time > 10){
+                                if ($("[data-toggle='tooltip']").length > 0 || time > 10) {
                                     clearInterval(interval);
                                 }
                             }, 300);
@@ -845,6 +873,21 @@
                         if (!isNaN(current) && current != page.current) {
                             page.load(current, page.size, page.orderBy, page.asc);
                         }
+                    },
+                    refreshAfterDel: function (delCount) {
+                        /**
+                         * 2020-2-11
+                         * 发现一个惊天大bug，如果当前页只有一个元素，删掉它后应该跳转到它的前一页(>=1)
+                         */
+                        var toCurrent = page.current;
+                        if (page.current === page.total) {
+                            if (page.current === 1) {
+                                toCurrent = 1;
+                            } else if (page.count - delCount == (page.current - 1) * page.size) {
+                                toCurrent -= 1;
+                            }
+                        }
+                        page.refreshTo(toCurrent);
                     },
                     refresh: function () {
                         page.load(page.current, page.size, page.orderBy, page.asc);
@@ -1177,28 +1220,34 @@
             }
         });
     /**警告框
-     * 使用: alertService.show("操作成功!", "success", "80%");
+     * 使用: alertService.show("操作成功!", "success", "80%", "ok");
      */
     angular.module("alertModule", [])
         .service("alertService", function () {
-            this.show = function (msg, color, size) {
-                var element = $("#" + "alertDiv");
-                if (element.length <= 0) {//不存在就创建
-                    var tempString = '<div id="alertDiv" class="text-center"' +
-                        ' style="width: 100%;height: 40px;position: fixed;background-color: transparent;' +
-                        ' top: 5px;left: 0;z-index: 3000;">' +
-                        '<div class="alert alert-_color center-block text-center" ' +
-                        ' style="width: _size;padding-top: 5px;padding-bottom: 5px;">' +
-                        '<span style="font-size: 20px;"><i class="icon-ok"></i>&nbsp;_msg</span></div>' +
-                        '</div>';
-                    tempString = tempString.replace("_msg", msg)
-                        .replace("_color", color)
-                        .replace("_size", size);
-                    var $alert = $(tempString);
-                    $(document.body).append($alert);
-                    element = $("#" + "alertDiv");
-                    element.hide();//否则第一次没有淡入效果
+            this.show = function (msg, color, size, icon) {
+                var _icon = "ok";
+                if (icon != null && icon != "" && icon != 'undefined') {
+                    _icon = icon;
                 }
+                var element = $("#" + "alertModule-alertDiv");
+                if (element.length > 0) element.remove();
+
+                var tempString = '<div id="alertModule-alertDiv" class="text-center"' +
+                    ' style="width: 100%;height: 40px;position: fixed;background-color: transparent;' +
+                    ' top: 5px;left: 0;z-index: 3000;">' +
+                    '<div class="alert alert-_color center-block text-center" ' +
+                    ' style="width: _size;padding-top: 5px;padding-bottom: 5px;">' +
+                    '<span style="font-size: 20px;"><i class="icon-_icon"></i>&nbsp;_msg</span></div>' +
+                    '</div>';
+                tempString = tempString.replace("_msg", msg)
+                    .replace("_color", color)
+                    .replace("_size", size)
+                    .replace("_icon", _icon);
+                var $alert = $(tempString);
+                $(document.body).append($alert);
+                element = $("#" + "alertModule-alertDiv");
+                element.hide();//否则第一次没有淡入效果
+
                 element.fadeIn(500).delay(1000).slideUp("normal").hide("normal");
             };
         });
