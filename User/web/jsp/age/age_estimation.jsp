@@ -19,6 +19,7 @@
     <script src="/jsp/common/js/ng-file-upload-all.min.js"></script>
     <%--自定义angular module--%>
     <script src="/jsp/common/template/baseModule.js"></script>
+    <script src="/jsp/common/template/uploadimg.js"></script>
     <%--日期处理--%>
     <link href="/jsp/common/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
     <script src="/jsp/common/js/bootstrap-datetimepicker.min.js"></script>
@@ -71,7 +72,7 @@
     </div>
 </div>
 <script>
-    angular.module("m", ["nm"])
+    angular.module("m", ["nm", "uploadModule"])
         .controller("c", function ($scope, page, ajax, entity, $filter, md5, alertService) {
             $scope.download = function () {//应用普通form提交
                 var protocolStr = document.location.protocol.replace(":", ""),

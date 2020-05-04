@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="renderer" content="webkit">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>检测记录</title>
+    <title>检测统计</title>
     <%--基础css--%>
     <link href="/jsp/common/css/bootstrap.min.css" rel="stylesheet">
     <link href="/jsp/common/css/font-awesome.min.css" rel="stylesheet">
@@ -50,7 +50,7 @@
         });
     </script>
 </head>
-<body ng-app="m" ng-init='index = "数据统计";subIndex="检测记录" '>
+<body ng-app="m" ng-init='index = "检测统计"'>
 <jsp:include page="/jsp/common/nav.jsp"/>
 <div class="container-fluid" ng-controller="c">
     <%--<ul class="nav nav-tabs nav-justified m-t">--%>

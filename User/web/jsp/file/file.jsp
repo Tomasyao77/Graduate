@@ -49,8 +49,8 @@
                                 ng-change="page.refreshTo(1)">
                         </select>
                     </label>
-                    <input class="form-control m-l" type="text" placeholder="id" ng-model="searchId">
-                    <input class="form-control m-l" type="text" placeholder="url" ng-model="searchUrl">
+                    <input class="form-control m-l" type="text" placeholder="性别" ng-model="searchId">
+                    <input class="form-control m-l" type="text" placeholder="年龄" ng-model="searchUrl">
                     <button class="btn btn-primary" type="submit">
                         <span class="icon-search m-r"></span> 搜索
                     </button>

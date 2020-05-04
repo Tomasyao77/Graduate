@@ -64,7 +64,7 @@
         <%--<%@ include file="/jsp/common/table.jspf" %>--%>
         <div style="margin: 10px 10px;">
             <div class="m-a-md">（示例）根据原始图片合成指定年龄段的图片：</div>
-            <div class="m-a-md">共10个年龄段0-80岁：0-5 6-10 11-15 16-20 21-30 31-40 41-50 51-60 61-70 71-80</div>
+            <div class="m-a-md">共10个年龄段0-70岁：0-5 6-10 11-15 16-20 21-25 26-30 31-35 36-45 46-55 56-70</div>
             <div class="m-a-md">
                 <img src="/jsp/common/asset/age/6_1_3.jpg" style="width: 130px;height: 130px;">
                 <span class="icon-arrow-right icon-2x m-l m-r"></span>
