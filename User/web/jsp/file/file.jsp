@@ -70,7 +70,6 @@
         .controller("c", function ($scope, page, ajax, entity, $filter, md5, alertService) {
             $scope.statusList = [{id:-1,name:"全部"},{id:0,name:"正常"},{id:1,name:"已删除"}];
             $scope.searchStatus = -1;
-
             $scope.load = function (current, size, orderBy, asc) {
                 ajax.ajax("/fileManage/getFilePage", "POST",
                     {
@@ -97,6 +96,7 @@
                     },
                     clas: function () {
                         return {
+
                             "img-rounded": true
                         };
                     },

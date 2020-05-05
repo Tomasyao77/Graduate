@@ -3,8 +3,6 @@ package com.whut.tomasyao.age_estimation.util;
  * Created by zouy on 20-1-8.
  */
 
-import org.apache.log4j.Logger;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -15,22 +13,22 @@ import java.util.Map;
 /**
  * Java执行shell脚本工具类
  */
-public class ShellExcutor {
-    //private static Logger log = Logger.getLogger(ShellExcutor.class);
-    //private static String base = "/alfa/whut/data/age-estimation-root/project";
-    private static String base = "/media/zouy/workspace/gitcloneroot/age-estimation-pytorch";
+public class ShellExcutor1 {
+    //    private static Logger log = Logger.getLogger(ShellExcutor.class);
+    //private static String base = "/alfa/whut/data/age-estimation-root/face_aging";
+    private static String base = "/media/zouy/workspace/gitcloneroot/face_aging_detection";
 
     /**
      * Java执行shell脚本入口
      * @param url 图片路径
      * @throws Exception
      */
-    public Map<String, String> service(String url) throws Exception{
+    public Map<String, String> service(String url, Integer age, Integer gender) throws Exception{
         try {
             //拼接完整的脚本目录
             String shellPath = base + "/start.sh";
             //执行脚本
-            return callScript(shellPath, url);
+            return callScript(shellPath, url, age, gender);
         } catch (Exception e) {
             System.out.println("ShellExcutor异常" + e.getMessage());
             throw e;
@@ -42,9 +40,9 @@ public class ShellExcutor {
      * @param script 脚本文件绝对路径
      * @throws Exception
      */
-    private Map<String, String> callScript(String script, String url) throws Exception{
+    private Map<String, String> callScript(String script, String url, Integer age, Integer gender) throws Exception{
         try {
-            String cmd = " " + script + " graduate_age_estimation " + url;
+            String cmd = " " + script + " test " + url + " " + age + " " + gender;
             System.out.println("cmd: " + cmd);
 
             //启动独立线程等待process执行完成
@@ -63,7 +61,7 @@ public class ShellExcutor {
 
             Map<String, String> returnMap = new HashMap<>();
             returnMap.put("success", "true");
-            returnMap.put("age_value", commandThread.age_value+"");
+            returnMap.put("result_url", commandThread.result_url);
             returnMap.put("shell", "script");
             returnMap.put("exitValue", commandThread.getExitValue()+"");
             return returnMap;
@@ -81,7 +79,7 @@ public class ShellExcutor {
         private String cmd;
         private boolean finish = false;
         private int exitValue = -1;
-        private int age_value = -1;
+        private String result_url = "";
 
         public CommandWaitForThread(String cmd) {
             this.cmd = cmd;
@@ -112,8 +110,8 @@ public class ShellExcutor {
                 for(String s : list){
                     System.out.println("list:"+s);
                 }
-                float temoF = Float.valueOf(list.get(list.size()-1));
-                age_value = (int) temoF;
+                String[] tmp = list.get(1).split(" ");
+                result_url = tmp[tmp.length - 1];
 
                 //阻塞执行线程直至脚本执行完成后返回
                 this.exitValue = process.waitFor();
