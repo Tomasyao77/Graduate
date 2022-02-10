@@ -64,7 +64,7 @@
     <!--依赖及版本-->
     <properties>
         <spring-version>4.2.6.RELEASE</spring-version>
-        <hibernate-version>4.3.11.Final</hibernate-version>
+        <hibernate-version>5.4.24.Final</hibernate-version>
         <logger-version>1.7.5</logger-version>
         <jackson-version>2.8.8</jackson-version>
         <mybatis-version>3.2.8</mybatis-version>
